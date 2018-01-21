@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <div class="form-group">
+          <label for="title">Product Name: </label>
+          <input type="text"
+                 id="title"
+                 class="form-control"
+                 ngModel
+                 name="title">
+        </div>
+        <div class="form-group">
+          <label for="price">Price: </label>
+          <input type="number"
+                 id="price"
+                 class="form-control"
+                 ngModel
+                 name="price">
+        </div>
+        <div class="form-group">
+          <label for="desc">Description</label>
+          <textarea id="desc"
+                    class="form-control"
+                    ngModel
+                    name="desc"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="image">Imge Link: </label>
+          <input id="image"
+                 type="text"
+                 class="form-control"
+                 ngModel
+                 name="image">
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+<p>Lubie placki</p>

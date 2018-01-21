@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <button class="btn btn-primary" (click)="onGetProducts()">Get Products form Server</button>
+      <button class="btn btn-info" (click)="onShowProduct()">Show Product</button>
+      <div *ngIf="showProduct===true">
+
+
+      <ul class="list-group" *ngFor="let product of products">
+        <li class="list-group-item">
+          <p> Tile: {{product.title}}</p>
+          <p> Price: {{product.price}} $</p>
+          <p> description: {{product.description}}</p>
+            Image:
+
+            <img
+              src="{{product.imageLink}}"
+              alt="{{product.imageLink}}"
+              class="img-responsive"
+              style="max-height: 120px; max-width: 120px" >
+
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</div>

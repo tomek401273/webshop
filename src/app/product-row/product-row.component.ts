@@ -19,7 +19,7 @@ productData: ProductData;
   ngOnInit() {
   }
   getProduct() {
-    return this.http.get('http://localhost:8080/product/1')
+    return this.http.get('http://localhost:8080/product/2')
       .subscribe(
         (response: Response) => {
           const data = response.json();
