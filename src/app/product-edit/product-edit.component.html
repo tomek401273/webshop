@@ -20,8 +20,15 @@
               class="img-responsive"
               style="max-height: 120px; max-width: 120px" >
             <button class="btn btn-danger" (click)="onRemove(i)">REMOVE</button>
+            <div *ngIf="editProduct==true">
+
+            </div>
+            <app-edit-detail
+            [product]="product"
+            [id]="i"></app-edit-detail>
           </li>
         </ul>
+
       </div>
     </div>
   </div>

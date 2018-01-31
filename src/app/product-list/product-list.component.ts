@@ -11,6 +11,7 @@ export class ProductListComponent implements OnInit {
   showProduct = false;
   products = [
     {
+      id: 0,
       price: 10000,
       title: 'Procesor',
       description: 'super Procesor',
@@ -31,6 +32,7 @@ export class ProductListComponent implements OnInit {
         (products: any[]) => this.products = products,
         (error) => console.log(error)
       );
+    console.log(this.products);
   }
   onShowProduct() {
     this.showProduct = !this.showProduct;
