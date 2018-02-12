@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {ServerService} from "../server.service";
+import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
 
 @Component({

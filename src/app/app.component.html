@@ -1,10 +1,16 @@
 <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-
-  <p><a routerLink="/productList">Show Product List</a></p>
-  <p><a routerLink="/addProduct">Add</a></p>
-  <p><a routerLink="/productEdit">Edit Products</a></p>
-  <p><a routerLink="/showBucket">Show Bucket</a></p>
-
-  <router-outlet></router-outlet>
-
+  <div class="container">
+    <div class="row">
+    <p><a routerLink="/productList">Show Product List</a></p>
+    <p><a routerLink="/addProduct">Add</a></p>
+    <p><a routerLink="/productEdit">Edit Products</a></p>
+    <p><a routerLink="/showBucket">Show Bucket</a></p>
+  </div>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+  <div>
+    <app-logging></app-logging>
+  </div>
+</div>
 </div>

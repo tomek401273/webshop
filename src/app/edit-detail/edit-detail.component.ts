@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ProductData} from '../product-row/ProductData';
-import {ServerService} from '../server.service';
+import {ServerService} from '../services/server.service';
 
 @Component({
   selector: 'app-edit-detail',
