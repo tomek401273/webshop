@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default">
+  <div class="container">
+   <div class="row">
+     <div>
+       <a routerLink="/" class="navbar-brand">Copupter WebShop -  everything for computers </a>
+     </div>
+
+
+     <ul class="nav navbar-nav navbar-right">
+       <div *ngIf="authenticated==false">
+         <li><a routerLink="/">Register</a> </li>
+         <li><a routerLink="/login" (click)="login()">Login</a></li>
+       </div>
+       <div *ngIf="authenticated == true" >
+       <li>
+         <a routerLink="/" (click)="login()">Logout</a>
+       </li>
+       </div>
+     </ul>
+   </div>
+    <div class="row">
+      <ul class="nav navbar-nav">
+      <li routerLinkActive="active"><a routerLink="/">Laptops</a></li>
+      <li routerLinkActive="active"><a routerLink="/">Stacionars Coputers</a></li>
+      </ul>
+    </div>
+
+  </div>
+</nav>

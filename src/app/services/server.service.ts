@@ -3,8 +3,11 @@ import {Headers, Http, RequestOptions, Response} from '@angular/http';
 import 'rxjs/Rx';
 import {ProductData} from '../product-row/ProductData';
 import {BucketData} from '../show-buket/BucketData';
-import {Log} from "../logging/Log";
-import {HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest,} from "@angular/common/http";
+import {Log} from "../auth/signin/Log";
+import {
+  HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpParams,
+  HttpRequest,
+} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {observable} from "rxjs/symbol/observable";
 import {map} from "rxjs/operators";
@@ -30,14 +33,25 @@ export class ServerService {
 
 
   getProduct() {
-    return this.http.get('http://localhost:8080/product/all.json')
-      .map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      );
+    const headers = new HttpHeaders().set('Authorization', localStorage.getItem("token"));
+    // const headers = new HttpHeaders().set('Authorization', 'Bearer afdklasflaldf');
+    return this.http.get('http://localhost:8080/product/all', {
+     headers: headers
+    })
+
+      .subscribe(
+          (products: any[]) => console.log(products),
+          (error) => console.log(error)
+        );
   }
+
+
+// .map(
+// (response: Response) => {
+//   const data = response.json();
+//   console.log(data);
+//   return data;
+// })
 
   addNewProduct(product: ProductData) {
     const headers = new Headers({'Content-Type': 'application/json'});
