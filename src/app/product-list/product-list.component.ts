@@ -19,23 +19,26 @@ export class ProductListComponent implements OnInit {
     }
   ];
 
-  constructor(private serverService: ServerService) { }
+  constructor(private serverService: ServerService) {
+  }
 
   ngOnInit() {
     // this.serverService.onTaskRemoved.subscribe(
     //   (product: ProductData) =>this.products.splice(this.products.indexOf(this.product),1)
     // )
   }
+
   onGetProducts() {
     this.serverService.getProduct();
-  //     .subscribe(
-  //       (products: any[]) => this.products = products,
-  //       (error) => console.log(error)
-  //     );
-  //   console.log(this.products);
-  // }
-  // onShowProduct() {
-  //   this.showProduct = !this.showProduct;
-  // }
+    //     .subscribe(
+    //       (products: any[]) => this.products = products,
+    //       (error) => console.log(error)
+    //     );
+    //   console.log(this.products);
+    // }
+    // onShowProduct() {
+    //   this.showProduct = !this.showProduct;
+    // }
 
+  }
 }
