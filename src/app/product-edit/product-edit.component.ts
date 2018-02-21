@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
+import {ShowPublicDataSevice} from "../product-list/show-public-data.sevice";
 
 @Component({
   selector: 'app-product-edit',
@@ -9,38 +10,25 @@ import {ProductData} from "../product-row/ProductData";
 })
 export class ProductEditComponent implements OnInit {
   editProduct = false;
+  private products: ProductData[] =[];
 
-  showProduct = false;
-  products = [
-    {
-      id: 0,
-      price: 10000,
-      title: 'Procesor',
-      description: 'super Procesor',
-      imageLink: 'http://themillenniumreport.com/wp-content/uploads/2017/03/e5403971-5cd3-4010-9401-c0c264ac23dd1.jpg'
-    }
-  ];
-
-  constructor(private serverService: ServerService) {
+  constructor(
+    private serverService: ServerService,
+    private showPublicData: ShowPublicDataSevice) {
   }
 
   ngOnInit() {
     // this.serverService.onTaskRemoved.subscribe(
     //   (product222: ProductData) => this.products.splice(this.products.indexOf(product222), 1)
     // );
+
+    this.showPublicData.getProduct()
+      .subscribe(
+        (procucts: any[]) => this.products= procucts,
+        (error) => console.log(error)
+      );
   }
 
-  onGetProducts() {
-    this.serverService.getProduct()
-      // .subscribe(
-      //   (products: any[]) => this.products = products,
-      //   (error) => console.log(error)
-      // );
-  }
-
-  onShowProduct() {
-    this.showProduct = !this.showProduct;
-  }
 
   onRemove(id: number) {
     // console.log(id);
@@ -66,6 +54,7 @@ export class ProductEditComponent implements OnInit {
     this.editProduct = !this.editProduct;
     console.log('Index procut:' + i);
   }
+
 
 
 }

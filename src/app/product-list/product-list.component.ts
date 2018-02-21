@@ -31,14 +31,8 @@ export class ProductListComponent implements OnInit {
     // )
     this.showPublicData.getProduct()
       .subscribe(
-        // (products: any[]) => this.products = products,
         (products: any[]) => this.products = products,
         (error) => console.log(error)
       );
-
-    // console.log(this.product);
-    // this.product2.push(this.product);
-    // this.product2.push(this.product);
-    // console.log(this.product2);
   }
 }

@@ -14,7 +14,7 @@ import { ShowBuketComponent } from './show-buket/show-buket.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./services/auth.interceptor";
 import {LoggingInterceptor} from "./services/logging.interceptor";
-import {LoggingService} from "./auth/logging.service";
+import {LogingService} from "./auth/loging.service";
 import { HeaderComponent } from './header/header.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import {ShowPublicDataSevice} from "./product-list/show-public-data.sevice";
@@ -51,7 +51,7 @@ const appRoutes: Routes = [
   providers: [
     ServerService,
     ShowPublicDataSevice,
-    LoggingService,
+    LogingService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
     ],

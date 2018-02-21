@@ -25,15 +25,12 @@ export class ServerService {
   }
 
 
+
   getProduct() {
     const headers = new HttpHeaders().set('Authorization', localStorage.getItem("token"));
     return this.http.get('http://localhost:8080/product/all', {
      headers: headers
     })
-      .subscribe(
-          (products: any[]) => console.log(products),
-          (error) => console.log(error)
-        );
   }
 
   addNewProduct(product: ProductData) {

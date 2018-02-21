@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {LogingService} from "../auth/loging.service";
 
 @Component({
   selector: 'app-header',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   authenticated = false;
-  constructor() { }
-
+  constructor(private logingService: LogingService) { }
+  adminPanel=false;
   ngOnInit() {
+    this.logingService.loginSuccessful.subscribe(
+      (role:String) => {
+        this.adminPanel=true;
+        console.log(localStorage.getItem("role"));
+        console.log(localStorage.getItem("token"));
+      }
+    )
   }
 
   login() {
@@ -17,6 +25,7 @@ export class HeaderComponent implements OnInit {
   }
 
   adminLogin() {
+
     console.log("Admin login");
   }
   userLogin() {

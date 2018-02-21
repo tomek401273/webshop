@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
+import {EventEmitter, Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Log} from "./signin/Log";
 import {ServerService} from "../services/server.service";
 
 @Injectable()
-export class LoggingService {
+export class LogingService {
 
   constructor(private httpClient: HttpClient,private serverService: ServerService) {}
 
@@ -33,9 +33,9 @@ export class LoggingService {
   //
   // }
 
-  getToken(log: Log) {
-    console.log(log);
+  loginSuccessful = new EventEmitter<String>();
 
+  getToken(log: Log) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.httpClient.post('http://localhost:8080/login', log,

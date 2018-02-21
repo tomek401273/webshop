@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Log} from "./Log";
 import {ServerService} from "../../services/server.service";
-import {LoggingService} from "../logging.service";
+import {LogingService} from "../loging.service";
 import {NgForm} from "@angular/forms";
 import {HttpResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
@@ -19,7 +19,7 @@ export class SigninComponent implements OnInit {
   message = '';
 
   constructor(private server: ServerService,
-              private loggingService: LoggingService,
+              private loggingService: LogingService,
               private router: Router) {
   }
 
@@ -36,13 +36,7 @@ export class SigninComponent implements OnInit {
           let role =  response.headers.get("Credentials");
           localStorage.setItem("token", token);
           localStorage.setItem("role", role);
-          if (role ==='admin') {
-            console.log("Loginng Posititve admin");
-          }
-          else {
-            console.log("Loging Positive user");
-          }
-
+          this.loggingService.loginSuccessful.emit(role);
           this.router.navigate(['/']);
 
         },

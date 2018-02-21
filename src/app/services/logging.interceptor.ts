@@ -7,7 +7,7 @@ export class LoggingInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).do(
       event => {
-        console.log('headers Authorization: ' + req.headers.get('Authorization'));
+        // console.log('headers Authorization: ' + req.headers.get('Authorization'));
 
         // console.log('url: ' + req.url);
         // console.log('body login: ' + req.body.login);
