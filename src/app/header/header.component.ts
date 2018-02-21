@@ -16,4 +16,11 @@ export class HeaderComponent implements OnInit {
     this.authenticated = !this.authenticated;
   }
 
+  adminLogin() {
+    console.log("Admin login");
+  }
+  userLogin() {
+    console.log("User Login")
+  }
+
 }

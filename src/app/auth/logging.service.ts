@@ -1,13 +1,12 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {Log} from "../auth/signin/Log";
+import {Log} from "./signin/Log";
+import {ServerService} from "../services/server.service";
 
 @Injectable()
 export class LoggingService {
-  // model = {password: '$2a$10$ee/Qv.MHjREpOYTq8ZKO5uXcFft4xrrL.q6V1Gb0Les.6Blt5cRCK', login: 'tomek'};
-  model = {password: '$2a$10$KEAhNEMjlM9TXmyTNCYE1.v/tFp4ie5kJAibRCv91DkjMJhYpkFh6', login: 'tomek2'};
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient,private serverService: ServerService) {}
 
   // getToken(log: Log) {
   //   console.log(log);
@@ -47,5 +46,7 @@ export class LoggingService {
       });
 
   }
+
+
 
 }

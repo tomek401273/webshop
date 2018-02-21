@@ -51,12 +51,12 @@ export class AddNewProductComponent implements OnInit {
 
 
   onGetProducts() {
-    this.serverService.getProduct()
-      .subscribe(
-        (products: any[]) => this.products = products,
-        (error) => console.log(error)
-      );
-    console.log(this.products);
+    // this.serverService.getProduct()
+    //   .subscribe(
+    //     (products: any[]) => this.products = products,
+    //     (error) => console.log(error)
+    //   );
+    // console.log(this.products);
   }
 
 }

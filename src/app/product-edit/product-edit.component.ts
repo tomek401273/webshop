@@ -32,10 +32,10 @@ export class ProductEditComponent implements OnInit {
 
   onGetProducts() {
     this.serverService.getProduct()
-      .subscribe(
-        (products: any[]) => this.products = products,
-        (error) => console.log(error)
-      );
+      // .subscribe(
+      //   (products: any[]) => this.products = products,
+      //   (error) => console.log(error)
+      // );
   }
 
   onShowProduct() {
@@ -55,10 +55,10 @@ export class ProductEditComponent implements OnInit {
     //   );
 
     this.serverService.getProduct()
-      .subscribe(
-        (products: any[]) => this.products = products,
-        (error) => console.log(error)
-      );
+      // .subscribe(
+      //   (products: any[]) => this.products = products,
+      //   (error) => console.log(error)
+      // );
 
   }
 
