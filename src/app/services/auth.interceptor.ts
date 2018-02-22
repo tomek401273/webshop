@@ -1,9 +1,13 @@
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {
+  HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
+  HttpResponse
+} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor () { }
+  constructor() {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // console.log('Interceptor!!!' + req);
@@ -16,8 +20,8 @@ export class AuthInterceptor implements HttpInterceptor {
     // console.log('params: ' + req.params);
     // console.log('responseType: ' + req.responseType);
     // console.log('reportProgres: ' + req.reportProgress);
-
     return next.handle(req);
   }
 
 }
+

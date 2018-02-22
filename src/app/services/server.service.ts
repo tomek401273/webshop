@@ -15,42 +15,66 @@ import {map} from "rxjs/operators";
 @Injectable()
 export class ServerService {
 
-  private model = {
-    "login": "tomek",
-    "password": "$2a$10$ee/Qv.MHjREpOYTq8ZKO5uXcFft4xrrL.q6V1Gb0Les.6Blt5cRCK"
-
-  };
-
-  constructor(private http: HttpClient) {
+    constructor(private http: HttpClient) {
   }
-
-
+  private productDto = {
+    "id": null,
+    "price": null,
+    "title": "",
+    "description": "",
+    "imageLink": ""
+  };
 
   getProduct() {
     const headers = new HttpHeaders().set('Authorization', localStorage.getItem("token"));
     return this.http.get('http://localhost:8080/product/all', {
-     headers: headers
+      headers: headers
     })
   }
 
   addNewProduct(product: ProductData) {
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:8080/product/save/',
-      product);
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem("token"));
+    // this.productDto.id = 62;
+    this.productDto.title = product.title;
+    this.productDto.description = product.description;
+    this.productDto.price = product.price;
+    this.productDto.imageLink = product.imageLink;
+
+
+    console.log(this.productDto);
+
+    return this.http.post('http://localhost:8080/product/save',
+      this.productDto, {
+      headers: headers
+      });
   }
 
   onTaskRemoved = new EventEmitter<ProductData>();
+  onTaskUpdated = new EventEmitter<ProductData>();
 
-  removeProduct(product: ProductData) {
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.put('http://localhost:8080/product/deleteProduct',
-      product);
+  removeProduct(product) {
+    console.log(product);
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem("token"));
+
+    return this.http.put('http://localhost:8080/product/deleteProduct', product, {
+      headers: headers
+    });
   }
 
-  updateTask(product: ProductData) {
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.put('http://localhost:8080/product/updateProduct',
-      product);
+  updateTask(product) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem("token"));
+    return this.http.put('http://localhost:8080/product/updateProduct', product,{
+        headers: headers
+      });
   }
 
   getBuckets() {

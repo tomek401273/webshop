@@ -9,7 +9,7 @@ import {AddNewProductComponent} from './add-new-product/add-new-product.componen
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { ProductEditComponent } from './product-edit/product-edit.component';
-import { EditDetailComponent } from './edit-detail/edit-detail.component';
+import { EditDetailComponent } from './product-edit/edit-detail/edit-detail.component';
 import { ShowBuketComponent } from './show-buket/show-buket.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./services/auth.interceptor";

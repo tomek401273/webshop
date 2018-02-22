@@ -26,9 +26,9 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.serverService.onTaskRemoved.subscribe(
-    //   (product: ProductData) =>this.products.splice(this.products.indexOf(this.product),1)
-    // )
+    this.serverService.onTaskRemoved.subscribe(
+      (product: ProductData) =>this.products.splice(this.products.indexOf(this.product),1)
+    )
     this.showPublicData.getProduct()
       .subscribe(
         (products: any[]) => this.products = products,

@@ -1,9 +1,10 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <ul class="list-group" *ngFor="let product of products; let i = index">
+      <ul class="list-group" *ngFor="let product of productDataEdit; let i = index">
         <li class="list-group-item">
           <p>Index: {{i}}</p>
+          <p>Index in database:{{product.id}}</p>
           <p> Tile: {{product.title}}</p>
           <p> Price: {{product.price}} $</p>
           <p> description: {{product.description}}</p>
@@ -14,14 +15,13 @@
             alt="{{product.imageLink}}"
             class="img-responsive"
             style="max-height: 120px; max-width: 120px">
-          <button class="btn btn-danger" (click)="onRemove(i)">REMOVE</button>
-          <button class="btn btn-warning">EDIT PRODUCT</button>
+          <button class="btn btn-danger" (click)="onRemove(product, i)">REMOVE</button>
+          <button class="btn btn-warning" (click)="onEditDetail(i)">EDIT PRODUCT</button>
 
-          <div *ngIf="editProduct==true">
+          <div *ngIf="product.visible">
+            <app-edit-detail [product]="product" [id]="i"></app-edit-detail>
           </div>
-          <app-edit-detail
-            [product]="product"
-            [id]="i"></app-edit-detail>
+
         </li>
       </ul>
 
