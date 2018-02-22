@@ -18,6 +18,7 @@ import {LogingService} from "./auth/loging.service";
 import { HeaderComponent } from './header/header.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import {ShowPublicDataSevice} from "./product-list/show-public-data.sevice";
+import {PagerService} from "./services/pager.service";
 //import {AuthInterceptor} from "./auth.interceptor";
 
 const appRoutes: Routes = [
@@ -52,6 +53,7 @@ const appRoutes: Routes = [
     ServerService,
     ShowPublicDataSevice,
     LogingService,
+    PagerService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
     ],
