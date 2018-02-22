@@ -9,8 +9,6 @@ export class PagerService {
       startPage = 1;
       endPage = totalPages;
     } else {
-      // more than 10 total pages so calculate start and end pages
-
       if (currentPage <= 6) {
         startPage = 1;
         endPage = 10;
@@ -22,21 +20,15 @@ export class PagerService {
         endPage = currentPage + 4;
       }
     }
-    console.log(currentPage);
-    console.log(startPage);
-    console.log(endPage);
-    // calculate start and end item indexes
+
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-
-    // create an array of pages to ng-repeat in the pager controlss
-    //  let pages = _.range(startPage, endPage + 1);
     const pages = [];
 
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
-    // return object with all pager properties required by the viewd
+
     return {
       currentPage: currentPage,
       totalPages: totalPages,

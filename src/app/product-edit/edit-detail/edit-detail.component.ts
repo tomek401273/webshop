@@ -15,7 +15,6 @@ export class EditDetailComponent {
   @Input() product: { id: number, price: number, title: string, description: string, imageLink: string };
   @Input() id: number;
   editData = false;
-
   constructor(private serverServie: ServerService) {
   }
 
@@ -42,7 +41,7 @@ export class EditDetailComponent {
       .subscribe(
         (response: Response) => {
           console.log(response);
-          console.log("next")
+          console.log("next");
           this.serverServie.onTaskUpdated.emit(this.productData);
         },
         (error) => {

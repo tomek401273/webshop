@@ -20,11 +20,10 @@ export class ProductListComponent implements OnInit {
   //   }
   // ];
 
-  private product: ProductData = new ProductData(1, 100, 'Procek', 'wiencyj rdzenióf ', 'http://themillenniumreport.com/wp-content/uploads/2017/03/e5403971-5cd3-4010-9401-c0c264ac23dd1.jpg');
   private products: ProductData[] = [];
 
   private pager: any = {};
-  private pagedItems: any[];
+  private pagedProduct: any[];
 
 
   constructor(private serverService: ServerService,
@@ -34,7 +33,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit() {
     this.serverService.onTaskRemoved.subscribe(
-      (product: ProductData) => this.products.splice(this.products.indexOf(this.product), 1)
+      (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
     )
     this.showPublicData.getProduct()
       .subscribe(
@@ -51,7 +50,7 @@ export class ProductListComponent implements OnInit {
       return;
     }
     this.pager = this.pagerService.getPager(this.products.length, page);
-    this.pagedItems = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
     console.log(this.pager.pages);
   }
 

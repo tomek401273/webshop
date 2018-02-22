@@ -6,6 +6,7 @@ import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
 import {ShowPublicDataSevice} from "../product-list/show-public-data.sevice";
 import {ProductDataEdit} from "./ProductDataEdit";
+import {PagerService} from "../services/pager.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -16,8 +17,12 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private products: ProductData[] = [];
   private productDataEdit: ProductDataEdit[] = [];
   private prdutDataDeleted: ProductData;
+  private pager: any = {};
+  private pagedProducts: any[];
+
   constructor(private serverService: ServerService,
-              private showPublicData: ShowPublicDataSevice) {
+              private showPublicData: ShowPublicDataSevice,
+              private pagerService: PagerService) {
   }
 
   ngAfterContentChecked() {
@@ -50,6 +55,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
             let product: ProductData = this.products[i];
             this.productDataEdit.push(new ProductDataEdit(product.id, product.price, product.title, product.description, product.imageLink, false));
           }
+          this.setPage(1);
         },
         (error) => console.log(error)
       );
@@ -81,4 +87,15 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   onEditDetail(id: number) {
     this.productDataEdit[id].visible = !this.productDataEdit[id].visible;
   }
+
+  setPage(page: number) {
+    if (page < 1 || page > this.products.length) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.productDataEdit.length, page);
+    this.pagedProducts = this.productDataEdit.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    console.log(this.pager.pages);
+  }
+
+
 }

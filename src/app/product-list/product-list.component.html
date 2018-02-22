@@ -1,79 +1,56 @@
-<!--<div class="container">-->
-  <!--<div class="row">-->
-    <!--<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">-->
-      <!--<div class="list-group">-->
-        <!--<ul class="list-group" *ngFor="let product of products; let i = index">-->
-          <!--<li class="list-group-item">-->
-            <!--<p>id: {{i}}</p>-->
-            <!--<p>id form Database: {{product.id}}</p>-->
-            <!--<p> Tile: {{product.title}}</p>-->
-            <!--<p> Price: {{product.price}} $</p>-->
-            <!--<p> description: {{product.description}}</p>-->
-            <!--Image:-->
-
-            <!--<img-->
-              <!--src="{{product.imageLink}}"-->
-              <!--alt="{{product.imageLink}}"-->
-              <!--class="img-responsive"-->
-              <!--style="max-height: 120px; max-width: 120px">-->
-
-          <!--</li>-->
-        <!--</ul>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
-
 <div class="container">
+
   <div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <div class="list-group">
-
-
-        <ul *ngFor="let product of pagedItems; let i = index">
-            <li class="list-group-item">
-              <p>id: {{i}}</p>
-              <p>id form Database: {{product.id}}</p>
-              <p> Tile: {{product.title}}</p>
-              <p> Price: {{product.price}} $</p>
-              <p> description: {{product.description}}</p>
-              Image:
-
-              <img
-                src="{{product.imageLink}}"
-                alt="{{product.imageLink}}"
-                class="img-responsive"
-                style="max-height: 120px; max-width: 120px">
-
-            </li>
-          </ul>
-
-
-        <!-- pager -->
-        <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-
-          <li [ngClass]="{disabled:pager.currentPage === 1}">
-            <a (click)="setPage(1)">First</a>
-          </li>
-          <li [ngClass]="{disabled:pager.currentPage === 1}">
-            <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-          </li>
-
-
-          <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-            <a (click)="setPage(page)">{{page}}</a>
-          </li>
-
-
-          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-            <a (click)="setPage(pager.currentPage + 1)">Next</a>
-          </li>
-          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-            <a (click)="setPage(pager.totalPages)">Last</a>
-          </li>
-        </ul>
-
-      </div>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-9">
+      <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(1)">First</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+        </li>
+        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+          <a (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.currentPage + 1)">Next</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.totalPages)">Last</a>
+        </li>
+      </ul>
     </div>
   </div>
+
+
+  <div class="row align-items-end">
+    <div class="container list-group-item" *ngFor="let product of pagedProduct; let i = index">
+      <div class="row">
+      <div class="col-sm-4">
+        <img
+          src="{{product.imageLink}}"
+          alt="{{product.imageLink}}"
+          class="img-responsive"
+          style="max-height: 200px; max-width: 200px">
+      </div>
+
+      <div class="col-sm-4">
+        <h4> Tile: {{product.title}}</h4>
+        <p> Price: {{product.price}} $</p>
+        <p> description: {{product.description}}</p>
+      </div>
+        <button class="btn bottom-toolbar">Add to Card</button>
+
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <h3 class="col-sm-9">Bottom</h3>
+  </div>
+
 </div>
