@@ -24,29 +24,41 @@
   </div>
 
 
-  <div class="row align-items-end">
-    <div class="container list-group-item" *ngFor="let product of pagedProduct; let i = index">
-      <div class="row">
-      <div class="col-sm-4">
-        <img
-          src="{{product.imageLink}}"
-          alt="{{product.imageLink}}"
-          class="img-responsive"
-          style="max-height: 200px; max-width: 200px">
-      </div>
+  <div class="row " *ngFor="let product of pagedProduct; let i = index">
+    <div class="col-sm-11 list-group-item">
+      <h3 class="text-center">{{product.title}}</h3>
+      <hr>
+      <table class="table table-borderless">
+        <thead>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="col-sm-4"><img
+            src="{{product.imageLink}}"
+            alt="{{product.imageLink}}"
+            class="img-responsive"
+            style="max-height: 200px; max-width: 250px"></td>
+          <td class="col-sm-6 text-left">
+            {{product.description}}
+          </td>
+          <td class="col-sm-2 text-center">
+            Price: {{product.price}} $<br>
+            <button class="btn btn-primary btn-group-lg">Add to Card</button>
+          </td>
+        </tr>
 
-      <div class="col-sm-4">
-        <h4> Tile: {{product.title}}</h4>
-        <p> Price: {{product.price}} $</p>
-        <p> description: {{product.description}}</p>
-      </div>
-        <button class="btn bottom-toolbar">Add to Card</button>
-
-      </div>
-
-
+        </tbody>
+      </table>
     </div>
+
+
   </div>
+
 
   <div class="row">
     <div class="col-sm-3"></div>
