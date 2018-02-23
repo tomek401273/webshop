@@ -6,11 +6,13 @@ import {HttpClient} from "@angular/common/http";
 export class ShowPublicDataSevice {
   constructor(private httpClient: HttpClient) {}
 
-  getProduct() {
+  getProducts() {
     return this.httpClient.get('http://localhost:8080/product/all')
-      // .subscribe(
-      //   (products: any[]) => console.log(products),
-      //   (error) => console.log(error)
-      // );
   }
+
+  getProduct(id: number) {
+    return this.httpClient.get('http://localhost:8080/product/'+id)
+  }
+
+
 }

@@ -10,22 +10,9 @@ import {PagerService} from "../services/pager.service";
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  // products = [
-  //   {
-  //     id: 0,
-  //     price: 10000,
-  //     title: 'Procesor',
-  //     description: 'super Procesor',
-  //     imageLink: 'http://themillenniumreport.com/wp-content/uploads/2017/03/e5403971-5cd3-4010-9401-c0c264ac23dd1.jpg'
-  //   }
-  // ];
-
   private products: ProductData[] = [];
-
   private pager: any = {};
   private pagedProduct: any[];
-
-
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
               private pagerService: PagerService) {
@@ -35,7 +22,7 @@ export class ProductListComponent implements OnInit {
     this.serverService.onTaskRemoved.subscribe(
       (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
     )
-    this.showPublicData.getProduct()
+    this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
           this.products = products;

@@ -27,7 +27,6 @@ export class ProductData {
     this._imageLink = imageLink;
   }
 
-
   get id(): number {
     return this._id;
   }

@@ -7,6 +7,7 @@ import {ProductData} from "../product-row/ProductData";
 import {ShowPublicDataSevice} from "../product-list/show-public-data.sevice";
 import {ProductDataEdit} from "./ProductDataEdit";
 import {PagerService} from "../services/pager.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-product-edit',
@@ -20,7 +21,8 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private pager: any = {};
   private pagedProducts: any[];
 
-  constructor(private serverService: ServerService,
+  constructor(private router: Router,
+              private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
               private pagerService: PagerService) {
   }
@@ -40,13 +42,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     //   (product222: ProductData) => this.products.splice(this.products.indexOf(product222), 1)
     // );
 
-    // this.showPublicData.getProduct()
-    //   .subscribe(
-    //     (procucts: any[]) => this.products = procucts,
-    //     (error) => console.log(error)
-    //   );
-
-    this.showPublicData.getProduct()
+    this.showPublicData.getProducts()
       .subscribe(
         (procucts: any[]) => {
           this.products = procucts;
@@ -62,6 +58,9 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
 
   }
 
+  onEditDetail(id: number) {
+    this.router.navigate(['/product-edit-detail', id]);
+  }
 
   onRemove(poroductDeteted: ProductDataEdit, id: number) {
     console.log(poroductDeteted);
@@ -73,21 +72,17 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       "description": poroductDeteted.description,
       "imageLink": poroductDeteted.imageLink
     };
-    this.prdutDataDeleted= poroductDeteted;
+    this.prdutDataDeleted = poroductDeteted;
     this.serverService.removeProduct(product)
       .subscribe(
         (response) => {
           this.serverService.onTaskRemoved.emit(this.prdutDataDeleted);
-          this.productDataEdit.splice(id,1);
+          this.productDataEdit.splice(id, 1);
         },
         (error) => console.log(error)
       );
   }
 
-  onEditDetail(product: ProductDataEdit) {
-    console.log(product);
-    product.visible=!product.visible;
-    }
 
   setPage(page: number) {
     if (page < 1 || page > this.products.length) {

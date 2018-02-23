@@ -8,15 +8,15 @@ import {ServerService} from './services/server.service';
 import {AddNewProductComponent} from './add-new-product/add-new-product.component';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import { ProductEditComponent } from './product-edit/product-edit.component';
-import { EditDetailComponent } from './product-edit/edit-detail/edit-detail.component';
-import { ShowBuketComponent } from './show-buket/show-buket.component';
+import {ProductEditComponent} from './product-edit/product-edit.component';
+import {EditDetailComponent} from './product-edit/edit-detail/edit-detail.component';
+import {ShowBuketComponent} from './show-buket/show-buket.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./services/auth.interceptor";
 import {LoggingInterceptor} from "./services/logging.interceptor";
 import {LogingService} from "./auth/loging.service";
-import { HeaderComponent } from './header/header.component';
-import { SigninComponent } from './auth/signin/signin.component';
+import {HeaderComponent} from './header/header.component';
+import {SigninComponent} from './auth/signin/signin.component';
 import {ShowPublicDataSevice} from "./product-list/show-public-data.sevice";
 import {PagerService} from "./services/pager.service";
 //import {AuthInterceptor} from "./auth.interceptor";
@@ -25,8 +25,9 @@ const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
   {path: 'addProduct', component: AddNewProductComponent},
   {path: 'productEdit', component: ProductEditComponent},
+  {path: 'product-edit-detail/:id', component: EditDetailComponent},
   {path: 'showBucket', component: ShowBuketComponent},
-  {path: 'login', component: SigninComponent}
+  {path: 'login', component: SigninComponent},
 ];
 
 
@@ -56,7 +57,7 @@ const appRoutes: Routes = [
     PagerService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
-    ],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
