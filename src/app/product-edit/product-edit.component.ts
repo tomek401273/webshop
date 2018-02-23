@@ -84,9 +84,10 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       );
   }
 
-  onEditDetail(id: number) {
-    this.productDataEdit[id].visible = !this.productDataEdit[id].visible;
-  }
+  onEditDetail(product: ProductDataEdit) {
+    console.log(product);
+    product.visible=!product.visible;
+    }
 
   setPage(page: number) {
     if (page < 1 || page > this.products.length) {

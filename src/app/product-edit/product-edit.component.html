@@ -41,10 +41,10 @@
             class="img-responsive"
             style="max-height: 120px; max-width: 120px">
           <button class="btn btn-danger" (click)="onRemove(product, i)">REMOVE</button>
-          <button class="btn btn-warning" (click)="onEditDetail(i)">EDIT PRODUCT</button>
+          <button class="btn btn-warning" (click)="onEditDetail(product)">EDIT PRODUCT</button>
 
           <div *ngIf="product.visible">
-            <app-edit-detail [product]="product" [id]="i"></app-edit-detail>
+            <app-edit-detail [product]="product" [id]="product.id"></app-edit-detail>
           </div>
 
         </li>
