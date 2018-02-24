@@ -26,3 +26,4 @@ export class AuthGuard implements CanActivate {
 
 
 }
+// guard guard only guard
