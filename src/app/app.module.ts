@@ -20,6 +20,7 @@ import {PagerService} from "./services/pager.service";
 import {AppRoutingModule} from "./app-routing.module";
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { SignupComponent } from './auth/signup/signup.component';
+import {AuthGuard} from "./auth/auth-guard.service";
 
 
 
@@ -48,6 +49,7 @@ import { SignupComponent } from './auth/signup/signup.component';
     ShowPublicDataSevice,
     LogingService,
     PagerService,
+    AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
   ],

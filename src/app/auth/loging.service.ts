@@ -41,6 +41,16 @@ export class LogingService {
     }
   }
 
+  isAuthentication() {
+    const promise = new Promise(
+      (resolve => {
+        resolve(this.isAuthenticated())
+      })
+    )
+    return promise;
+  }
+
+
   registration(register: Register) {
     console.log(register);
     const headers = new HttpHeaders().set('Content-Type', 'application/json').append('Accept','application/json');

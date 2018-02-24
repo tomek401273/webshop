@@ -15,7 +15,7 @@ export class SigninComponent implements OnInit {
 
   // @ViewChild('form') loginForm: NgForm;
   name = 'tomek4';
-  password = '$2a$10$1jqMcOyaoPpF1pYTERFHYum1ox1W2evZX/GDuSDdRMb3YUjH.f3RW';
+  password = 'tomek4';
   message = '';
 
   constructor(private server: ServerService,
