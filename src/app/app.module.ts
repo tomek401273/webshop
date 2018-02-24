@@ -1,12 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {ProductRowComponent} from './product-row/product-row.component';
 import {ProductListComponent} from './product-list/product-list.component';
 import {ServerService} from './services/server.service';
 import {AddNewProductComponent} from './add-new-product/add-new-product.component';
-import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {ProductEditComponent} from './product-edit/product-edit.component';
 import {EditDetailComponent} from './product-edit/edit-detail/edit-detail.component';
@@ -19,16 +17,10 @@ import {HeaderComponent} from './header/header.component';
 import {SigninComponent} from './auth/signin/signin.component';
 import {ShowPublicDataSevice} from "./product-list/show-public-data.sevice";
 import {PagerService} from "./services/pager.service";
-//import {AuthInterceptor} from "./auth.interceptor";
+import {AppRoutingModule} from "./app-routing.module";
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
-const appRoutes: Routes = [
-  {path: '', component: ProductListComponent},
-  {path: 'addProduct', component: AddNewProductComponent},
-  {path: 'productEdit', component: ProductEditComponent},
-  {path: 'product-edit-detail/:id', component: EditDetailComponent},
-  {path: 'showBucket', component: ShowBuketComponent},
-  {path: 'login', component: SigninComponent},
-];
 
 
 @NgModule({
@@ -41,14 +33,15 @@ const appRoutes: Routes = [
     EditDetailComponent,
     ShowBuketComponent,
     HeaderComponent,
-    SigninComponent
+    SigninComponent,
+    AuthenticationComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
-    // HttpModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    AppRoutingModule
   ],
   providers: [
     ServerService,

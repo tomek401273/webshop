@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Log} from "./Log";
 import {ServerService} from "../../services/server.service";
 import {LogingService} from "../loging.service";
@@ -33,7 +33,7 @@ export class SigninComponent implements OnInit {
       .subscribe(
         (response: HttpResponse<String>) => {
           let token = response.headers.get("Authorization");
-          let role =  response.headers.get("Credentials");
+          let role = response.headers.get("Credentials");
           localStorage.setItem("token", token);
           localStorage.setItem("role", role);
           this.loggingService.loginSuccessful.emit(role);
@@ -41,6 +41,8 @@ export class SigninComponent implements OnInit {
 
         },
         (error) => {
+          localStorage.setItem("token", null);
+          localStorage.setItem("role", null);
           this.somethingGoWrong();
         }
       );

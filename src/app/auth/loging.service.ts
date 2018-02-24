@@ -2,36 +2,16 @@ import {EventEmitter, Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Log} from "./signin/Log";
 import {ServerService} from "../services/server.service";
+import {Router} from "@angular/router";
+import {Register} from "./register";
 
 @Injectable()
 export class LogingService {
 
-  constructor(private httpClient: HttpClient,private serverService: ServerService) {}
-
-  // getToken(log: Log) {
-  //   console.log(log);
-  //
-  //   const headers = new HttpHeaders().set('Content-Type', 'application/json');
-  //
-  //   return this.httpClient.post('http://localhost:8080/login', log,
-  //     {
-  //       observe: 'response',
-  //       responseType: 'text',
-  //       headers: headers
-  //     })
-  //     .subscribe(
-  //       (response: HttpResponse<String>) => {
-  //         // console.log(response.headers.get("Authorization"));
-  //         let token= response.headers.get("Authorization");
-  //         localStorage.setItem("token",token);
-  //
-  //         // console.log("Credentials: ");
-  //         // console.log(response.headers.get("CREDENTIALS"))
-  //         console.log(localStorage.getItem("token"));
-  //       }
-  //     );
-  //
-  // }
+  constructor(private httpClient: HttpClient,
+              private serverService: ServerService,
+              private router: Router) {
+  }
 
   loginSuccessful = new EventEmitter<String>();
 
@@ -47,6 +27,28 @@ export class LogingService {
 
   }
 
+  logOut() {
+    localStorage.setItem("token", null);
+    localStorage.setItem("role", null);
+  }
 
+  isAuthenticated() {
+    if (localStorage.getItem("role") === "user" || localStorage.getItem("role") === "admin") {
+      return true;
+    }
+    else {
+      return false
+    }
+  }
+
+  registration(register: Register) {
+    console.log(register);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json').append('Accept','application/json');
+    return this.httpClient.post('http://localhost:8080/auth/signup', register, {
+      observe: 'response',
+      responseType: 'text',
+      headers: headers,
+    })
+  }
 
 }

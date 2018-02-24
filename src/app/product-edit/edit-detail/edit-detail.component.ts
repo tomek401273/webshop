@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ProductData} from '../../product-row/ProductData';
 import {ServerService} from '../../services/server.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ShowPublicDataSevice} from "../../product-list/show-public-data.sevice";
 
 @Component({
@@ -14,6 +14,7 @@ export class EditDetailComponent implements OnInit {
   @ViewChild('f') editProductForm: NgForm;
   private product: ProductData = new ProductData(null,null,null,null,null);
   private productUpdated: ProductData;
+  private positonProductOnPage =1;
   editData = false;
 
   constructor(private publicServer: ShowPublicDataSevice,
@@ -33,15 +34,16 @@ export class EditDetailComponent implements OnInit {
         (error) => console.log(error)
       )
 
+    this.activatedRoute.queryParams
+      .subscribe(
+        (params: Params) => {
+          this.positonProductOnPage= params['numberpage'];
+        },
+        (error) => console.log(error)
+      );
+
   }
-
-  onShowDetail() {
-    this.editData = !this.editData;
-
-  }
-
   onSubmit() {
-
       this.productUpdated = new ProductData(this.product.id, this.editProductForm.value.price, this.editProductForm.value.title, this.editProductForm.value.desc, this.editProductForm.value.image);
 
       let productUpdated = {
@@ -56,7 +58,7 @@ export class EditDetailComponent implements OnInit {
         .subscribe(
           (response: Response) => {
             this.serverServie.onTaskUpdated.emit(this.productUpdated);
-            this.router.navigate(['/productEdit'])
+            this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'})
           },
           (error) => {
             console.log(error)

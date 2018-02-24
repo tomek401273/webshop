@@ -7,7 +7,7 @@ import {ProductData} from "../product-row/ProductData";
 import {ShowPublicDataSevice} from "../product-list/show-public-data.sevice";
 import {ProductDataEdit} from "./ProductDataEdit";
 import {PagerService} from "../services/pager.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'app-product-edit',
@@ -20,11 +20,14 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private prdutDataDeleted: ProductData;
   private pager: any = {};
   private pagedProducts: any[];
+  private currentPage = 1;
+  private redirectedPage = 1;
 
   constructor(private router: Router,
               private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
-              private pagerService: PagerService) {
+              private pagerService: PagerService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngAfterContentChecked() {
@@ -42,6 +45,14 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     //   (product222: ProductData) => this.products.splice(this.products.indexOf(product222), 1)
     // );
 
+    this.activatedRoute.queryParams
+      .subscribe(
+        (params: Params) => {
+          this.redirectedPage = params['numberpage'];
+        },
+        (error) => console.log(error)
+      );
+
     this.showPublicData.getProducts()
       .subscribe(
         (procucts: any[]) => {
@@ -51,7 +62,8 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
             let product: ProductData = this.products[i];
             this.productDataEdit.push(new ProductDataEdit(product.id, product.price, product.title, product.description, product.imageLink, false));
           }
-          this.setPage(1);
+          this.redirectedPage = (typeof this.redirectedPage === 'undefined') ? 1 : this.redirectedPage;
+          this.setPage(this.redirectedPage);
         },
         (error) => console.log(error)
       );
@@ -59,7 +71,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   }
 
   onEditDetail(id: number) {
-    this.router.navigate(['/product-edit-detail', id]);
+    this.router.navigate(['/product-edit-detail', id], {queryParams: {numberpage: this.currentPage}});
   }
 
   onRemove(poroductDeteted: ProductDataEdit, id: number) {
@@ -85,6 +97,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
 
 
   setPage(page: number) {
+    this.currentPage = page;
     if (page < 1 || page > this.products.length) {
       return;
     }

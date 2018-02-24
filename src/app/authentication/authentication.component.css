@@ -1,0 +1,32 @@
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+  border: none;
+}
+/*button.sing {*/
+  /*position: relative;*/
+  /*left: 20px;*/
+  /*top: 20px;*/
+  /*width: 75px;*/
+/*}*/
+/*button.signUp {*/
+  /*position: relative;*/
+  /*left: 600px;*/
+  /*top: 80px;*/
+  /*width: 75px;*/
+/*}*/
+
+button.logOut {
+  width: 200px;
+}
+button.logAcces {
+  width: 100px;
+}
+div.tableLog {
+  position: relative;
+  top: 30px;
+  left: 350px;
+}

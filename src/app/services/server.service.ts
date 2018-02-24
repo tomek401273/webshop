@@ -37,7 +37,6 @@ export class ServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem("token"));
-    // this.productDto.id = 62;
     this.productDto.title = product.title;
     this.productDto.description = product.description;
     this.productDto.price = product.price;
@@ -85,9 +84,5 @@ export class ServerService {
           return data;
         }
       );
-  }
-
-  adminLogin() {
-
   }
 }

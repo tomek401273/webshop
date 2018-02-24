@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LogingService} from "../auth/loging.service";
 
 @Component({
@@ -6,30 +6,39 @@ import {LogingService} from "../auth/loging.service";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   authenticated = false;
-  constructor(private logingService: LogingService) { }
-  adminPanel=false;
+
+  constructor(private logingService: LogingService) {
+  }
+
+ private adminPanel = false;
+
   ngOnInit() {
     this.logingService.loginSuccessful.subscribe(
-      (role:String) => {
-        this.adminPanel=true;
-        console.log(localStorage.getItem("role"));
-        console.log(localStorage.getItem("token"));
+      (role: String) => {
+        if (role==="admin") {
+          this.adminPanel =true;
+        }
+        if (this.logingService.isAuthenticated()) {
+          this.authenticated= true;
+        } else {
+          this.authenticated =false;
+        }
       }
     )
   }
 
-  login() {
-    this.authenticated = !this.authenticated;
+  ngOnDestroy() {
+    this.logingService.logOut();
   }
 
-  adminLogin() {
 
-    console.log("Admin login");
+  logOut() {
+    this.logingService.logOut();
+    this.authenticated = false;
   }
-  userLogin() {
-    console.log("User Login")
-  }
+
+
 
 }
