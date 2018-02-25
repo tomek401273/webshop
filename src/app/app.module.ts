@@ -22,6 +22,8 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { SignupComponent } from './auth/signup/signup.component';
 import {AuthGuard} from "./auth/auth-guard.service";
 import {CanDeactivateGuard} from "./can-deactivate-guard";
+import { BucketUserComponent } from './bucket-user/bucket-user.component';
+import {BucketService} from "./bucket-user/bucket.service";
 
 
 
@@ -37,7 +39,8 @@ import {CanDeactivateGuard} from "./can-deactivate-guard";
     HeaderComponent,
     SigninComponent,
     AuthenticationComponent,
-    SignupComponent
+    SignupComponent,
+    BucketUserComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ import {CanDeactivateGuard} from "./can-deactivate-guard";
     PagerService,
     AuthGuard,
     CanDeactivateGuard,
+    BucketService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
   ],

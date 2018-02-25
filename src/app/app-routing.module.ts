@@ -9,12 +9,14 @@ import {EditDetailComponent} from "./product-edit/edit-detail/edit-detail.compon
 import {SignupComponent} from "./auth/signup/signup.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {CanDeactivateGuard} from "./can-deactivate-guard";
+import {BucketUserComponent} from "./bucket-user/bucket-user.component";
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
   {path: 'showBucket', component: ShowBuketComponent},
   {path: 'login', component: SigninComponent},
   {path: 'signup', component: SignupComponent},
+  {path: 'bucket', component: BucketUserComponent},
   {path: 'addProduct', canActivate: [AuthGuard],
     component: AddNewProductComponent,
   canDeactivate: [CanDeactivateGuard]},

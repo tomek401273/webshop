@@ -3,6 +3,7 @@ import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
 import {ShowPublicDataSevice} from "./show-public-data.sevice";
 import {PagerService} from "../services/pager.service";
+import {BucketService} from "../bucket-user/bucket.service";
 
 @Component({
   selector: 'app-product-list',
@@ -13,9 +14,11 @@ export class ProductListComponent implements OnInit {
   private products: ProductData[] = [];
   private pager: any = {};
   private pagedProduct: any[];
+
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
-              private pagerService: PagerService) {
+              private pagerService: PagerService,
+              private bucketService: BucketService) {
   }
 
   ngOnInit() {
@@ -38,8 +41,10 @@ export class ProductListComponent implements OnInit {
     }
     this.pager = this.pagerService.getPager(this.products.length, page);
     this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
-    console.log(this.pager.pages);
   }
 
+  onAddToCard(product: ProductData) {
+    this.bucketService.addProductToBucket(product);
+  }
 
 }
