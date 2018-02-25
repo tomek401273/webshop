@@ -10,9 +10,10 @@ import {isNull, isUndefined} from "util";
   templateUrl: './bucket-user.component.html',
   styleUrls: ['./bucket-user.component.css']
 })
-export class BucketUserComponent implements OnInit, DoCheck, OnDestroy {
+export class BucketUserComponent implements OnInit, DoCheck {
   private products: BucketProduct[] = [];
   private productRecived: BucketProduct[] =[];
+  private totalValueProducts: number = 0;
   constructor(private bucketService: BucketService) {
   }
 
@@ -40,6 +41,9 @@ export class BucketUserComponent implements OnInit, DoCheck, OnDestroy {
       this.addProductToBucket(recievedProduct)
     }
 
+
+
+
   }
 
   addProductToBucket(product: BucketProduct) {
@@ -63,11 +67,20 @@ export class BucketUserComponent implements OnInit, DoCheck, OnDestroy {
   ngDoCheck() {
     for (let i = 0; i < this.products.length; i++) {
       let prod = this.products[i];
-      let totalPrice = prod.price * prod.amount;
-      this.products[i].totalPrice = totalPrice;
+      let value = prod.price * prod.amount;
+      this.products[i].value = value;
       //console.log(totalPrice);
+      for (let product of this.products){
+        console.log(product)
+        this.totalValueProducts += product.value;
 
+      }
     }
+
+    let bucketToSave = JSON.stringify(this.products);
+    localStorage.setItem('bucket', bucketToSave);
+    this.bucketService.cleanUpBucketTemp();
+
   }
 
   onRemove(product: BucketProduct) {
@@ -76,9 +89,11 @@ export class BucketUserComponent implements OnInit, DoCheck, OnDestroy {
     this.products.splice(index, 1);
   }
 
-  ngOnDestroy() {
-    let bucketToSave = JSON.stringify(this.products);
-    localStorage.setItem('bucket', bucketToSave);
-    this.bucketService.cleanUpBucketTemp();
+  calcuateTotalValueProducts(){
+    for (let product of this.products){
+      this.totalValueProducts += product.value;
+
+    }
   }
+
 }

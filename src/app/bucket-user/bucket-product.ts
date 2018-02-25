@@ -2,7 +2,7 @@ import {ProductData} from "../product-row/ProductData";
 
 export class BucketProduct extends ProductData {
   private _amount;
-  private _totalPrice;
+  private _value;
 
   constructor(id: number, price: number, title: string, description: string, imageLink: string, amount) {
     super(id, price, title, description, imageLink);
@@ -18,12 +18,11 @@ export class BucketProduct extends ProductData {
     this._amount = value;
   }
 
-
-  get totalPrice() {
-    return this._totalPrice;
+  get value() {
+    return this._value;
   }
 
-  set totalPrice(value) {
-    this._totalPrice = value;
+  set value(value) {
+    this._value = value;
   }
 }
