@@ -71,7 +71,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   }
 
   onEditDetail(id: number) {
-    this.router.navigate(['/product-edit-detail', id], {queryParams: {numberpage: this.currentPage}});
+    this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this.currentPage}});
   }
 
   onRemove(poroductDeteted: ProductDataEdit, id: number) {
@@ -89,7 +89,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       .subscribe(
         (response) => {
           this.serverService.onTaskRemoved.emit(this.prdutDataDeleted);
-          this.productDataEdit.splice(id, 1);
+          this.pagedProducts.splice(id, 1);
         },
         (error) => console.log(error)
       );

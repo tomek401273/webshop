@@ -24,8 +24,11 @@
           <a (click)="setPage(pager.totalPages)">Last</a>
         </li>
       </ul>
+    </div>
+  </div>
 
-
+  <div class="row">
+    <div class="col-sm-12">
       <ul class="list-group" *ngFor="let product of pagedProducts; let i = index">
         <li class="list-group-item">
           <p>Index: {{i}}</p>
@@ -47,31 +50,11 @@
 
         </li>
       </ul>
-
-
-      <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(1)">First</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-        </li>
-
-
-        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-          <a (click)="setPage(page)">{{page}}</a>
-        </li>
-
-
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.currentPage + 1)">Next</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.totalPages)">Last</a>
-        </li>
-      </ul>
+    </div>
+    <div class="col-sm-4">
 
     </div>
+
+
   </div>
 </div>

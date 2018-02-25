@@ -21,6 +21,7 @@ import {AppRoutingModule} from "./app-routing.module";
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import {AuthGuard} from "./auth/auth-guard.service";
+import {CanDeactivateGuard} from "./can-deactivate-guard";
 
 
 
@@ -50,6 +51,7 @@ import {AuthGuard} from "./auth/auth-guard.service";
     LogingService,
     PagerService,
     AuthGuard,
+    CanDeactivateGuard,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
   ],

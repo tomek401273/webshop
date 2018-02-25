@@ -10,15 +10,21 @@ import {Router} from "@angular/router";
 })
 export class AuthenticationComponent implements OnInit, DoCheck {
   private isAuthenticated = false;
+  private loginUser ="";
+  private roleUser ="";
+
   constructor(private logginService: LogingService,
               private router: Router) {
   }
 
   ngOnInit() {
+
   }
 
   ngDoCheck() {
     this.isAuthenticated = this.logginService.isAuthenticated();
+    this.loginUser =localStorage.getItem("login");
+    this.roleUser = localStorage.getItem("role");
   }
 
   onRedirect(page){

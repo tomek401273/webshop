@@ -1,15 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
 import {LogingService} from "../auth/loging.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, DoCheck {
   authenticated = false;
 
-  constructor(private logingService: LogingService) {
+  constructor(private logingService: LogingService,
+              private router: Router) {
   }
 
  private adminPanel = false;
@@ -29,8 +31,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnDestroy() {
-    this.logingService.logOut();
+  ngDoCheck() {
+    this.logingService.logoutEmitter.subscribe(
+      (logout: boolean) => {
+        if (logout == true) {
+          this.adminPanel =false;
+          this.authenticated = false;
+          this.router.navigate(['/']);
+        }
+      }
+    )
   }
 
 

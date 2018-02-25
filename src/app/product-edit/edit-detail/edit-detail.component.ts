@@ -4,18 +4,20 @@ import {ProductData} from '../../product-row/ProductData';
 import {ServerService} from '../../services/server.service';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {ShowPublicDataSevice} from "../../product-list/show-public-data.sevice";
+import {CanDeactivateGuard} from "../../can-deactivate-guard";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-edit-detail',
   templateUrl: './edit-detail.component.html',
   styleUrls: ['./edit-detail.component.css']
 })
-export class EditDetailComponent implements OnInit {
+export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') editProductForm: NgForm;
-  private product: ProductData = new ProductData(null,null,null,null,null);
+  private product: ProductData = new ProductData(null, null, null, null, null);
   private productUpdated: ProductData;
-  private positonProductOnPage =1;
-  editData = false;
+  private positonProductOnPage = 1;
+  private saveChanges = false;
 
   constructor(private publicServer: ShowPublicDataSevice,
               private serverServie: ServerService,
@@ -27,9 +29,9 @@ export class EditDetailComponent implements OnInit {
 
     this.publicServer.getProduct(+this.activatedRoute.snapshot.params['id'])
       .subscribe(
-        (product: any) =>{
+        (product: any) => {
           console.log(product);
-         this.product = product;
+          this.product = product;
         },
         (error) => console.log(error)
       )
@@ -37,33 +39,47 @@ export class EditDetailComponent implements OnInit {
     this.activatedRoute.queryParams
       .subscribe(
         (params: Params) => {
-          this.positonProductOnPage= params['numberpage'];
+          this.positonProductOnPage = params['numberpage'];
         },
         (error) => console.log(error)
       );
 
   }
+
   onSubmit() {
-      this.productUpdated = new ProductData(this.product.id, this.editProductForm.value.price, this.editProductForm.value.title, this.editProductForm.value.desc, this.editProductForm.value.image);
+    this.productUpdated = new ProductData(this.product.id, this.editProductForm.value.price, this.editProductForm.value.title, this.editProductForm.value.desc, this.editProductForm.value.image);
 
-      let productUpdated = {
-        "id": this.product.id,
-        "price": this.editProductForm.value.price,
-        "title": this.editProductForm.value.title,
-        "description": this.editProductForm.value.desc,
-        "imageLink": this.editProductForm.value.image
-      };
+    let productUpdated = {
+      "id": this.product.id,
+      "price": this.editProductForm.value.price,
+      "title": this.editProductForm.value.title,
+      "description": this.editProductForm.value.desc,
+      "imageLink": this.editProductForm.value.image
+    };
 
-      this.serverServie.updateTask(productUpdated)
-        .subscribe(
-          (response: Response) => {
-            this.serverServie.onTaskUpdated.emit(this.productUpdated);
-            this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'})
-          },
-          (error) => {
-            console.log(error)
-          }
-        );
+    this.serverServie.updateTask(productUpdated)
+      .subscribe(
+        (response: Response) => {
+          this.serverServie.onTaskUpdated.emit(this.productUpdated);
+          this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'})
+        },
+        (error) => {
+          console.log(error)
+        }
+      );
+    this.saveChanges = true;
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if ((this.editProductForm.value.price !== this.product.price
+        || this.editProductForm.value.title !== this.product.title
+        || this.editProductForm.value.desc !== this.product.description
+        || this.editProductForm.value.image !== this.product.imageLink)
+      && !this.saveChanges) {
+      return confirm("Do you want to discard the changes ???");
+    } else {
+      return true;
+    }
   }
 
 }

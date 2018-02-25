@@ -14,6 +14,7 @@ export class LogingService {
   }
 
   loginSuccessful = new EventEmitter<String>();
+  logoutEmitter = new EventEmitter<boolean>();
 
   getToken(log: Log) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -30,6 +31,9 @@ export class LogingService {
   logOut() {
     localStorage.setItem("token", null);
     localStorage.setItem("role", null);
+    localStorage.setItem("login", null);
+    this.logoutEmitter.emit(true);
+
   }
 
   isAuthenticated() {

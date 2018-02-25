@@ -5,7 +5,7 @@
       <td></td>
       <td></td>
       <td></td>
-      <td><h4>Welcome Thomas</h4></td>
+      <td><h4 *ngIf="isAuthenticated">Welcome {{roleUser}} {{loginUser}}</h4></td>
 
     </tr>
     <tr>

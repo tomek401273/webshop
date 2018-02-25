@@ -13,9 +13,8 @@ import {Router} from "@angular/router";
 })
 export class SigninComponent implements OnInit {
 
-  // @ViewChild('form') loginForm: NgForm;
-  name = 'tomek4';
-  password = 'tomek4';
+  name = 'alpha';
+  password = 'alpha';
   message = '';
 
   constructor(private server: ServerService,
@@ -34,6 +33,7 @@ export class SigninComponent implements OnInit {
         (response: HttpResponse<String>) => {
           let token = response.headers.get("Authorization");
           let role = response.headers.get("Credentials");
+          localStorage.setItem("login", submittedForm.value.loginLog);
           localStorage.setItem("token", token);
           localStorage.setItem("role", role);
           this.loggingService.loginSuccessful.emit(role);
@@ -53,42 +53,5 @@ export class SigninComponent implements OnInit {
     this.name = "";
     this.password = ""
   }
-
-  //
-  // onSubmit(submittedForm) {
-  //
-  //   this.server.onLogin(this.log).subscribe(
-  //     data => {
-  //       localStorage.setItem("token", JSON.parse(JSON.stringify(data))._body);
-  //       console.log(localStorage.getItem("token"));
-  //       error => console.log(error);
-  //
-  //     }
-  //   )
-
-  //   onSubmit() {
-  //     this.server.onLogin(this.log).subscribe(
-  //         data => {
-  //           // localStorage.setItem("token", JSON.parse(JSON.stringify(data))._body);
-  //           // console.log(localStorage.getItem("token"));
-  //          // console.log(data.json())
-  //         },
-  //         error => console.log('error')
-  //       );
-  //
-  // }
-
-  // onSubmit(){
-  //   this.server.onLogin().subscribe(
-  //     data => {
-  //       console.log(data)
-  //     },
-  //     error => console.log(error)
-  //   )
-  // }
-
-  // onSubmit() {
-  //   this.loggingService.getToken();
-  // }
 
 }

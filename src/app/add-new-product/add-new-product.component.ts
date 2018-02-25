@@ -2,15 +2,18 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
+import {CanDeactivateGuard} from "../can-deactivate-guard";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'app-add-new-product',
   templateUrl: './add-new-product.component.html',
   styleUrls: ['./add-new-product.component.css']
 })
-export class AddNewProductComponent implements OnInit {
+export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') addProductForm: NgForm;
   productData: ProductData;
+  private savedChanges: boolean;
 
   products = [
     {
@@ -33,9 +36,7 @@ export class AddNewProductComponent implements OnInit {
     console.log('Submitted');
     console.log(this.addProductForm);
 
-    this.onGetProducts();
     this.lastId = this.products[this.products.length - 1].id;
-    //this.lastId= this.lastId + 1;
     console.log(this.lastId);
 
 
@@ -47,16 +48,17 @@ export class AddNewProductComponent implements OnInit {
         (response) => console.log(response),
         (error) => console.log(error)
       );
+    this.savedChanges = true;
   }
 
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if ((this.addProductForm.value.price !== null || this.addProductForm.value.title !== null || this.addProductForm.value.desc !== null || this.addProductForm.value.image !== null) && !this.savedChanges) {
+      return confirm("Do you want to discard the changes ??? ");
+    } else {
+      return true;
+    }
 
-  onGetProducts() {
-    // this.serverService.getProduct()
-    //   .subscribe(
-    //     (products: any[]) => this.products = products,
-    //     (error) => console.log(error)
-    //   );
-    // console.log(this.products);
   }
+
 
 }

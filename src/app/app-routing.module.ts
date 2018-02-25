@@ -8,21 +8,26 @@ import {ShowBuketComponent} from "./show-buket/show-buket.component";
 import {EditDetailComponent} from "./product-edit/edit-detail/edit-detail.component";
 import {SignupComponent} from "./auth/signup/signup.component";
 import {AuthGuard} from "./auth/auth-guard.service";
+import {CanDeactivateGuard} from "./can-deactivate-guard";
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
-  {path: 'addProduct', component: AddNewProductComponent},
-  {path: 'productEdit', canActivate: [AuthGuard], component: ProductEditComponent},
-  {path: 'product-edit-detail/:id', component: EditDetailComponent},
   {path: 'showBucket', component: ShowBuketComponent},
   {path: 'login', component: SigninComponent},
-  {path: 'signup', component: SignupComponent}
+  {path: 'signup', component: SignupComponent},
+  {path: 'addProduct', canActivate: [AuthGuard],
+    component: AddNewProductComponent,
+  canDeactivate: [CanDeactivateGuard]},
+  {path: 'productEdit', canActivate: [AuthGuard], component: ProductEditComponent},
+  {path: 'productEdit/:id', canActivate: [AuthGuard],
+    component: EditDetailComponent,
+    canDeactivate: [CanDeactivateGuard]}
 ];
 
 @NgModule({
-imports: [
-  RouterModule.forRoot(appRoutes)
-],
+  imports: [
+    RouterModule.forRoot(appRoutes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
