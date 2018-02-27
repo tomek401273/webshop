@@ -4,6 +4,7 @@ import {BucketService} from "./bucket.service";
 import {BucketProduct} from "./bucket-product";
 import {Session} from "selenium-webdriver";
 import {isNull, isUndefined} from "util";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-bucket-user',
@@ -15,7 +16,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
   private totalValueProducts: number = 0;
   private totalAmountProducts: number = 0;
 
-  constructor(private bucketService: BucketService) {
+  constructor(private bucketService: BucketService,
+              private router: Router) {
   }
 
 
@@ -75,7 +77,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onNext() {
-
+    this.router.navigate(['/summary'])
   }
 
 }

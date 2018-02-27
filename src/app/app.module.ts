@@ -24,6 +24,8 @@ import {AuthGuard} from "./auth/auth-guard.service";
 import {CanDeactivateGuard} from "./can-deactivate-guard";
 import { BucketUserComponent } from './bucket-user/bucket-user.component';
 import {BucketService} from "./bucket-user/bucket.service";
+import { SummaryComponent } from './summary/summary.component';
+import { OrderSuccessfullyComponent } from './order-successfully/order-successfully.component';
 
 
 
@@ -40,7 +42,9 @@ import {BucketService} from "./bucket-user/bucket.service";
     SigninComponent,
     AuthenticationComponent,
     SignupComponent,
-    BucketUserComponent
+    BucketUserComponent,
+    SummaryComponent,
+    OrderSuccessfullyComponent
   ],
   imports: [
     BrowserModule,

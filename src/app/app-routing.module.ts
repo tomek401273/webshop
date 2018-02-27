@@ -10,6 +10,8 @@ import {SignupComponent} from "./auth/signup/signup.component";
 import {AuthGuard} from "./auth/auth-guard.service";
 import {CanDeactivateGuard} from "./can-deactivate-guard";
 import {BucketUserComponent} from "./bucket-user/bucket-user.component";
+import {SummaryComponent} from "./summary/summary.component";
+import {OrderSuccessfullyComponent} from "./order-successfully/order-successfully.component";
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
@@ -17,6 +19,9 @@ const appRoutes: Routes = [
   {path: 'login', component: SigninComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'bucket', component: BucketUserComponent},
+  {path: 'summary',
+    component: SummaryComponent},
+  {path: 'success', component: OrderSuccessfullyComponent},
   {path: 'addProduct', canActivate: [AuthGuard],
     component: AddNewProductComponent,
   canDeactivate: [CanDeactivateGuard]},

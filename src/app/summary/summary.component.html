@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="row">
+    <h2 class="text-center">Shipping Address</h2>
+  </div>
+  <div class="row text-center">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+        <div class="form-group">
+          <label for="country">Coutry</label>
+          <select
+            id="country"
+            class="form-control"
+            [ngModel]="defaultCountry"
+            name="country">
+            <option value="USA">USA</option>
+            <option value="Canada>">Canada</option>
+            <option value="Poland">Poland</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input
+            class="form-control"
+            id="city"
+            type="text"
+            ngModel
+            name="city">
+        </div>
+        <div class="form-group">
+          <label for="postcode">PostCode</label>
+          <input
+            class="form-control"
+            id="postcode"
+            type="text"
+            ngModel
+            name="postcode">
+        </div>
+
+        <div class="form-group">
+          <label for="street">Street</label>
+          <input
+            class="form-control"
+            type="text"
+            id="street"
+            ngModel
+            name="street">
+        </div>
+
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            class="form-control"
+            type="text"
+            id="name"
+            ngModel
+            name="name">
+        </div>
+        <div class="form-group">
+          <label for="surname">Surname</label>
+          <input
+            class="form-control"
+            type="text"
+            id="surname"
+            ngModel
+            name="surname">
+        </div>
+        <br>
+        <h4>Select your supplier</h4>
+        <div class="radio text-left" *ngFor="let supplier of suppliers">
+
+          <label>
+            <input
+              type="radio"
+              name="supplier"
+              ngModel
+              [value]="supplier.name">
+            Supplier: {{supplier.name}} price: {{supplier.price}} $
+          </label>
+        </div>
+<br><br>
+        <div class="form-group">
+          <label for="bank">Select your bank </label>
+          <select
+            id="bank"
+            class="form-control"
+            ngModel
+            name="bank">
+            <option value="ING">ING</option>
+            <option value="AliorBank">AliorBank</option>
+          </select>
+          <p>You will by redirected to your bank website</p>
+          <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>
+        </div>
+
+        <button class="btn btn-primary"type="submit" [disabled]="!pay">Submit</button>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+<br><br><br>
