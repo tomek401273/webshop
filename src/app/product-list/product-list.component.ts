@@ -50,6 +50,16 @@ export class ProductListComponent implements OnInit {
   onAddToCard(product: ProductData) {
     this.addProductToBucket(product);
     this.saveTemp();
+    this.acutalNumberProductInBucket();
+  }
+
+  acutalNumberProductInBucket(){
+    let totalNumber =0;
+    for (let prod of this.bucketProducts) {
+      totalNumber+=prod.amount;
+    }
+
+    this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
 

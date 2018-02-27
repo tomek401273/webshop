@@ -13,6 +13,8 @@ import {isNull, isUndefined} from "util";
 export class BucketUserComponent implements OnInit, DoCheck {
   private products: BucketProduct[] = [];
   private totalValueProducts: number = 0;
+  private totalAmountProducts: number = 0;
+
   constructor(private bucketService: BucketService) {
   }
 
@@ -39,11 +41,12 @@ export class BucketUserComponent implements OnInit, DoCheck {
       let value = prod.price * prod.amount;
       this.products[i].value = value;
       this.calcuateTotalValueProducts();
+      this.calculateTotalAmountProduct();
 
     }
 
     let bucketToSave = JSON.stringify(this.products);
-   // localStorage.clear();
+    // localStorage.clear();
     localStorage.setItem('bucket123', null);
     localStorage.setItem('bucket123', bucketToSave);
   }
@@ -54,14 +57,25 @@ export class BucketUserComponent implements OnInit, DoCheck {
     this.products.splice(index, 1);
   }
 
-  calcuateTotalValueProducts(){
-    this.totalValueProducts =0;
-    for (let product of this.products){
-      let valueTemp =Number(product.value) | 0;
-      console.log(valueTemp);
+  calcuateTotalValueProducts() {
+    this.totalValueProducts = 0;
+    for (let product of this.products) {
+      let valueTemp = Number(product.value) | 0;
       this.totalValueProducts += valueTemp;
-
     }
+  }
+
+  calculateTotalAmountProduct() {
+    this.totalAmountProducts = 0;
+    for (let prduct of this.products) {
+      let amountTemp = Number(prduct.amount) | 0;
+      this.totalAmountProducts += amountTemp;
+    }
+    this.bucketService.bucketStatus.emit(this.totalAmountProducts.toString());
+  }
+
+  onNext() {
+
   }
 
 }

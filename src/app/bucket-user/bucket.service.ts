@@ -4,5 +4,5 @@ import {BucketProduct} from "./bucket-product";
 import {isUndefined} from "util";
 
 export class BucketService {
-
+  bucketStatus = new EventEmitter<String>();
 }
