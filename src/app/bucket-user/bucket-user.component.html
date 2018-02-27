@@ -1,46 +1,65 @@
-<table class="table text-center table-striped table-hover">
-  <thead>
-  <tr>
-    <td>
-      Title
-    </td>
-    <td>
-      Price
-    </td>
-    <td>
-      Amount
-    </td>
-    <td>
-      Value
-    </td>
-    <td>
+<div class="container">
+  <div class="row">
+    <table class="table text-center table-striped">
+      <thead>
+      <tr>
+        <td>
+          Title
+        </td>
+        <td>
+          Price
+        </td>
+        <td>
+          Amount
+        </td>
+        <td>
+          Value
+        </td>
+        <td>
 
-    </td>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let product of products">
-    <td>
-      {{product.title}}
-    </td>
-    <td>
-      {{product.price}}
-    </td>
-    <td>
-      <div class="col-sm-4">
-        <input class="form-control amonut-a" type="number" min="1" max="10" [(ngModel)]=product.amount name="amount"/>
-      </div>
+        </td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of products">
+        <td>
+          {{product.title}}
+        </td>
+        <td>
+          {{product.price}}
+        </td>
+        <td>
+          <div class="col-sm-4">
+            <input class="form-control amonut-a" type="number" min="1" max="10" [(ngModel)]=product.amount
+                   name="amount"/>
+          </div>
 
-    </td>
-    <td>
-      {{product.value}}
-    </td>
+        </td>
+        <td>
+          {{product.value}}
+        </td>
 
-    <td>
-      <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove</button>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total: {{totalValueProducts}}
+        </td>
+        <td><button class="btn btn-primary">Next >></button></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-sm-8 text-center"></div>
+    <div class="col-sm-3">
 
-Total value all products: {{totalValueProducts}}
+
+    </div>
+  </div>
+
+</div>
