@@ -41,6 +41,7 @@
 
         <td>
           <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove</button>
+
         </td>
       </tr>
       <tr>
@@ -49,7 +50,12 @@
         <td></td>
         <td>Total: {{totalValueProducts}}
         </td>
-        <td><button class="btn btn-primary" (click)="onNext()">Next >></button></td>
+        <td>
+          <div *ngIf="isAuthenticated == true">
+            <button class="btn btn-danger btn-sm" (click)="onRemoveAllProducts()">RemoveAllProducts</button>
+          </div>
+          <button class="btn btn-primary" (click)="onNext()">Next >></button>
+        </td>
       </tr>
       </tbody>
     </table>

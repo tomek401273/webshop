@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logingService.logOut();
+    // this.logingService.logOut();
     this.logingService.loginSuccessful
       .subscribe(
         (response) => {

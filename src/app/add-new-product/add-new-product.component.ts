@@ -4,6 +4,7 @@ import {ServerService} from "../services/server.service";
 import {ProductData} from "../product-row/ProductData";
 import {CanDeactivateGuard} from "../can-deactivate-guard";
 import {Observable} from "rxjs/Observable";
+import {ProductModel} from "./ProductModel";
 
 @Component({
   selector: 'app-add-new-product',
@@ -12,7 +13,7 @@ import {Observable} from "rxjs/Observable";
 })
 export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') addProductForm: NgForm;
-  productData: ProductData;
+  productData: ProductModel;
   private savedChanges: boolean;
 
   products = [
@@ -21,7 +22,8 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
       price: 10000,
       title: 'Procesor',
       description: 'super Procesor',
-      imageLink: 'http://themillenniumreport.com/wp-content/uploads/2017/03/e5403971-5cd3-4010-9401-c0c264ac23dd1.jpg'
+      imageLink: 'http://themillenniumreport.com/wp-content/uploads/2017/03/e5403971-5cd3-4010-9401-c0c264ac23dd1.jpg',
+      amount: 0
     }
   ];
 
@@ -41,7 +43,7 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
 
 
 
-    this.productData = new ProductData(this.lastId, this.addProductForm.value.price, this.addProductForm.value.title, this.addProductForm.value.desc, this.addProductForm.value.image);
+    this.productData = new ProductModel(this.lastId, this.addProductForm.value.price, this.addProductForm.value.title, this.addProductForm.value.desc, this.addProductForm.value.image, this.addProductForm.value.amount);
     console.log(this.productData);
     this.serverService.addNewProduct(this.productData)
       .subscribe(

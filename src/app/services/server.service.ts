@@ -11,6 +11,7 @@ import {
 import {Observable} from "rxjs/Observable";
 import {observable} from "rxjs/symbol/observable";
 import {map} from "rxjs/operators";
+import {ProductModel} from "../add-new-product/ProductModel";
 
 @Injectable()
 export class ServerService {
@@ -22,7 +23,8 @@ export class ServerService {
     "price": null,
     "title": "",
     "description": "",
-    "imageLink": ""
+    "imageLink": "",
+    "amount": null
   };
 
   getProduct() {
@@ -32,7 +34,7 @@ export class ServerService {
     })
   }
 
-  addNewProduct(product: ProductData) {
+  addNewProduct(product: ProductModel) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
@@ -41,6 +43,7 @@ export class ServerService {
     this.productDto.description = product.description;
     this.productDto.price = product.price;
     this.productDto.imageLink = product.imageLink;
+    this.productDto.amount = product.amount;
 
 
     console.log(this.productDto);

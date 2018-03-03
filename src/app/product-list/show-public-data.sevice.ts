@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 
 @Injectable()
@@ -14,5 +14,13 @@ export class ShowPublicDataSevice {
     return this.httpClient.get('http://localhost:8080/product/'+id)
   }
 
-
+  checkAvailable(id: number) {
+    const headers = new HttpHeaders()
+      .set('Content-Type','application/json')
+      .append('Accept','application/json')
+    return this.httpClient.put('http://localhost:8080/product/available',
+      id, {
+      headers: headers
+      })
+  }
 }

@@ -1,10 +1,12 @@
 import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {ProductData} from "../product-row/ProductData";
-import {BucketService} from "./bucket.service";
-import {BucketProduct} from "./bucket-product";
-import {Session} from "selenium-webdriver";
-import {isNull, isUndefined} from "util";
-import {Router} from "@angular/router";
+import {ProductData} from '../product-row/ProductData';
+import {BucketService} from './bucket.service';
+import {BucketProduct} from './bucket-product';
+import {Session} from 'selenium-webdriver';
+import {isNull, isUndefined} from 'util';
+import {Router} from '@angular/router';
+import {BucketServerService} from './bucket-server.service';
+import {LogingService} from '../auth/loging.service';
 
 @Component({
   selector: 'app-bucket-user',
@@ -15,14 +17,19 @@ export class BucketUserComponent implements OnInit, DoCheck {
   private products: BucketProduct[] = [];
   private totalValueProducts: number = 0;
   private totalAmountProducts: number = 0;
+  private isAuthenticated = false;
+
 
   constructor(private bucketService: BucketService,
-              private router: Router) {
+              private router: Router,
+              private bucketServerService: BucketServerService,
+              private logingServiece: LogingService) {
   }
 
 
   ngOnInit() {
-    let bucket = JSON.parse(localStorage.getItem("bucket123"));
+    let bucket = JSON.parse(localStorage.getItem('bucket123'));
+    console.log(bucket);
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
         let bucketProduct: BucketProduct = new BucketProduct(
@@ -51,6 +58,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
     // localStorage.clear();
     localStorage.setItem('bucket123', null);
     localStorage.setItem('bucket123', bucketToSave);
+    this.isAuthenticated = this.logingServiece.isAuthenticated();
+
   }
 
   onRemove(product: BucketProduct) {
@@ -77,7 +86,18 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onNext() {
-    this.router.navigate(['/summary'])
+    this.router.navigate(['/summary']);
+  }
+
+  onRemoveAllProducts() {
+    this.bucketServerService.removeAllProductFromBucket().subscribe(
+      (respone) => {
+        console.log('Succesfully rewmoved all products');
+        this.products = [];
+        localStorage.setItem('bucket123', null);
+      },
+      (error) => console.log(error)
+    );
   }
 
 }

@@ -26,6 +26,7 @@ import { BucketUserComponent } from './bucket-user/bucket-user.component';
 import {BucketService} from "./bucket-user/bucket.service";
 import { SummaryComponent } from './summary/summary.component';
 import { OrderSuccessfullyComponent } from './order-successfully/order-successfully.component';
+import {BucketServerService} from './bucket-user/bucket-server.service';
 
 
 
@@ -56,6 +57,7 @@ import { OrderSuccessfullyComponent } from './order-successfully/order-successfu
     ServerService,
     ShowPublicDataSevice,
     LogingService,
+    BucketServerService,
     PagerService,
     AuthGuard,
     CanDeactivateGuard,

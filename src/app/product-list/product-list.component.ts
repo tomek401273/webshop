@@ -1,34 +1,40 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ServerService} from "../services/server.service";
-import {ProductData} from "../product-row/ProductData";
-import {ShowPublicDataSevice} from "./show-public-data.sevice";
-import {PagerService} from "../services/pager.service";
-import {BucketService} from "../bucket-user/bucket.service";
-import {BucketProduct} from "../bucket-user/bucket-product";
-import {isNull, isUndefined} from "util";
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import {ServerService} from '../services/server.service';
+import {ProductData} from '../product-row/ProductData';
+import {ShowPublicDataSevice} from './show-public-data.sevice';
+import {PagerService} from '../services/pager.service';
+import {BucketService} from '../bucket-user/bucket.service';
+import {BucketProduct} from '../bucket-user/bucket-product';
+import {isNull, isUndefined} from 'util';
+import {BucketServerService} from '../bucket-user/bucket-server.service';
+import {LogingService} from '../auth/loging.service';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, DoCheck {
   private products: ProductData[] = [];
   private bucketProducts: BucketProduct[] = [];
   private pager: any = {};
   private pagedProduct: any[];
+  private isAvailable: boolean = false;
+  private isAuthenticated = false;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
               private pagerService: PagerService,
-              private bucketService: BucketService) {
+              private bucketService: BucketService,
+              private bucketServerService: BucketServerService,
+              private logingServiece: LogingService) {
   }
 
   ngOnInit() {
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
       (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
-    )
+    );
     this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
@@ -37,6 +43,10 @@ export class ProductListComponent implements OnInit {
         },
         (error) => console.log(error)
       );
+  }
+
+  ngDoCheck() {
+    this.isAuthenticated = this.logingServiece.isAuthenticated();
   }
 
   setPage(page: number) {
@@ -48,15 +58,41 @@ export class ProductListComponent implements OnInit {
   }
 
   onAddToCard(product: ProductData) {
-    this.addProductToBucket(product);
-    this.saveTemp();
-    this.acutalNumberProductInBucket();
+    this.showPublicData.checkAvailable(product.id).subscribe(
+      (resposne) => {
+        if (resposne > 0) {
+
+          this.addProductToBucket(product);
+          this.saveTemp();
+          this.acutalNumberProductInBucket();
+          console.log('Avaiable products' + resposne);
+        } else {
+          alert('This product is not available');
+        }
+
+      },
+      (error) => console.log(error)
+    );
+    if (this.isAuthenticated === true) {
+      this.bucketServerService.addProductToCard(product.id).subscribe(
+        (resposne) => {
+          if (resposne === true) {
+            alert('succesfully added product to bucket');
+          } else {
+            alert('something go wrong contact with our service');
+            console.log(resposne);
+          }
+
+        }
+      );
+    }
+
   }
 
-  acutalNumberProductInBucket(){
-    let totalNumber =0;
+  acutalNumberProductInBucket() {
+    let totalNumber = 0;
     for (let prod of this.bucketProducts) {
-      totalNumber+=prod.amount;
+      totalNumber += prod.amount;
     }
 
     this.bucketService.bucketStatus.emit(totalNumber.toString());
@@ -64,8 +100,7 @@ export class ProductListComponent implements OnInit {
 
 
   addProductToBucket(product: ProductData) {
-
-    let founded: BucketProduct = this.bucketProducts.find(x => x.id === product.id)
+    let founded: BucketProduct = this.bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
       this.bucketProducts.push(new BucketProduct(product.id, product.price, product.title, product.description, product.imageLink, 1));
@@ -76,7 +111,8 @@ export class ProductListComponent implements OnInit {
       amount++;
       founded.amount = amount;
       this.bucketProducts[index] = founded;
-      }
+    }
+
   }
 
   saveTemp() {
@@ -86,7 +122,7 @@ export class ProductListComponent implements OnInit {
   }
 
   getTemp() {
-    let bucket = JSON.parse(localStorage.getItem("bucket123"));
+    let bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
         let bucketProduct: BucketProduct = new BucketProduct(
@@ -96,8 +132,10 @@ export class ProductListComponent implements OnInit {
           bucket[i]._description,
           bucket[i]._imageLink,
           bucket[i]._amount);
-       this.bucketProducts.push(bucketProduct);
+        this.bucketProducts.push(bucketProduct);
       }
     }
   }
+
+
 }
