@@ -1,31 +1,21 @@
 import {EventEmitter, Injectable} from "@angular/core";
-import {Headers, Http, RequestOptions, Response} from '@angular/http';
+import {Response} from '@angular/http';
 import 'rxjs/Rx';
-import {ProductData} from '../product-row/ProductData';
-import {BucketData} from '../show-buket/BucketData';
-import {Log} from "../auth/signin/Log";
-import {
-  HttpClient, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpParams,
-  HttpRequest,
-} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {observable} from "rxjs/symbol/observable";
-import {map} from "rxjs/operators";
-import {ProductModel} from "../add-new-product/ProductModel";
+import {ProductData} from '../model/product-data';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {ProductDataAmount} from "../model/product-data-amount";
+import {ProductMapper} from "../model/dto/product-mapper";
+import {ProductDto} from "../model/dto/product-dto";
+import {ProductAmountDto} from "../model/dto/product-amount-dto";
 
 @Injectable()
 export class ServerService {
+  private productDto: ProductDto;
+  private productAmountDto: ProductAmountDto;
 
-    constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private mapper: ProductMapper) {
   }
-  private productDto = {
-    "id": null,
-    "price": null,
-    "title": "",
-    "description": "",
-    "imageLink": "",
-    "amount": null
-  };
 
   getProduct() {
     const headers = new HttpHeaders().set('Authorization', localStorage.getItem("token"));
@@ -34,58 +24,43 @@ export class ServerService {
     })
   }
 
-  addNewProduct(product: ProductModel) {
+  addNewProduct(product: ProductDataAmount) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem("token"));
-    this.productDto.title = product.title;
-    this.productDto.description = product.description;
-    this.productDto.price = product.price;
-    this.productDto.imageLink = product.imageLink;
-    this.productDto.amount = product.amount;
-
-
-    console.log(this.productDto);
+    this.productAmountDto = this.mapper.mapToProductAmountDto(product);
 
     return this.http.post('http://localhost:8080/product/save',
-      this.productDto, {
-      headers: headers
+      this.productAmountDto, {
+        headers: headers
       });
   }
 
   onTaskRemoved = new EventEmitter<ProductData>();
   onTaskUpdated = new EventEmitter<ProductData>();
 
-  removeProduct(product) {
-    console.log(product);
+  removeProduct(product: ProductData) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem("token"));
+    this.productDto = this.mapper.mapToProductDto(product);
 
-    return this.http.put('http://localhost:8080/product/deleteProduct', product, {
+    return this.http.put('http://localhost:8080/product/deleteProduct', this.productDto, {
       headers: headers
     });
   }
 
-  updateTask(product) {
+  updateTask(product: ProductDataAmount) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem("token"));
-    return this.http.put('http://localhost:8080/product/updateProduct', product,{
-        headers: headers
-      });
-  }
+    this.productAmountDto = this.mapper.mapToProductAmountDto(product);
 
-  getBuckets() {
-    return this.http.get('http://localhost:8080/bucket/all.json')
-      .map(
-        (response: Response) => {
-          const data = response.json();
-          return data;
-        }
-      );
+    return this.http.put('http://localhost:8080/product/updateProduct', this.productAmountDto, {
+      headers: headers
+    });
   }
 }

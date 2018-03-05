@@ -1,7 +1,8 @@
 import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {LogingService} from "../auth/loging.service";
+import {LogingService} from "../services/loging.service";
 import {Router} from "@angular/router";
 import {BucketService} from "../bucket-user/bucket.service";
+import {isNull} from "util";
 
 @Component({
   selector: 'app-header',
@@ -11,15 +12,18 @@ import {BucketService} from "../bucket-user/bucket.service";
 export class HeaderComponent implements OnInit, DoCheck {
   authenticated = false;
   private actualNumberProducts: number;
+  private adminPanel = false;
 
   constructor(private logingService: LogingService,
               private router: Router,
               private bucketService: BucketService) {
   }
 
-  private adminPanel = false;
-
   ngOnInit() {
+    if (localStorage.getItem("role") === "admin") {
+      this.adminPanel = true;
+    }
+
     this.logingService.loginSuccessful.subscribe(
       (role: String) => {
         if (role === "admin") {
@@ -31,24 +35,28 @@ export class HeaderComponent implements OnInit, DoCheck {
           this.authenticated = false;
         }
       }
-    )
-    this.calculateNumberProducts();
+    );
+
     this.bucketService.bucketStatus.subscribe(
       (result) => {
         this.actualNumberProducts = +result;
       }
-    )
+    );
   }
 
   calculateNumberProducts() {
     let bucket = JSON.parse(localStorage.getItem("bucket123"));
     let total = 0;
-    for (let i = 0; i < bucket.length; i++) {
-      total += bucket[i]._amount;
+    if (!isNull(bucket)) {
+      for (let i = 0; i < bucket.length; i++) {
+        total += bucket[i]._amount;
+      }
+      this.actualNumberProducts = total;
+    } else {
+      this.actualNumberProducts = 0;
     }
-    this.actualNumberProducts = total;
-  }
 
+  }
 
   ngDoCheck() {
     this.logingService.logoutEmitter.subscribe(
@@ -60,13 +68,6 @@ export class HeaderComponent implements OnInit, DoCheck {
         }
       }
     )
+    this.calculateNumberProducts();
   }
-
-
-  logOut() {
-    this.logingService.logOut();
-    this.authenticated = false;
-  }
-
-
 }

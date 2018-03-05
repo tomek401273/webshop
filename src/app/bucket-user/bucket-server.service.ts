@@ -1,26 +1,32 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {UserBucketDto} from "../model/dto/user-bucket-dto";
 
 @Injectable()
 export class BucketServerService {
   constructor(private httpClient: HttpClient) {
   }
 
-  private userBucketDto = {
-    'id': null,
-    'login': '',
-    'listId': []
-  };
-
-
   addProductToCard(productId: number) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    this.userBucketDto.id = productId;
-    this.userBucketDto.login = localStorage.getItem('login');
-    return this.httpClient.put('http://localhost:8080/bucket/add', this.userBucketDto, {
+    const userBucketDto: UserBucketDto = new UserBucketDto(productId, localStorage.getItem('login'), null);
+
+    return this.httpClient.put('http://localhost:8080/bucket/add', userBucketDto, {
+      headers: headers
+    });
+  }
+
+  removeSingleItemToBucket(productId: number) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+    const userBucketDto: UserBucketDto = new UserBucketDto(productId, localStorage.getItem('login'), null);
+
+    return this.httpClient.put('http://localhost:8080/bucket/removeSingeItemFromBucket', userBucketDto, {
       headers: headers
     });
   }
@@ -30,11 +36,21 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    this.userBucketDto.listId = data;
-    this.userBucketDto.id = 1;
-    console.log(this.userBucketDto);
-    this.userBucketDto.login = localStorage.getItem('login');
-    return this.httpClient.put('http://localhost:8080/bucket/addList', this.userBucketDto, {
+    const userBucketDto: UserBucketDto = new UserBucketDto(null, localStorage.getItem('login'), data);
+
+    return this.httpClient.put('http://localhost:8080/bucket/addList', userBucketDto, {
+      headers: headers
+    });
+  }
+
+  removeSingleProductFromBucket(productId: number) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+    const userBucketDto: UserBucketDto = new UserBucketDto(productId, localStorage.getItem('login'), null);
+
+    return this.httpClient.put('http://localhost:8080/bucket/removeSingleProduct', userBucketDto, {
       headers: headers
     });
   }
@@ -44,7 +60,6 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-
 
     return this.httpClient.put('http://localhost:8080/bucket/removeAllProductFromBucket', localStorage.getItem('login'), {
       headers: headers
@@ -56,6 +71,7 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
+
     return this.httpClient.put('http://localhost:8080/bucket/getAllProductFromBucket', localStorage.getItem('login'), {
       headers: headers
     });

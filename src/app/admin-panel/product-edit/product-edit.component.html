@@ -1,7 +1,5 @@
 <div class="container">
-  <br>
-  <br>
-  <div class="row " *ngFor="let product of pagedProduct; let i = index">
+  <div class="row " *ngFor="let product of pagedProducts; let i = index">
     <div class=" list-group-item">
       <h3 class="text-center">{{product.title}}</h3>
       <hr>
@@ -24,12 +22,13 @@
             {{product.description}}
           </td>
           <td class="col-sm-2 text-center">
-        <br>
-        <br>
-        <br>
+            <br>
+            <br>
         <tr>
-          Price: {{product.price}} $<br>
-          <button class="btn btn-primary btn-group-lg" (click)="onAddToCard(product)">Add to Card</button>
+          <button class="btn remove btn-danger" (click)="onRemove(product, i)">REMOVE</button>
+        </tr>
+        <tr>
+          <button class="btn edit btn-warning" (click)="onEditDetail(product.id)">EDIT</button>
         </tr>
         </td>
         </tr>
@@ -38,7 +37,8 @@
       </table>
     </div>
   </div>
-  <br>
+
+
   <div class="text-center">
     <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
       <li [ngClass]="{disabled:pager.currentPage === 1}">
@@ -58,4 +58,5 @@
       </li>
     </ul>
   </div>
+
 </div>

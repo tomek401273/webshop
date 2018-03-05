@@ -1,13 +1,13 @@
 import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
 import {ServerService} from '../services/server.service';
-import {ProductData} from '../product-row/ProductData';
-import {ShowPublicDataSevice} from './show-public-data.sevice';
-import {PagerService} from '../services/pager.service';
+import {ProductData} from '../model/product-data';
+import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
+import {PagerService} from '../services/navigation/pager.service';
 import {BucketService} from '../bucket-user/bucket.service';
-import {BucketProduct} from '../bucket-user/bucket-product';
+import {ProductDataAmount} from '../model/product-data-amount';
 import {isNull, isUndefined} from 'util';
 import {BucketServerService} from '../bucket-user/bucket-server.service';
-import {LogingService} from '../auth/loging.service';
+import {LogingService} from '../services/loging.service';
 
 @Component({
   selector: 'app-product-list',
@@ -16,10 +16,9 @@ import {LogingService} from '../auth/loging.service';
 })
 export class ProductListComponent implements OnInit, DoCheck {
   private products: ProductData[] = [];
-  private bucketProducts: BucketProduct[] = [];
+  private bucketProducts: ProductDataAmount[] = [];
   private pager: any = {};
   private pagedProduct: any[];
-  private isAvailable: boolean = false;
   private isAuthenticated = false;
 
   constructor(private serverService: ServerService,
@@ -94,16 +93,20 @@ export class ProductListComponent implements OnInit, DoCheck {
     for (let prod of this.bucketProducts) {
       totalNumber += prod.amount;
     }
-
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
-
   addProductToBucket(product: ProductData) {
-    let founded: BucketProduct = this.bucketProducts.find(x => x.id === product.id);
+    let founded: ProductDataAmount = this.bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
-      this.bucketProducts.push(new BucketProduct(product.id, product.price, product.title, product.description, product.imageLink, 1));
+      this.bucketProducts.push(new ProductDataAmount(
+        product.id,
+        product.price,
+        product.title,
+        product.description,
+        product.imageLink,
+        1));
       return;
     } else {
       let index = this.bucketProducts.indexOf(founded);
@@ -112,7 +115,6 @@ export class ProductListComponent implements OnInit, DoCheck {
       founded.amount = amount;
       this.bucketProducts[index] = founded;
     }
-
   }
 
   saveTemp() {
@@ -125,7 +127,7 @@ export class ProductListComponent implements OnInit, DoCheck {
     let bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        let bucketProduct: BucketProduct = new BucketProduct(
+        let bucketProduct: ProductDataAmount = new ProductDataAmount(
           bucket[i]._id,
           bucket[i]._price,
           bucket[i]._title,
@@ -136,6 +138,4 @@ export class ProductListComponent implements OnInit, DoCheck {
       }
     }
   }
-
-
 }

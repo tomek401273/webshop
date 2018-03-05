@@ -1,4 +1,3 @@
-
 <div class="table-section tableLog">
   <table class=" table table-borderless  text-center">
     <tr>
@@ -6,17 +5,17 @@
       <td></td>
       <td></td>
       <td><h4 *ngIf="isAuthenticated">Welcome {{roleUser}} {{loginUser}}</h4></td>
-
     </tr>
+
     <tr>
       <td></td>
       <td></td>
       <td></td>
       <td>
-       <div *ngIf="isAuthenticated==false">
-         <button class="btn btn-primary logAcces" (click)="onRedirect('/signup')">Sign up</button>
-         <button class="btn btn-primary logAcces" (click)="onRedirect('/login')">Sign in</button>
-       </div>
+        <div *ngIf="isAuthenticated==false">
+          <button class="btn btn-primary logAcces" (click)="onRedirect('/signup')">Sign up</button>
+          <button class="btn btn-primary logAcces" (click)="onRedirect('/login')">Sign in</button>
+        </div>
         <div *ngIf="isAuthenticated==true">
           <button class="btn btn-primary logOut" (click)="onLogOut()">Log out</button>
         </div>

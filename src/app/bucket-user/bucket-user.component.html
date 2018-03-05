@@ -29,11 +29,9 @@
           {{product.price}}
         </td>
         <td>
-          <div class="col-sm-4">
-            <input class="form-control amonut-a" type="number" min="1" max="10" [(ngModel)]=product.amount
-                   name="amount"/>
-          </div>
-
+          <button class="btn btn-default btn-sm" (click)="onSubtractAmountProduct(product)">-</button>
+          {{product.amount}}
+          <button class="btn btn-sm btn-default" (click)="onAddAmountProcuct(product)">+</button>
         </td>
         <td>
           {{product.value}}
@@ -51,9 +49,10 @@
         <td>Total: {{totalValueProducts}}
         </td>
         <td>
-          <div *ngIf="isAuthenticated == true">
-            <button class="btn btn-danger btn-sm" (click)="onRemoveAllProducts()">RemoveAllProducts</button>
-          </div>
+
+          <button class="btn btn-danger" (click)="onRemoveAllProducts()" *ngIf="totalAmountProducts>1">
+            RemoveAll
+          </button>
           <button class="btn btn-primary" (click)="onNext()">Next >></button>
         </td>
       </tr>

@@ -1,6 +1,5 @@
-import {AfterContentChecked, Component, DoCheck, OnInit} from '@angular/core';
-import {Log} from "../auth/signin/Log";
-import {LogingService} from "../auth/loging.service";
+import {Component, DoCheck, OnInit} from '@angular/core';
+import {LogingService} from "../services/loging.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -30,6 +29,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
   onRedirect(page){
     this.router.navigate([page])
   }
+
   onLogOut(){
     this.logginService.logOut();
   }

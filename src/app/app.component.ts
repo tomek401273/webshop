@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LogingService} from "./auth/loging.service";
-import {Session} from "selenium-webdriver";
+import {Component, OnInit} from '@angular/core';
+import {LogingService} from "./services/loging.service";
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,10 @@ import {Session} from "selenium-webdriver";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
-
   constructor(private logingService: LogingService) {
   }
 
   ngOnInit() {
-    // this.logingService.logOut();
     this.logingService.loginSuccessful
       .subscribe(
         (response) => {
@@ -27,5 +23,4 @@ export class AppComponent implements OnInit {
         }
       )
   }
-
 }

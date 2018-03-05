@@ -1,6 +1,6 @@
-import {ProductData} from '../product-row/ProductData';
+import {ProductData} from '../model/product-data';
 import {EventEmitter, Injectable} from '@angular/core';
-import {BucketProduct} from './bucket-product';
+import {ProductDataAmount} from '../model/product-data-amount';
 import {isUndefined} from 'util';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 Injectable()
