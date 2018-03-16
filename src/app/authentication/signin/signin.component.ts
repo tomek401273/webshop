@@ -21,7 +21,7 @@ export class SigninComponent {
   message = '';
 
   constructor(private server: ServerService,
-              private loggingService: LogingService,
+              private logginService: LogingService,
               private router: Router,
               private bucketServerService: BucketServerService) {
   }
@@ -29,7 +29,7 @@ export class SigninComponent {
   onSubmit(submittedForm) {
     let log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
 
-    this.loggingService.getToken(log)
+    this.logginService.getToken(log)
       .subscribe(
         (response: HttpResponse<String>) => {
           let token = response.headers.get('Authorization');
@@ -47,7 +47,7 @@ export class SigninComponent {
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
-          this.loggingService.loginSuccessful.emit(role);
+          this.logginService.loginSuccessful.emit(role);
           this.router.navigate(['/']);
         },
         (error) => this.somethingGoWrong()

@@ -26,6 +26,8 @@ import { SummaryComponent } from './bucket-user/summary/summary.component';
 import { OrderSuccessfullyComponent } from './bucket-user/summary/order-successfully/order-successfully.component';
 import {BucketServerService} from './bucket-user/bucket-server.service';
 import {ProductMapper} from "./model/dto/product-mapper";
+import { LoginModelComponent } from './login-model/login-model.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -40,9 +42,11 @@ import {ProductMapper} from "./model/dto/product-mapper";
     SignupComponent,
     BucketUserComponent,
     SummaryComponent,
-    OrderSuccessfullyComponent
+    OrderSuccessfullyComponent,
+    LoginModelComponent
   ],
   imports: [
+    ModalModule.forRoot(),
     BrowserModule,
     HttpClientModule,
     FormsModule,
