@@ -7,6 +7,9 @@ import {Router} from '@angular/router';
 import {isNull} from 'util';
 import {ProductDataAmount} from '../../model/product-data-amount';
 import {BucketServerService} from '../../bucket-user/bucket-server.service';
+import {TemplateRef } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 @Component({
   selector: 'app-signin',
@@ -16,6 +19,7 @@ import {BucketServerService} from '../../bucket-user/bucket-server.service';
 export class SigninComponent {
   private productIdArray: number[] = [];
   private products: ProductDataAmount[] = [];
+  modalRef: BsModalRef;
   name = 'thomas';
   password = 'thomas';
   message = '';
@@ -23,7 +27,8 @@ export class SigninComponent {
   constructor(private server: ServerService,
               private loggingService: LogingService,
               private router: Router,
-              private bucketServerService: BucketServerService) {
+              private bucketServerService: BucketServerService,
+              private modalService: BsModalService) {
   }
 
   onSubmit(submittedForm) {
@@ -48,7 +53,8 @@ export class SigninComponent {
           this.productIdArray = [];
           this.getDataFromDatabase();
           this.loggingService.loginSuccessful.emit(role);
-          this.router.navigate(['/']);
+          this.modalRef.hide();
+          // this.router.navigate(['/']);
         },
         (error) => this.somethingGoWrong()
       );
@@ -108,5 +114,9 @@ export class SigninComponent {
       },
       (error) => console.log(error)
     );
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 }

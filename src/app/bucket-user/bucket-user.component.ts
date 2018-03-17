@@ -67,43 +67,47 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onAddAmountProcuct(bucketProduct: ProductDataAmount) {
-    if (this.isAuthenticated) {
-      this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
-        (resposne) => {
-          if (resposne === true) {
-            alert('successfully added product to bucket');
-           this.adding(bucketProduct)
-          } else {
-            alert('something go wrong contact with our service');
-            console.log(resposne);
+    if (bucketProduct.amount < 3) {
+      if (this.isAuthenticated) {
+        this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
+          (resposne) => {
+            if (resposne === true) {
+              alert('successfully added product to bucket');
+              this.adding(bucketProduct)
+            } else {
+              alert('something go wrong contact with our service');
+              console.log(resposne);
+            }
           }
-        }
-      );
-    } else {
-      this.adding(bucketProduct)
+        );
+      } else {
+        this.adding(bucketProduct)
+      }
     }
   }
 
-  adding(bucketProduct: ProductDataAmount){
+  adding(bucketProduct: ProductDataAmount) {
     let index = this.products.indexOf(this.products.find(x => x.id === bucketProduct.id));
     bucketProduct.amount++;
     this.products[index] = bucketProduct;
   }
 
   onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
-    if (this.isAuthenticated) {
-      this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
-        (resposne) => {
-          if (resposne === true) {
-            alert('succesfully removed product from bucket');
-            this.subtracting(bucketProduct)
-          } else {
-            alert('something go wrong contact with our service');
-            console.log(resposne);
-          }
-        });
-    } else {
-      this.subtracting(bucketProduct);
+    if (bucketProduct.amount > 0) {
+      if (this.isAuthenticated) {
+        this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
+          (resposne) => {
+            if (resposne === true) {
+              alert('succesfully removed product from bucket');
+              this.subtracting(bucketProduct)
+            } else {
+              alert('something go wrong contact with our service');
+              console.log(resposne);
+            }
+          });
+      } else {
+        this.subtracting(bucketProduct);
+      }
     }
   }
 
@@ -124,7 +128,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onRemove(product: ProductDataAmount) {
-    if (this.isAuthenticated){
+    if (this.isAuthenticated) {
       this.bucketServerService.removeSingleProductFromBucket(product.id).subscribe(
         (respones) => {
           this.removing(product);
@@ -136,7 +140,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
     }
   }
 
-  removing(product: ProductDataAmount){
+  removing(product: ProductDataAmount) {
     let found = this.products.find(x => x.id === product.id);
     let index = this.products.indexOf(found);
     this.products.splice(index, 1);

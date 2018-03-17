@@ -2,21 +2,22 @@
   <div class="row">
     <h2 class="text-center">Shipping Address</h2>
   </div>
+
   <div class="row text-center">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group">
-          <label for="country">Coutry</label>
-          <select
-            id="country"
+          <label >Coutry</label>
+          <pre class="card card-block card-header mb-3">Country: {{selected | json}}</pre>
+          <input
             class="form-control"
-            [ngModel]="defaultCountry"
-            name="country">
-            <option value="USA">USA</option>
-            <option value="Canada>">Canada</option>
-            <option value="Poland">Poland</option>
-          </select>
+            [(ngModel)]="selected"
+            [typeahead]="states"
+            [ngModelOptions]="{standalone: true}"
+          >
+
+
         </div>
         <div class="form-group">
           <label for="city">City</label>
@@ -79,7 +80,7 @@
             Supplier: {{supplier.name}} price: {{supplier.price}} $
           </label>
         </div>
-<br><br>
+        <br><br>
         <div class="form-group">
           <label for="bank">Select your bank </label>
           <select
@@ -94,7 +95,7 @@
           <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>
         </div>
 
-        <button class="btn btn-primary"type="submit" [disabled]="!pay">Submit</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!pay">Submit</button>
 
       </form>
     </div>

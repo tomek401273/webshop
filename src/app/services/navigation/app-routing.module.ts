@@ -14,7 +14,6 @@ import {OrderSuccessfullyComponent} from "../../bucket-user/summary/order-succes
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
-  {path: 'login', component: SigninComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'bucket', component: BucketUserComponent},
   {path: 'summary',
