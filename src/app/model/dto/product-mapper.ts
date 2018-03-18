@@ -21,7 +21,7 @@ export class ProductMapper {
       product.title,
       product.description,
       product.imageLink,
-      product.amount
+      product.totalAmount
     );
     return productAmountDto;
   }

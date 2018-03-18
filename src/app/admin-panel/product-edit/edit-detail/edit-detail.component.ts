@@ -30,7 +30,12 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
     let id: number =Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.publicServer.getProduct(id)
       .subscribe(
-        (product: any) => this.product = product,
+        (product: any) =>
+        {
+          console.log("productEdit received: ");
+          console.log(product);
+          this.product = product;
+        },
         (error) => console.log(error));
 
     this.activatedRoute.queryParams
@@ -47,7 +52,6 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
       this.editProductForm.value.desc,
       this.editProductForm.value.image,
       this.editProductForm.value.amount);
-
     this.serverServie.updateTask(this.productUpdated)
       .subscribe(
         (response: Response) => {

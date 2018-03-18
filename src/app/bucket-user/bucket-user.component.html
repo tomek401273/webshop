@@ -4,7 +4,7 @@
       <thead>
       <tr>
         <td>
-          Title
+          Product
         </td>
         <td>
           Price
@@ -30,7 +30,7 @@
         </td>
         <td>
           <button class="btn btn-default btn-sm" (click)="onSubtractAmountProduct(product)">-</button>
-          {{product.amount}}
+          {{product.totalAmount}}
           <button class="btn btn-sm btn-default" (click)="onAddAmountProcuct(product)">+</button>
         </td>
         <td>
@@ -38,7 +38,8 @@
         </td>
 
         <td>
-          <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove</button>
+          <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove <span class="
+glyphicon glyphicon-remove"></span></button>
 
         </td>
       </tr>
@@ -49,11 +50,8 @@
         <td>Total: {{totalValueProducts}}
         </td>
         <td>
-
-          <button class="btn btn-danger" (click)="onRemoveAllProducts()" *ngIf="totalAmountProducts>1">
-            RemoveAll
-          </button>
-          <button class="btn btn-primary" (click)="onNext()">Next >></button>
+          <button class="btn btn-success submit-next" (click)="onNext()"> Next <span
+            class="glyphicon glyphicon-arrow-right"></span></button>
         </td>
       </tr>
       </tbody>

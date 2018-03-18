@@ -2,3 +2,7 @@ input.amonut-a {
   position: relative;
   left: 100px;
 }
+
+button.submit-next {
+  width: 125px;
+}

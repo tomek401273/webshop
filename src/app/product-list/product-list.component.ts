@@ -91,7 +91,7 @@ export class ProductListComponent implements OnInit, DoCheck {
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (let prod of this.bucketProducts) {
-      totalNumber += prod.amount;
+      totalNumber += prod.totalAmount;
     }
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
@@ -110,9 +110,9 @@ export class ProductListComponent implements OnInit, DoCheck {
       return;
     } else {
       let index = this.bucketProducts.indexOf(founded);
-      let amount = founded.amount;
+      let amount = founded.totalAmount;
       amount++;
-      founded.amount = amount;
+      founded.totalAmount = amount;
       this.bucketProducts[index] = founded;
     }
   }
@@ -133,7 +133,7 @@ export class ProductListComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._amount);
+          bucket[i]._totalAmount);
         this.bucketProducts.push(bucketProduct);
       }
     }

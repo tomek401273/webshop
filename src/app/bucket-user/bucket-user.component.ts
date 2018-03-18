@@ -34,7 +34,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._amount);
+          bucket[i]._totalAmount);
         this.products.push(bucketProduct);
       }
     }
@@ -43,7 +43,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   ngDoCheck() {
     for (let i = 0; i < this.products.length; i++) {
       let prod = this.products[i];
-      let value = prod.price * prod.amount;
+      let value = prod.price * prod.totalAmount;
       this.products[i].value = value;
       this.calcuateTotalValueProducts();
       this.calculateTotalAmountProduct();
@@ -67,7 +67,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onAddAmountProcuct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.amount < 3) {
+    if (bucketProduct.totalAmount < 3) {
       if (this.isAuthenticated) {
         this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
           (resposne) => {
@@ -88,12 +88,12 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
   adding(bucketProduct: ProductDataAmount) {
     let index = this.products.indexOf(this.products.find(x => x.id === bucketProduct.id));
-    bucketProduct.amount++;
+    bucketProduct.totalAmount++;
     this.products[index] = bucketProduct;
   }
 
   onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.amount > 0) {
+    if (bucketProduct.totalAmount > 0) {
       if (this.isAuthenticated) {
         this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
           (resposne) => {
@@ -113,7 +113,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
   subtracting(bucketProduct: ProductDataAmount) {
     let index = this.products.indexOf(this.products.find(x => x.id === bucketProduct.id));
-    bucketProduct.amount--;
+    bucketProduct.totalAmount--;
     this.products[index] = bucketProduct;
   }
 
@@ -121,7 +121,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   calculateTotalAmountProduct() {
     this.totalAmountProducts = 0;
     for (let prduct of this.products) {
-      let amountTemp = Number(prduct.amount) | 0;
+      let amountTemp = Number(prduct.totalAmount) | 0;
       this.totalAmountProducts += amountTemp;
     }
     this.bucketService.bucketStatus.emit(this.totalAmountProducts.toString());

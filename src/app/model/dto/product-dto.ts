@@ -4,7 +4,7 @@ export class ProductDto {
   title: String;
   description: String;
   imageLink: String;
-  amount: number
+  totalAmount: number
 
   constructor(id: number, price: number, title: String, description: String, imageLink: String) {
     this.id = id;

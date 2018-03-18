@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, DoCheck {
     let total = 0;
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        total += bucket[i]._amount;
+        total += bucket[i]._totalAmount;
       }
       this.actualNumberProducts = total;
     } else {

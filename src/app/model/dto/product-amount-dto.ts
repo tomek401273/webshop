@@ -1,10 +1,10 @@
 import {ProductDto} from "./product-dto";
 
 export class ProductAmountDto extends ProductDto {
-  amount: number;
+  totalAmount: number;
 
-  constructor(id: number, price: number, title: String, description: String, imageLink: String, amount: number) {
+  constructor(id: number, price: number, title: String, description: String, imageLink: String, totalAmount: number) {
     super(id, price, title, description, imageLink);
-    this.amount = amount;
+    this.totalAmount = totalAmount;
   }
 }

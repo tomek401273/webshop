@@ -17,6 +17,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private pagedProducts: any[];
   private currentPage = 1;
   private redirectedPage = 1;
+  private lastPage = false;
 
   constructor(private router: Router,
               private serverService: ServerService,
@@ -30,18 +31,21 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       (productUpdated: ProductData) =>
         this.productDataEdit[productUpdated.id - 1] =
           new ProductData(
-          productUpdated.id,
-          productUpdated.price,
-          productUpdated.title,
-          productUpdated.description,
-          productUpdated.imageLink)
+            productUpdated.id,
+            productUpdated.price,
+            productUpdated.title,
+            productUpdated.description,
+            productUpdated.imageLink)
     )
   }
 
   ngOnInit() {
     this.activatedRoute.queryParams
       .subscribe(
-        (params: Params) => this.redirectedPage = params['numberpage'],
+        (params: Params) => {
+          this.redirectedPage = params['numberpage'];
+          this.lastPage = params['lastpage'];
+        },
         (error) => console.log(error)
       );
 
@@ -59,6 +63,11 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
               product.imageLink));
           }
           this.redirectedPage = (typeof this.redirectedPage === 'undefined') ? 1 : this.redirectedPage;
+
+          if (this.lastPage) {
+            this.computeNunberPages();
+            this.redirectedPage = this.pager.pages.length;
+          }
           this.setPage(this.redirectedPage);
         },
         (error) => console.log(error)
@@ -80,6 +89,10 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       );
   }
 
+  computeNunberPages() {
+    this.pager = this.pagerService.getPager(this.productDataEdit.length, 1);
+  }
+
   setPage(page: number) {
     this.currentPage = page;
     if (page < 1 || page > this.products.length) {
@@ -87,6 +100,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     }
     this.pager = this.pagerService.getPager(this.productDataEdit.length, page);
     this.pagedProducts = this.productDataEdit.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    console.log("count of pages")
     console.log(this.pager.pages);
   }
 }

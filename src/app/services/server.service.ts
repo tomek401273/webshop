@@ -58,7 +58,6 @@ export class ServerService {
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem("token"));
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-
     return this.http.put('http://localhost:8080/product/updateProduct', this.productAmountDto, {
       headers: headers
     });
