@@ -9,6 +9,12 @@ import {isNull, isUndefined} from 'util';
 import {BucketServerService} from '../bucket-user/bucket-server.service';
 import {LogingService} from '../services/loging.service';
 
+import {ViewChild} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import {TypeaheadMatch} from 'ngx-bootstrap/typeahead'
+
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -16,10 +22,19 @@ import {LogingService} from '../services/loging.service';
 })
 export class ProductListComponent implements OnInit, DoCheck {
   private products: ProductData[] = [];
+  private products2: ProductData[] = [];
+
   private bucketProducts: ProductDataAmount[] = [];
   private pager: any = {};
   private pagedProduct: any[];
   private isAuthenticated = false;
+  private typedTitleLengthTemp = 0;
+  @ViewChild('form') searchForm: NgForm;
+
+  asyncSelected: string;
+  typeaheadLoading: boolean;
+  typeaheadNoResults: boolean;
+  dataSource: Observable<any>;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -27,13 +42,44 @@ export class ProductListComponent implements OnInit, DoCheck {
               private bucketService: BucketService,
               private bucketServerService: BucketServerService,
               private logingServiece: LogingService) {
+    this.dataSource = Observable.create((observer: any) => {
+      // Runs on every search
+      observer.next(this.asyncSelected);
+    }).mergeMap((token: string) => this.getStatesAsObservable(token));
   }
+
+  getStatesAsObservable(token: string): Observable<any> {
+    const query = new RegExp(token, 'ig');
+
+    return Observable.of(
+      this.products.filter((state: any) => {
+        return query.test(state._title);
+      })
+    );
+  }
+
+  changeTypeaheadLoading(e: boolean): void {
+    this.typeaheadLoading = e;
+  }
+
+  typeaheadOnSelect(e: TypeaheadMatch): void {
+    console.log('Selected value: ', e.value);
+  }
+
 
   ngOnInit() {
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
       (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
     );
+    this.getDataFromDatabase();
+  }
+
+  ngDoCheck() {
+    this.isAuthenticated = this.logingServiece.isAuthenticated();
+  }
+
+  getDataFromDatabase() {
     this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
@@ -44,12 +90,61 @@ export class ProductListComponent implements OnInit, DoCheck {
       );
   }
 
-  ngDoCheck() {
-    this.isAuthenticated = this.logingServiece.isAuthenticated();
+
+  onSubmitSearch() {
+    if (this.searchForm.value.search.length === 1 && this.typedTitleLengthTemp === 3) {
+      this.getDataFromDatabase();
+      this.typedTitleLengthTemp = 0;
+    }
+
+    if (this.searchForm.value.search.length > 2) {
+      this.typedTitleLengthTemp = 3;
+      this.showPublicData.searchProductInDatabase(this.searchForm.value.search).subscribe(
+        (products: any[]) => {
+          if (products.length === 0) {
+            this.products = [];
+            this.pagedProduct=[];
+          } else {
+            this.products = products;
+            this.setPage(1);
+          }
+        },
+        (error) => console.log(error)
+      )
+    }
   }
+
+  onFilterProducts(fiter) {
+    this.showPublicData.filterProductWithPriceBetween(fiter.value.above, fiter.value.below).subscribe(
+      (products: any[]) => {
+        if (products.length === 0) {
+          this.products = [];
+          this.pagedProduct=[];
+        } else {
+          this.products = products;
+          this.setPage(1);
+        }
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  onFilterReset() {
+    this.getDataFromDatabase();
+  }
+
 
   setPage(page: number) {
     if (page < 1 || page > this.products.length) {
+      return;
+    }
+    this.pager = this.pagerService.getPager(this.products.length, page);
+    this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+  }
+
+
+  setPage2(page: number) {
+    if (page < 1) {
       return;
     }
     this.pager = this.pagerService.getPager(this.products.length, page);

@@ -24,4 +24,27 @@ export class ShowPublicDataSevice {
       headers: headers
       })
   }
+
+  searchProductInDatabase(title) {
+    const headers = new HttpHeaders()
+      .set('Content-Type','application/json')
+      .append('Accept','application/json');
+    return this.httpClient.post('http://localhost:8080/product/searchProduct', title, {
+      headers: headers
+    })
+  }
+
+  filterProductWithPriceBetween(above,below){
+    const headers = new HttpHeaders()
+      .set('Content-Type','application/json')
+      .append('Accept', 'application/json');
+    let filterPrice={
+      'above': above,
+      'below': below
+    };
+
+    return this.httpClient.post('http://localhost:8080/product/filterPrice',filterPrice, {
+      headers: headers
+    })
+  }
 }

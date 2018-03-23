@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-order-successfully',
@@ -6,10 +6,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./order-successfully.component.css']
 })
 export class OrderSuccessfullyComponent implements OnInit {
+  private isPaid: boolean = false;
+  private redirectToBank: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  onPay() {
+    this.redirectToBank= true;
+    setTimeout(()=>{
+      this.redirectToBank=false;
+      this.isPaid = true;
+
+    },3000)
+
+
   }
 
 }

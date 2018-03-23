@@ -1,3 +1,75 @@
+<!--searching in previously download products-->
+<!--<pre class="card card-block card-header">Model: {{asyncSelected | json}}</pre>-->
+
+<!--<input [(ngModel)]="asyncSelected"-->
+<!--[typeahead]="products"-->
+<!--(typeaheadLoading)="changeTypeaheadLoading($event)"-->
+<!--(typeaheadOnSelect)="typeaheadOnSelect($event)"-->
+<!--[typeaheadOptionsLimit]="2"-->
+<!--typeaheadOptionField="title"-->
+<!--placeholder="Locations loaded with timeout"-->
+<!--class="form-control">-->
+<!--<div *ngIf="typeaheadLoading">Loading</div>-->
+<!--<hr>-->
+<!--<br>-->
+<!--<br>-->
+<form (ngSubmit)="onSubmitSearch()" #form="ngForm">
+  <div class="form-group">
+    <!--searching after press enter-->
+    <!--<input class="form-control"-->
+    <!--type="text"-->
+    <!--id="search"-->
+    <!--ngModel-->
+    <!--name="search"-->
+    <!--placeholder="Search title in database"-->
+    <!--#search="ngModel"-->
+    <!--&gt;-->
+    <input class="form-control"
+           type="text"
+           ngModel
+           name="search"
+           (keyup)="onSubmitSearch()"
+           placeholder="Search title in database"
+           #search="ngModel"
+    >
+    <div class="alert-info" *ngIf="typedTitleLengthTemp>0">
+      Count found products: {{products.length}}
+    </div>
+    <!--optional button-->
+    <!--<button type="submit" class=" btn btn-primary">Search in database</button>-->
+  </div>
+</form>
+<hr>
+<br>
+<br>
+
+<form (ngSubmit)="onFilterProducts(filter)" #filter="ngForm">
+  <div class="form-group">
+    <label class="form-control">Filter product with totalPrice between </label>
+    <input class="form-control"
+           type="number"
+           placeholder="above"
+           ngModel
+           name="above">
+    <input class="form-control"
+           type="number"
+           placeholder="below"
+           ngModel
+           name="below"
+    >
+    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="reset" class="btn btn-danger" (click)="onFilterReset()">Reset</button>
+  </div>
+</form>
+
+
+<div *ngIf="products.length==0">
+  <h3 class="alert-danger">Somethin something go wrong try another time</h3>
+</div>
+<hr>
+<br>
+<br>
+
 <div class="container">
   <br>
   <br>
@@ -24,9 +96,9 @@
             {{product.description}}
           </td>
           <td class="col-sm-2 text-center">
-        <br>
-        <br>
-        <br>
+            <br>
+            <br>
+            <br>
         <tr>
           Price: {{product.price}} $<br>
           <button class="btn btn-primary btn-group-lg" (click)="onAddToCard(product)">Add to Card</button>

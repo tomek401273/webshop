@@ -16,20 +16,25 @@ import {SigninComponent} from './authentication/signin/signin.component';
 import {ShowPublicDataSevice} from "./services/show-public-data.sevice";
 import {PagerService} from "./services/navigation/pager.service";
 import {AppRoutingModule} from "./services/navigation/app-routing.module";
-import { AuthenticationComponent } from './authentication/authentication.component';
-import { SignupComponent } from './authentication/signup/signup.component';
+import {AuthenticationComponent} from './authentication/authentication.component';
+import {SignupComponent} from './authentication/signup/signup.component';
 import {AuthGuard} from "./services/protect/auth-guard.service";
 import {CanDeactivateGuard} from "./services/protect/can-deactivate-guard";
-import { BucketUserComponent } from './bucket-user/bucket-user.component';
+import {BucketUserComponent} from './bucket-user/bucket-user.component';
 import {BucketService} from "./bucket-user/bucket.service";
-import { SummaryComponent } from './bucket-user/summary/summary.component';
-import { OrderSuccessfullyComponent } from './bucket-user/summary/order-successfully/order-successfully.component';
+import {SummaryComponent} from './bucket-user/summary/summary.component';
+import {OrderSuccessfullyComponent} from './bucket-user/summary/order-successfully/order-successfully.component';
 import {BucketServerService} from './bucket-user/bucket-server.service';
 import {ProductMapper} from "./model/dto/product-mapper";
-import { LoginModelComponent } from './login-model/login-model.component';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { StatuteComponent } from './statute/statute.component';
+import {LoginModelComponent} from './login-model/login-model.component';
+import {ModalModule} from 'ngx-bootstrap/modal';
+import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
+import {StatuteComponent} from './statute/statute.component';
+import {OrdersComponent} from './orders/orders.component';
+import {OrdersService} from "./services/orders.service";
+import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { OrdersAdminComponent } from './orders/orders-admin/orders-admin.component';
+import { OrderAdminDetailComponent } from './orders/orders-admin/order-admin-detail/order-admin-detail.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,11 @@ import { StatuteComponent } from './statute/statute.component';
     SummaryComponent,
     OrderSuccessfullyComponent,
     LoginModelComponent,
-    StatuteComponent
+    StatuteComponent,
+    OrdersComponent,
+    OrderDetailComponent,
+    OrdersAdminComponent,
+    OrderAdminDetailComponent
   ],
   imports: [
     TypeaheadModule.forRoot(),
@@ -66,6 +75,7 @@ import { StatuteComponent } from './statute/statute.component';
     CanDeactivateGuard,
     BucketService,
     ProductMapper,
+    OrdersService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true}
   ],

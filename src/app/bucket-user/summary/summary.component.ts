@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {OrdersService} from "../../services/orders.service";
+import {ShippingAddress} from "../../model/shipping-address";
 
 @Component({
   selector: 'app-summary',
@@ -11,7 +13,8 @@ export class SummaryComponent implements OnInit {
   private defaultCountry: String = 'USA';
   suppliers = [{"name": "InPost", "price": 10}, {"name": "DHL", "price": "23"}];
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private orderService: OrdersService) {
   }
 
   selected: string;
@@ -72,11 +75,37 @@ export class SummaryComponent implements OnInit {
   }
 
   onSubmit(data) {
-    this.router.navigate(['/success'])
+    let conf =confirm("Are you really sure that you want buy all this products ???");
+    const  shippingAddress: ShippingAddress = new ShippingAddress(
+      localStorage.getItem("login"),
+      this.selected,
+      data.value.city,
+      data.value.postcode,
+      data.value.street,
+      data.value.name,
+      data.value.surname,
+      data.value.supplier
+    );
+
+    if (conf){
+      this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
+        (response) => {
+          this.router.navigate(['/success'])
+        },
+        (error) => console.log(error)
+      );
+    } else {
+      console.log("not I am not sure!!!")
+    }
+
+
   }
 
   onPay() {
     this.pay = true;
+  }
+
+  onBuy() {
   }
 
 

@@ -4,9 +4,37 @@
     <div class="col-sm-6">
       <div class="text-center">
         <h3>Thank you for shopping</h3>
-        <p> Your order will be realised very soon</p>
-        <p> When will be done you receive email with link to shipment </p>
       </div>
+      <h4>Pay your order</h4>
+
+
+      <div class="form-group">
+        <label for="bank">Select your bank </label>
+        <select
+          id="bank"
+          class="form-control"
+          ngModel
+          name="bank">
+          <option value="ING">ING</option>
+          <option value="AliorBank">AliorBank</option>
+        </select>
+       <div class="text-center">
+         <p>You will by redirected to your bank website</p>
+         <br>
+         <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>
+       </div>
+      </div>
+
+      <div  class="text-center">
+        <h3 *ngIf="redirectToBank"><span class="label label-info">Please wait few secends verification payment in progress </span> </h3>
+
+        <div *ngIf="isPaid">
+          <h3><span class="label label-success">Your payment was verified</span></h3>
+          <p class="text-success"> Your order will be realised very soon</p>
+          <p class="text-success"> When will be done you receive email with link to shipment </p>
+        </div>
+      </div>
+
 
     </div>
   </div>
