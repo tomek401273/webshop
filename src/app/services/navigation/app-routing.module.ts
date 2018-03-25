@@ -15,6 +15,7 @@ import {OrdersComponent} from '../../orders/orders.component';
 import {OrderDetailComponent} from '../../orders/order-detail/order-detail.component';
 import {OrdersAdminComponent} from '../../orders/orders-admin/orders-admin.component';
 import {OrderAdminDetailComponent} from '../../orders/orders-admin/order-admin-detail/order-admin-detail.component';
+import {DeliveryStatusComponent} from '../../delivery-status/delivery-status.component';
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
@@ -25,6 +26,7 @@ const appRoutes: Routes = [
   {path: 'orders', component: OrdersComponent},
   {path: 'orders/:id', component: OrderDetailComponent},
   {path: 'admin-orders', component: OrdersAdminComponent},
+  {path: 'delivery/:id', component: DeliveryStatusComponent},
   {path: 'admin-orders/:id', component: OrderAdminDetailComponent},
   {
     path: 'addProduct', canActivate: [AuthGuard],

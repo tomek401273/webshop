@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {OrdersService} from "../../services/orders.service";
-import {Order} from "../../model/order";
-import {ActivatedRoute} from "@angular/router";
-import {ShippingAddress} from "../../model/shipping-address";
-import {Payment} from "../../model/payment";
-import {isNull} from "util";
+import {OrdersService} from '../../services/orders.service';
+import {Order} from '../../model/order';
+import {ActivatedRoute} from '@angular/router';
+import {ShippingAddress} from '../../model/shipping-address';
+import {OrderStatus} from '../../model/order-status';
+import {isNull} from 'util';
 
 @Component({
   selector: 'app-order-detail',
@@ -13,8 +13,9 @@ import {isNull} from "util";
 })
 export class OrderDetailComponent implements OnInit {
   private id: number;
-  private shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private order: Order = new Order(null, null, null, null, null, null, null, null, null, this.shippingAddress);
+  private shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
+  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null,);
+  private paid = false;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute) {
@@ -24,31 +25,35 @@ export class OrderDetailComponent implements OnInit {
     this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.ordersService.getOneOrder(this.id).subscribe(
       (order: any) => {
+        console.log(order);
         this.order = order;
-        console.log(this.order)
+        if ('Order was booked' !== this.order.status) {
+          this.paid = true;
+        }
+
       },
       (error) => console.log(error)
     );
   }
 
   onPay() {
-    let payment: Payment = new Payment(localStorage.getItem('login'), this.order.id, !this.order.paid);
+    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, true, null, null, null);
     console.log('payment');
     console.log(payment);
     this.ordersService.paymentVerification(payment).subscribe(
       (response: boolean) => {
         console.log('response: ');
         console.log(response);
-        if (isNull(response)){
-          this.order.paid=false;
-        } else {
-          this.order.paid= true;
+        if (response) {
+          this.order.status = 'Transaction confirmed';
         }
+
+        // this.order.status = response;
       },
       (error) => {
         console.log(error);
       }
-    )
+    );
   }
 
 }

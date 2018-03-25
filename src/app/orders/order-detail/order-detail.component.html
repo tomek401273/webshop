@@ -21,11 +21,8 @@
           <tr>Total Value: {{order.totalValue}}</tr>
           <tr>Total Amount: {{order.totalAmount}}</tr>
           <tr>Bought Date: {{order.boughtDate}}</tr>
-          <tr *ngIf="order.paid" class="text-success">Paid: {{order.paid}}</tr>
-          <tr *ngIf="!order.paid" class="text-danger">Paid: {{order.paid}}</tr>
+          <tr>Stratus status: {{order.status}}</tr>
 
-          <tr>Prepared: {{order.send}}</tr>
-          <tr>Send: {{order.send}}</tr>
           <tr> <a href="#">Delivery link</a></tr>
 
         </td>
@@ -43,7 +40,7 @@
     </div>
     <br>
     <br>
-    <div class="text-center">
+    <div class="text-center" *ngIf="!paid">
       <button class="btn btn-primary " (click)="onPay()">Pay Order</button>
 
     </div>

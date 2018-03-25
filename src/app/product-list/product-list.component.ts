@@ -13,7 +13,7 @@ import {ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import {TypeaheadMatch} from 'ngx-bootstrap/typeahead'
+import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 
 @Component({
   selector: 'app-product-list',
@@ -103,14 +103,14 @@ export class ProductListComponent implements OnInit, DoCheck {
         (products: any[]) => {
           if (products.length === 0) {
             this.products = [];
-            this.pagedProduct=[];
+            this.pagedProduct = [];
           } else {
             this.products = products;
             this.setPage(1);
           }
         },
         (error) => console.log(error)
-      )
+      );
     }
   }
 
@@ -119,7 +119,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (products: any[]) => {
         if (products.length === 0) {
           this.products = [];
-          this.pagedProduct=[];
+          this.pagedProduct = [];
         } else {
           this.products = products;
           this.setPage(1);

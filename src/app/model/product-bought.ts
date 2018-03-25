@@ -1,17 +1,18 @@
-import {ProductDataAmount} from "./product-data-amount";
+import {ProductDataAmount} from './product-data-amount';
 
 export class ProductBought {
   private _product: ProductDataAmount;
   private _amount: number;
   private _totalPrice: number;
+  private _packed: boolean;
 
 
-  constructor(product: ProductDataAmount, amount: number, totalPrice: number) {
+  constructor(product: ProductDataAmount, amount: number, totalPrice: number, packed: boolean) {
     this._product = product;
     this._amount = amount;
     this._totalPrice = totalPrice;
+    this._packed = packed;
   }
-
 
   get product(): ProductDataAmount {
     return this._product;
@@ -35,5 +36,13 @@ export class ProductBought {
 
   set totalPrice(value: number) {
     this._totalPrice = value;
+  }
+
+  get packed(): boolean {
+    return this._packed;
+  }
+
+  set packed(value: boolean) {
+    this._packed = value;
   }
 }

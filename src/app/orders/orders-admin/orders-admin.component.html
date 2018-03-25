@@ -1,3 +1,121 @@
+<form (ngSubmit)="onSubmitSearch()" #form="ngForm">
+  <div class="form-group">
+    <!--searching after press enter-->
+    <!--<input class="form-control"-->
+    <!--type="text"-->
+    <!--id="search"-->
+    <!--ngModel-->
+    <!--name="search"-->
+    <!--placeholder="Search title in database"-->
+    <!--#search="ngModel"-->
+    <!--&gt;-->
+    <input class="form-control"
+           type="text"
+           ngModel
+           name="search"
+           placeholder="Search title in database"
+           #search="ngModel"
+    >
+    <!--<div class="alert-info" *ngIf="typedTitleLengthTemp>0">-->
+      <!--Count found products: {{orders.length}}-->
+    <!--</div>-->
+    <!--optional button-->
+    <button type="submit" class=" btn btn-primary">Search in database</button>
+  </div>
+</form>
+<hr>
+<br>
+<br>
+
+<!--<div *ngIf="products.length==0">-->
+  <!--<h3 class="alert-danger">Somethin something go wrong try another time</h3>-->
+<!--</div>-->
+<hr>
+<br>
+
+<form (ngSubmit)="onfilterOrdersWithState(filter)" #filter="ngForm">
+  <div class="form-group">
+    <label class="form-control">Filter product with state</label>
+    <!--<input class="form-control"-->
+           <!--type="text"-->
+           <!--placeholder="state"-->
+           <!--ngModel-->
+           <!--name="state">-->
+    <select
+      class="form-control"
+      [ngModel]="defaultState"
+      name="state">
+      <option value="paid">Paid Orders</option>
+      <option value="prepared">Prepared Orders</option>
+      <option value="send">Send Orders</option>
+      <option value="booked">Booked Orders</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+
+
+<form (ngSubmit)="onFilterOrdersWithDate(date)" #date="ngForm">
+  <div class="form-group">
+    <label class="form-control">Filter product with DATE </label>
+    <input class="form-control"
+           type="date"
+           placeholder="Order bought after"
+           ngModel
+           name="after">
+
+    <input class="form-control"
+           type="date"
+           placeholder="Order bought before"
+           ngModel
+           name="before">
+    <!--<input class="form-control"-->
+           <!--type="number"-->
+           <!--placeholder="below"-->
+           <!--ngModel-->
+           <!--name="below"-->
+    <!--&gt;-->
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+<form (ngSubmit)="onFilterOrdersByUserLogin(userLoginF)" #userLoginF="ngForm">
+  <div class="form-group">
+    <label class="form-control">STANDARD Filter orders by User Login </label>
+    <input class="form-control"
+           type="text"
+           placeholder="Filter orders by User Login"
+           ngModel
+           name="userLogin">
+
+    <!--<input class="form-control"-->
+    <!--type="number"-->
+    <!--placeholder="below"-->
+    <!--ngModel-->
+    <!--name="below"-->
+    <!--&gt;-->
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
+
+
+<div class="form-group">
+  <label>BETTER Filter orders by User login: </label>
+  <pre class="card card-block card-header mb-3">Login: {{selected | json}}</pre>
+  <input
+    class="form-control"
+    [(ngModel)]="selected"
+    [typeahead]="usersLogin"
+    [ngModelOptions]="{standalone: true}"
+    required
+    (keyup)="onFilterUser()"
+  >
+
+
+
 <div class="container">
   <table class="table text-center table-striped">
     <thead>
@@ -6,20 +124,17 @@
       <td>Total Value</td>
       <td>Total Amount</td>
       <td>Bought Date</td>
-      <td>Paid</td>
-      <td>Prepared</td>
-      <td>Send</td>
+      <td>Status</td>
+
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let order of orders">
+    <tr *ngFor="let order of pagedProduct">
       <td>{{order.id}}</td>
       <td>{{order.totalValue}}</td>
       <td>{{order.totalAmount}}</td>
       <td>{{order.boughtDate}}</td>
-      <td>{{order.paid}}</td>
-      <td>{{order.prepared}}</td>
-      <td>{{order.send}}</td>
+      <td>{{order.status}}</td>
       <td><button class="btn btn-info" (click)="showOrderDetail(order)">Show Detail</button></td>
 
     </tr>
@@ -27,4 +142,26 @@
 
     </tbody>
   </table>
+</div>
+</div>
+
+
+<div class="text-center">
+  <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(1)">First</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === 1}">
+      <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+    </li>
+    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <a (click)="setPage(page)">{{page}}</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.currentPage + 1)">Next</a>
+    </li>
+    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+      <a (click)="setPage(pager.totalPages)">Last</a>
+    </li>
+  </ul>
 </div>

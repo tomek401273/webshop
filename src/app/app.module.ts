@@ -35,6 +35,7 @@ import {OrdersService} from "./services/orders.service";
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { OrdersAdminComponent } from './orders/orders-admin/orders-admin.component';
 import { OrderAdminDetailComponent } from './orders/orders-admin/order-admin-detail/order-admin-detail.component';
+import { DeliveryStatusComponent } from './delivery-status/delivery-status.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { OrderAdminDetailComponent } from './orders/orders-admin/order-admin-det
     OrdersComponent,
     OrderDetailComponent,
     OrdersAdminComponent,
-    OrderAdminDetailComponent
+    OrderAdminDetailComponent,
+    DeliveryStatusComponent
   ],
   imports: [
     TypeaheadModule.forRoot(),
