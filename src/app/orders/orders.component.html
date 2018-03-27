@@ -1,0 +1,26 @@
+<div class="container">
+  <table class="table text-center table-striped">
+    <thead>
+    <tr>
+      <td>Order Id</td>
+      <td>Total Value</td>
+      <td>Total Amount</td>
+      <td>Bought Date</td>
+      <td>Status </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{order.id}}</td>
+      <td>{{order.totalValue}}</td>
+      <td>{{order.totalAmount}}</td>
+      <td>{{order.boughtDate}}</td>
+      <td>{{order.status}}</td>
+      <td><button class="btn btn-info" (click)="showOrderDetail(order)">Show Detail</button></td>
+
+    </tr>
+
+
+    </tbody>
+  </table>
+</div>

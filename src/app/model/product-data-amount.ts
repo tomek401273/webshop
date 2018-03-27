@@ -1,21 +1,21 @@
 import {ProductData} from "./product-data";
 
 export class ProductDataAmount extends ProductData {
-  private _amount: number;
+  private _totalAmount: number;
   private _value: number;
 
-  constructor(id: number, price: number, title: string, description: string, imageLink: string, amount: number) {
+  constructor(id: number, price: number, title: string, description: string, imageLink: string, totalAmount: number) {
     super(id, price, title, description, imageLink);
-    this._amount = amount;
+    this._totalAmount = totalAmount;
   }
 
 
-  get amount() {
-    return this._amount;
+  get totalAmount() {
+    return this._totalAmount;
   }
 
-  set amount(value) {
-    this._amount = value;
+  set totalAmount(value) {
+    this._totalAmount = value;
   }
 
   get value() {

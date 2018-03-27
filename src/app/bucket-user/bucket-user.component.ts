@@ -34,16 +34,24 @@ export class BucketUserComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._amount);
+          bucket[i]._totalAmount);
         this.products.push(bucketProduct);
       }
     }
+
+    this.bucketService.buyAllProduct.subscribe(
+      (respone) => {
+        this.products = [];
+        localStorage.setItem('bucket123', null);
+      }
+    );
+
   }
 
   ngDoCheck() {
     for (let i = 0; i < this.products.length; i++) {
       let prod = this.products[i];
-      let value = prod.price * prod.amount;
+      let value = prod.price * prod.totalAmount;
       this.products[i].value = value;
       this.calcuateTotalValueProducts();
       this.calculateTotalAmountProduct();
@@ -67,49 +75,70 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onAddAmountProcuct(bucketProduct: ProductDataAmount) {
-    if (this.isAuthenticated) {
-      this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
-        (resposne) => {
-          if (resposne === true) {
-            alert('successfully added product to bucket');
-           this.adding(bucketProduct)
-          } else {
-            alert('something go wrong contact with our service');
-            console.log(resposne);
+    if (bucketProduct.totalAmount < 3) {
+      if (this.isAuthenticated) {
+        this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
+          (resposne) => {
+            if (resposne === true) {
+              alert('successfully added product to bucket');
+              this.adding(bucketProduct);
+            } else {
+              alert('something go wrong contact with our service');
+              console.log(resposne);
+            }
           }
-        }
-      );
-    } else {
-      this.adding(bucketProduct)
+        );
+      } else {
+        this.adding(bucketProduct);
+      }
     }
   }
 
-  adding(bucketProduct: ProductDataAmount){
+  adding(bucketProduct: ProductDataAmount) {
     let index = this.products.indexOf(this.products.find(x => x.id === bucketProduct.id));
-    bucketProduct.amount++;
+    bucketProduct.totalAmount++;
     this.products[index] = bucketProduct;
   }
 
   onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
+    if (bucketProduct.totalAmount === 1) {
+      this.onRemove(bucketProduct);
+    }
+
+    if (bucketProduct.totalAmount > 1) {
+      if (this.isAuthenticated) {
+        this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
+          (resposne) => {
+            if (resposne === true) {
+              alert('succesfully removed product from bucket');
+              this.subtracting(bucketProduct);
+            } else {
+              alert('something go wrong contact with our service');
+              console.log(resposne);
+            }
+          });
+      } else {
+        this.subtracting(bucketProduct);
+      }
+    }
+  }
+
+  onRemove(product: ProductDataAmount) {
     if (this.isAuthenticated) {
-      this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
-        (resposne) => {
-          if (resposne === true) {
-            alert('succesfully removed product from bucket');
-            this.subtracting(bucketProduct)
-          } else {
-            alert('something go wrong contact with our service');
-            console.log(resposne);
-          }
-        });
+      this.bucketServerService.removeSingleProductFromBucket(product.id).subscribe(
+        (respones) => {
+          this.removing(product);
+        },
+        (error) => console.log(error)
+      );
     } else {
-      this.subtracting(bucketProduct);
+      this.removing(product);
     }
   }
 
   subtracting(bucketProduct: ProductDataAmount) {
     let index = this.products.indexOf(this.products.find(x => x.id === bucketProduct.id));
-    bucketProduct.amount--;
+    bucketProduct.totalAmount--;
     this.products[index] = bucketProduct;
   }
 
@@ -117,26 +146,14 @@ export class BucketUserComponent implements OnInit, DoCheck {
   calculateTotalAmountProduct() {
     this.totalAmountProducts = 0;
     for (let prduct of this.products) {
-      let amountTemp = Number(prduct.amount) | 0;
+      let amountTemp = Number(prduct.totalAmount) | 0;
       this.totalAmountProducts += amountTemp;
     }
     this.bucketService.bucketStatus.emit(this.totalAmountProducts.toString());
   }
 
-  onRemove(product: ProductDataAmount) {
-    if (this.isAuthenticated){
-      this.bucketServerService.removeSingleProductFromBucket(product.id).subscribe(
-        (respones) => {
-          this.removing(product);
-        },
-        (error) => console.log(error)
-      )
-    } else {
-      this.removing(product);
-    }
-  }
 
-  removing(product: ProductDataAmount){
+  removing(product: ProductDataAmount) {
     let found = this.products.find(x => x.id === product.id);
     let index = this.products.indexOf(found);
     this.products.splice(index, 1);

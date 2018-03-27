@@ -1,61 +1,110 @@
-<div class="container">
-  <br>
-  <br>
-  <div class="row " *ngFor="let product of pagedProduct; let i = index">
-    <div class=" list-group-item">
-      <h3 class="text-center">{{product.title}}</h3>
-      <hr>
-      <table class="table table-borderless">
-        <thead>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="col-sm-4"><img
-            src="{{product.imageLink}}"
-            alt="{{product.imageLink}}"
-            class="img-responsive"
-            style="max-height: 200px; max-width: 250px"></td>
-          <td class="col-sm-6 text-left bottom-left">
-            {{product.description}}
-          </td>
-          <td class="col-sm-2 text-center">
-        <br>
-        <br>
-        <br>
-        <tr>
-          Price: {{product.price}} $<br>
-          <button class="btn btn-primary btn-group-lg" (click)="onAddToCard(product)">Add to Card</button>
-        </tr>
-        </td>
-        </tr>
+<div class="form-group">
+  <input
+    class="form-control"
+    placeholder="Search product in WebShop"
+    [(ngModel)]="chosenTitle"
+    [typeahead]="productsTitle"
+    [ngModelOptions]="{standalone: true}"
+    required
+    (keyup)="onSearchProductWithTitle()"
+  >
+</div>
+<hr>
 
-        </tbody>
-      </table>
+<div id="container">
+
+  <ion-range-slider #advancedSliderElement
+                    type="double"
+                    min="0"
+                    max="23000"
+                    grid="true"
+                    grid_num="10"
+                    (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
+  <input type="number"
+         class="form-control"
+         [(ngModel)]="above"
+         (keyup)="setAdvancedSliderTo()"
+         (click)="setAdvancedSliderTo()"
+  >
+  <input type="number"
+         class="form-control"
+         [(ngModel)]="below"
+         (keyup)="setAdvancedSliderTo()"
+         (click)="setAdvancedSliderTo()"
+  >
+  <p>
+    <button class="btn btn-primary" (click)="onFilterDatabaseWithPriceBetween()">Search database</button>
+  </p>
+
+  <div class="alert-info" *ngIf="typedTitleLengthTemp>0">
+    Count found products: {{products.length}}
+  </div>
+  <hr>
+  <br>
+  <br>
+
+  <div *ngIf="products.length==0">
+    <h3 class="alert-danger">Somethin something go wrong try another time</h3>
+  </div>
+
+  <div class="container">
+    <br>
+    <br>
+    <div class="row " *ngFor="let product of pagedProduct; let i = index">
+      <div class=" list-group-item">
+        <h3 class="text-center">{{product.title}}</h3>
+        <hr>
+        <table class="table table-borderless">
+          <thead>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="col-sm-4"><img
+              src="{{product.imageLink}}"
+              alt="{{product.imageLink}}"
+              class="img-responsive"
+              style="max-height: 200px; max-width: 250px"></td>
+            <td class="col-sm-6 text-left bottom-left">
+              {{product.description}}
+            </td>
+            <td class="col-sm-2 text-center">
+              <br>
+              <br>
+              <br>
+          <tr>
+            Price: {{product.price}} $<br>
+            <button class="btn btn-primary btn-group-lg" (click)="onAddToCard(product)">Add to Card</button>
+          </tr>
+          </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <br>
+    <div class="text-center">
+      <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(1)">First</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+        </li>
+        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+          <a (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.currentPage + 1)">Next</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.totalPages)">Last</a>
+        </li>
+      </ul>
     </div>
   </div>
-  <br>
-  <div class="text-center">
-    <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-      <li [ngClass]="{disabled:pager.currentPage === 1}">
-        <a (click)="setPage(1)">First</a>
-      </li>
-      <li [ngClass]="{disabled:pager.currentPage === 1}">
-        <a (click)="setPage(pager.currentPage - 1)">Prev</a>
-      </li>
-      <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-        <a (click)="setPage(page)">{{page}}</a>
-      </li>
-      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-        <a (click)="setPage(pager.currentPage + 1)">Next</a>
-      </li>
-      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-        <a (click)="setPage(pager.totalPages)">Last</a>
-      </li>
-    </ul>
-  </div>
-</div>

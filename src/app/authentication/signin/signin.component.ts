@@ -7,6 +7,9 @@ import {Router} from '@angular/router';
 import {isNull} from 'util';
 import {ProductDataAmount} from '../../model/product-data-amount';
 import {BucketServerService} from '../../bucket-user/bucket-server.service';
+import {TemplateRef} from '@angular/core';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 @Component({
   selector: 'app-signin',
@@ -16,6 +19,7 @@ import {BucketServerService} from '../../bucket-user/bucket-server.service';
 export class SigninComponent {
   private productIdArray: number[] = [];
   private products: ProductDataAmount[] = [];
+  modalRef: BsModalRef;
   name = 'thomas';
   password = 'thomas';
   message = '';
@@ -23,7 +27,8 @@ export class SigninComponent {
   constructor(private server: ServerService,
               private logginService: LogingService,
               private router: Router,
-              private bucketServerService: BucketServerService) {
+              private bucketServerService: BucketServerService,
+              private modalService: BsModalService) {
   }
 
   onSubmit(submittedForm) {
@@ -39,16 +44,19 @@ export class SigninComponent {
           localStorage.setItem('role', role);
 
           this.getDataFromLocalStorage();
+
           this.bucketServerService.addProductListToCard(this.productIdArray).subscribe(
             (response2) => {
-              console.log('successfully added all product form localStorage to database: '+response2);
+              console.log(response2);
             },
             (error) => console.log(error)
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
-          this.logginService.loginSuccessful.emit(role);
-          this.router.navigate(['/']);
+
+          this.loggingService.loginSuccessful.emit(role);
+          this.modalRef.hide();
+          // this.router.navigate(['/']);
         },
         (error) => this.somethingGoWrong()
       );
@@ -58,7 +66,7 @@ export class SigninComponent {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        for (let j = 0; j < bucket[i]._amount; j++) {
+        for (let j = 0; j < bucket[i]._totalAmount; j++) {
           this.productIdArray.push(bucket[i]._id);
         }
       }
@@ -69,9 +77,8 @@ export class SigninComponent {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._amount
+          bucket[i]._totalAmount
         );
-        console.log(bucketProduct);
         this.products.push(bucketProduct);
       }
 
@@ -92,11 +99,11 @@ export class SigninComponent {
         if (!isNull(products)) {
           for (let i = 0; i < products.length; i++) {
             let bucketProduct: ProductDataAmount = new ProductDataAmount(
-              products[i].id,
-              products[i].price,
-              products[i].title,
-              products[i].description,
-              products[i].imageLink,
+              products[i].productDto.id,
+              products[i].productDto.price,
+              products[i].productDto.title,
+              products[i].productDto.description,
+              products[i].productDto.imageLink,
               products[i].amount
             );
             this.products.push(bucketProduct);
@@ -104,9 +111,12 @@ export class SigninComponent {
         }
         let datatoLocalStorage = JSON.stringify(this.products);
         localStorage.setItem('bucket123', datatoLocalStorage);
-        console.log("data was succes dowloadad from server")
       },
       (error) => console.log(error)
     );
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
   }
 }

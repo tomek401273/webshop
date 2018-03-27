@@ -1,37 +1,46 @@
-<div >
 
-  <form (ngSubmit)="onSubmit(form)" #form="ngForm" id="loginForm">
-    <div class="form-group">
-      <label for="idlogin">Login</label>
-      <input
-        type="text"
-        id="idlogin"
-        name="loginLog"
-        class="form-control"
-        required
-        #loginCrt
-        [ngModel]="name"
-      >
-      <span class="help-block" *ngIf="loginCrt.invalid && loginCrt.touched">Please fill login </span>
-    </div>
-    <div class="form-group">
-      <label for="idpassword">Password</label>
-      <input
-        type="text"
-        id="idpassword"
-        name="passwordLog"
-        class="form-control"
-        required
-        #paswordCrt
-        [ngModel]="password">
-      <span class="help-block" *ngIf="paswordCrt.invalid && paswordCrt.touched"></span>
-    </div>
-     <h5 class="text-center" *ngIf="message.length>0"> <span class="alert-danger ">Warrning  {{message}} check login and password</span></h5>
+<button type="button" class="btn btn-primary logAcces" (click)="openModal(template)">Log in</button>
 
-    <br>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Login to your account</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times; exit</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm" id="loginForm">
+      <div class="form-group">
+        <label for="idlogin">Login</label>
+        <input
+          type="text"
+          id="idlogin"
+          name="loginLog"
+          class="form-control"
+          required
+          #loginCrt
+          [ngModel]="name"
+        >
+        <span class="help-block" *ngIf="loginCrt.invalid && loginCrt.touched">Please fill login </span>
+      </div>
+      <div class="form-group">
+        <label for="idpassword">Password</label>
+        <input
+          type="text"
+          id="idpassword"
+          name="passwordLog"
+          class="form-control"
+          required
+          #paswordCrt
+          [ngModel]="password">
+        <span class="help-block" *ngIf="paswordCrt.invalid && paswordCrt.touched"></span>
+      </div>
+      <h5 class="text-center" *ngIf="message.length>0"> <span class="alert-danger ">Warrning  {{message}} check login and password</span></h5>
 
-    <button class="btn btn-primary center-block" type="submit">LOGGIN</button>
+      <br>
 
-  </form>
+      <button class="btn btn-primary center-block" type="submit">LOGGIN</button>
 
-</div>
+    </form>
+  </div>
+</ng-template>

@@ -1,14 +1,7 @@
-import {Component, DoCheck, OnInit, TemplateRef} from '@angular/core';
-import {LogingService} from "../services/loging.service";
-import {Router} from "@angular/router";
-import {BsModalRef} from "ngx-bootstrap/modal/bs-modal-ref.service";
-import {BsModalService} from "ngx-bootstrap/modal";
-import {ServerService} from "../services/server.service";
-import {BucketServerService} from "../bucket-user/bucket-server.service";
-import {isNull} from "util";
-import {ProductDataAmount} from "../model/product-data-amount";
-import {Log} from "../model/Log";
-import {HttpResponse} from "@angular/common/http";
+
+import {Component, DoCheck, OnInit} from '@angular/core';
+import {LogingService} from '../services/loging.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-authentication',
@@ -17,14 +10,9 @@ import {HttpResponse} from "@angular/common/http";
 })
 export class AuthenticationComponent implements OnInit, DoCheck {
   private isAuthenticated = false;
-  private loginUser ="";
-  private roleUser ="";
-  modalRef: BsModalRef;
-  private productIdArray: number[] = [];
-  private products: ProductDataAmount[] = [];
-  name = 'thomas';
-  password = 'thomas';
-  message = '';
+
+  private loginUser = '';
+  private roleUser = '';
 
   constructor(private logginService: LogingService,
               private router: Router,
@@ -42,15 +30,15 @@ export class AuthenticationComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     this.isAuthenticated = this.logginService.isAuthenticated();
-    this.loginUser =localStorage.getItem("login");
-    this.roleUser = localStorage.getItem("role");
+    this.loginUser = localStorage.getItem('login');
+    this.roleUser = localStorage.getItem('role');
   }
 
-  onRedirect(page){
-    this.router.navigate([page])
+  onRedirect(page) {
+    this.router.navigate([page]);
   }
 
-  onLogOut(){
+  onLogOut() {
     this.logginService.logOut();
   }
 

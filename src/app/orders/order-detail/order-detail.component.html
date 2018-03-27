@@ -1,0 +1,77 @@
+<div class="container">
+  <h2 class="text-center">Detail informetion of order nr: {{order.id}}</h2>
+  <hr>
+  <br>
+  <br>
+  <div class="row ">
+
+   <div class="col-sm-2"></div>
+    <div class="col-sm-10">
+      <table class="table text-justify line-height-200">
+        <thead>
+        <td>
+          <tr><h3>Actual order Status</h3></tr>
+        </td>
+        <td>
+          <tr><h3>Shippin Address</h3></tr>
+        </td>
+        </thead>
+        <tbody>
+        <td>
+          <tr>Total Value: {{order.totalValue}}</tr>
+          <tr>Total Amount: {{order.totalAmount}}</tr>
+          <tr>Bought Date: {{order.boughtDate}}</tr>
+          <tr>Stratus status: {{order.status}}</tr>
+
+          <tr> <a href="#">Delivery link</a></tr>
+
+        </td>
+        <td>
+          <tr>Country: {{order.shippingAddressDto.country}}</tr>
+          <tr>City: {{order.shippingAddressDto.city}}</tr>
+          <tr>PostCode: {{order.shippingAddressDto.postCode}}</tr>
+          <tr>Street: {{order.shippingAddressDto.street}}</tr>
+          <tr>Name: {{order.shippingAddressDto.name}}</tr>
+          <tr>Surname: {{order.shippingAddressDto.surname}}</tr>
+          <tr>Supplier: {{order.shippingAddressDto.supplier}}</tr>
+        </td>
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <br>
+    <div class="text-center" *ngIf="isPaid">
+      <button class="btn btn-primary " (click)="onPay()">Pay Order</button>
+
+    </div>
+
+  </div>
+
+
+  <br>
+  <br>
+  <br>
+  <div class="row">
+    <h3 class="text-center">List ordered products</h3>
+    <table class="table text-center table-striped">
+      <thead>
+      <tr>
+        <td>name</td>
+        <td>price</td>
+        <td>amount</td>
+        <td>value</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let productBoughts of order.productBoughts">
+        <td>{{productBoughts.product.title}}</td>
+        <td>{{productBoughts.product.price}}</td>
+        <td>{{productBoughts.amount}}</td>
+        <td>{{productBoughts.totalPrice}}</td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -2,21 +2,23 @@
   <div class="row">
     <h2 class="text-center">Shipping Address</h2>
   </div>
+
   <div class="row text-center">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <form (ngSubmit)="onSubmit(form)" #form="ngForm">
         <div class="form-group">
-          <label for="country">Coutry</label>
-          <select
-            id="country"
+          <label>Coutry</label>
+          <pre class="card card-block card-header mb-3">Country: {{selected | json}}</pre>
+          <input
             class="form-control"
-            [ngModel]="defaultCountry"
-            name="country">
-            <option value="USA">USA</option>
-            <option value="Canada>">Canada</option>
-            <option value="Poland">Poland</option>
-          </select>
+            [(ngModel)]="selected"
+            [typeahead]="states"
+            [ngModelOptions]="{standalone: true}"
+            required
+          >
+
+
         </div>
         <div class="form-group">
           <label for="city">City</label>
@@ -25,7 +27,8 @@
             id="city"
             type="text"
             ngModel
-            name="city">
+            name="city"
+            required>
         </div>
         <div class="form-group">
           <label for="postcode">PostCode</label>
@@ -34,7 +37,9 @@
             id="postcode"
             type="text"
             ngModel
-            name="postcode">
+            name="postcode"
+            required
+          >
         </div>
 
         <div class="form-group">
@@ -44,7 +49,8 @@
             type="text"
             id="street"
             ngModel
-            name="street">
+            name="street"
+            required>
         </div>
 
 
@@ -55,7 +61,8 @@
             type="text"
             id="name"
             ngModel
-            name="name">
+            name="name"
+            required>
         </div>
         <div class="form-group">
           <label for="surname">Surname</label>
@@ -64,7 +71,8 @@
             type="text"
             id="surname"
             ngModel
-            name="surname">
+            name="surname"
+            required>
         </div>
         <br>
         <h4>Select your supplier</h4>
@@ -75,26 +83,15 @@
               type="radio"
               name="supplier"
               ngModel
-              [value]="supplier.name">
-            Supplier: {{supplier.name}} price: {{supplier.price}} $
+              [value]="supplier.name"
+              required>
+            Supplier: {{supplier.name}} totalPrice: {{supplier.totalPrice}} $
           </label>
         </div>
-<br><br>
-        <div class="form-group">
-          <label for="bank">Select your bank </label>
-          <select
-            id="bank"
-            class="form-control"
-            ngModel
-            name="bank">
-            <option value="ING">ING</option>
-            <option value="AliorBank">AliorBank</option>
-          </select>
-          <p>You will by redirected to your bank website</p>
-          <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>
-        </div>
+        <br><br>
 
-        <button class="btn btn-primary"type="submit" [disabled]="!pay">Submit</button>
+
+        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Buy</button>
 
       </form>
     </div>

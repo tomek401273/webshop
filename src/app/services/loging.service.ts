@@ -36,7 +36,7 @@ export class LogingService {
   }
 
   isAuthenticated() {
-    if (localStorage.getItem('role') === 'user' || localStorage.getItem('role') === 'admin') {
+    if (localStorage.getItem('role') === 'user' || localStorage.getItem('role') === 'admin, user') {
       return true;
     }
     else {
@@ -61,6 +61,17 @@ export class LogingService {
       observe: 'response',
       responseType: 'text',
       headers: headers,
+    });
+  }
+
+  checkLoginAvailable(login) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
+    console.log('serviced');
+    console.log(login);
+    return this.httpClient.post('http://localhost:8080/auth/checkLoginAvailable', login, {
+      observe: 'response',
+      responseType: 'text',
+      headers: headers
     });
   }
 }

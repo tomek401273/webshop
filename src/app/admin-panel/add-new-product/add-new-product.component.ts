@@ -4,6 +4,7 @@ import {ServerService} from "../../services/server.service";
 import {CanDeactivateGuard} from "../../services/protect/can-deactivate-guard";
 import {Observable} from "rxjs/Observable";
 import {ProductDataAmount} from "../../model/product-data-amount";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-new-product',
@@ -15,7 +16,8 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   productData: ProductDataAmount;
   private savedChanges: boolean;
 
-  constructor(private  serverService: ServerService) {
+  constructor(private  serverService: ServerService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -32,7 +34,12 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
 
     this.serverService.addNewProduct(this.productData)
       .subscribe(
-        (response) => console.log(response),
+        (response) => {
+          console.log(response);
+          alert("Product added successfully");
+          this.router.navigate(['/productEdit'], {queryParams: {lastpage: true}}  )
+
+        },
         (error) => console.log(error)
       );
     this.savedChanges = true;

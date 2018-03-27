@@ -15,9 +15,8 @@
         <div *ngIf="isAuthenticated==false">
           <button class="btn btn-primary logAcces" (click)="onRedirect('/signup')">Sign up</button>
           <!--<button class="btn btn-primary logAcces" (click)="onRedirect('/login')">Sign in</button>-->
-          <!--<button class="btn btn-primary logAcces" (click)="onRedirect('/login')">Sign in</button>-->
-          <button class="btn btn-primary logAcces" (click)="openModal(template)">Sign in</button>
 
+          <app-signin></app-signin>
         </div>
         <div *ngIf="isAuthenticated==true">
           <button class="btn btn-primary logOut" (click)="onLogOut()">Log out</button>
