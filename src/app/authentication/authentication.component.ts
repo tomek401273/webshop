@@ -1,6 +1,6 @@
 import {Component, DoCheck, OnInit} from '@angular/core';
-import {LogingService} from "../services/loging.service";
-import {Router} from "@angular/router";
+import {LogingService} from '../services/loging.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-authentication',
@@ -9,8 +9,8 @@ import {Router} from "@angular/router";
 })
 export class AuthenticationComponent implements OnInit, DoCheck {
   private isAuthenticated = false;
-  private loginUser ="";
-  private roleUser ="";
+  private loginUser = '';
+  private roleUser = '';
 
   constructor(private logginService: LogingService,
               private router: Router) {
@@ -22,15 +22,15 @@ export class AuthenticationComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     this.isAuthenticated = this.logginService.isAuthenticated();
-    this.loginUser =localStorage.getItem("login");
-    this.roleUser = localStorage.getItem("role");
+    this.loginUser = localStorage.getItem('login');
+    this.roleUser = localStorage.getItem('role');
   }
 
-  onRedirect(page){
-    this.router.navigate([page])
+  onRedirect(page) {
+    this.router.navigate([page]);
   }
 
-  onLogOut(){
+  onLogOut() {
     this.logginService.logOut();
   }
 

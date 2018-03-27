@@ -36,6 +36,8 @@ import { OrderDetailComponent } from './orders/order-detail/order-detail.compone
 import { OrdersAdminComponent } from './orders/orders-admin/orders-admin.component';
 import { OrderAdminDetailComponent } from './orders/orders-admin/order-admin-detail/order-admin-detail.component';
 import { DeliveryStatusComponent } from './delivery-status/delivery-status.component';
+import { IonRangeSliderModule } from "ng2-ion-range-slider";
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -61,11 +63,13 @@ import { DeliveryStatusComponent } from './delivery-status/delivery-status.compo
   ],
   imports: [
     TypeaheadModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    IonRangeSliderModule
   ],
   providers: [
     ServerService,

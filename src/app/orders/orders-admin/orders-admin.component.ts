@@ -17,13 +17,9 @@ export class OrdersAdminComponent implements OnInit {
   private typedTitleLengthTemp = 0;
   private defaultState = 'paid';
   @ViewChild('form') searchForm: NgForm;
-
   selected: string;
-
   private pagedProduct: any[];
   private pager: any = {};
-
-
 
 
   constructor(private serverService: ServerService,
@@ -43,13 +39,10 @@ export class OrdersAdminComponent implements OnInit {
 
     this.ordersService.getAllUserLogin().subscribe(
       (response: any[]) => {
-        console.log('usersLogin');
-        console.log(response);
         this.usersLogin = response;
       },
       (error) => console.log(error)
     );
-
   }
 
   showOrderDetail(order: Order) {
@@ -66,6 +59,8 @@ export class OrdersAdminComponent implements OnInit {
       this.ordersService.searchOrderContainsProduct(this.searchForm.value.search).subscribe(
         (orders: any[]) => {
           this.orders = orders;
+          this.pagedProduct = [];
+          this.setPage(1);
         },
         (error) => console.log(error)
       );
@@ -73,27 +68,26 @@ export class OrdersAdminComponent implements OnInit {
   }
 
   onfilterOrdersWithState(filter) {
+    console.log(filter.value.state);
     this.ordersService.filterOrdersWithState(filter.value.state).subscribe(
       (orders: any[]) => {
         this.orders = orders;
+        this.pagedProduct = [];
+        this.setPage(1);
       },
       (error) => console.log(error)
     );
   }
 
-  onFilterOrdersWithDate(date) {
-    this.ordersService.filterOrdersWithDate(date.value.after, date.value.before).subscribe(
-      (orders: any[]) => {
-        this.orders = orders;
-      },
-      (error) => console.log(error)
-    );
-  }
+  searchOrdersWithDates(dates) {
+    const from: String = dates.viewModel[0].toLocaleDateString('en-GB', {timeZone: 'UTC'});
+    const to: String = dates.viewModel[1].toLocaleDateString('en-GB', {timeZone: 'UTC'});
 
-  onFilterOrdersByUserLogin(userLogin) {
-    this.ordersService.filterOrdersByUserLogin(userLogin.value.userLogin).subscribe(
+    this.ordersService.filterOrdersWithDate(from, to).subscribe(
       (orders: any[]) => {
         this.orders = orders;
+        this.pagedProduct = [];
+        this.setPage(1);
       },
       (error) => console.log(error)
     );
@@ -101,16 +95,14 @@ export class OrdersAdminComponent implements OnInit {
 
   onFilterUser() {
     if (this.selected.length > 3) {
-      console.log(this.selected.length);
-      console.log(this.selected);
-
       this.ordersService.filterOrdersByUserLogin(this.selected).subscribe(
         (orders: any[]) => {
           this.orders = orders;
+          this.pagedProduct = [];
+          this.setPage(1);
         },
         (error) => console.log(error)
       );
-
     }
   }
 

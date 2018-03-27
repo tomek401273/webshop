@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {OrdersService} from '../../services/orders.service';
 import {Order} from '../../model/order';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ShippingAddress} from '../../model/shipping-address';
 import {OrderStatus} from '../../model/order-status';
 import {isNull} from 'util';
@@ -14,21 +14,21 @@ import {isNull} from 'util';
 export class OrderDetailComponent implements OnInit {
   private id: number;
   private shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null,);
-  private paid = false;
+  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null);
+  private isPaid = false;
 
   constructor(private ordersService: OrdersService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.ordersService.getOneOrder(this.id).subscribe(
       (order: any) => {
-        console.log(order);
         this.order = order;
-        if ('Order was booked' !== this.order.status) {
-          this.paid = true;
+        if ('Order was booked' === this.order.status) {
+          this.isPaid = true;
         }
 
       },
@@ -37,23 +37,8 @@ export class OrderDetailComponent implements OnInit {
   }
 
   onPay() {
-    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, true, null, null, null);
-    console.log('payment');
-    console.log(payment);
-    this.ordersService.paymentVerification(payment).subscribe(
-      (response: boolean) => {
-        console.log('response: ');
-        console.log(response);
-        if (response) {
-          this.order.status = 'Transaction confirmed';
-        }
+    this.router.navigate(['/success/' + this.order.id]);
 
-        // this.order.status = response;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
   }
 
 }

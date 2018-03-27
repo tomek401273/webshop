@@ -5,10 +5,10 @@
       <div class="text-center">
         <h3>Thank you for shopping</h3>
       </div>
-      <h4>Pay your order</h4>
 
 
-      <div class="form-group">
+
+      <div class="form-group" *ngIf="!isPaid">
         <label for="bank">Select your bank </label>
         <select
           id="bank"
@@ -18,7 +18,7 @@
           <option value="ING">ING</option>
           <option value="AliorBank">AliorBank</option>
         </select>
-       <div class="text-center">
+       <div class="text-center" >
          <p>You will by redirected to your bank website</p>
          <br>
          <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>

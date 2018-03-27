@@ -22,7 +22,7 @@ const appRoutes: Routes = [
   {path: 'signup', component: SignupComponent},
   {path: 'bucket', component: BucketUserComponent},
   {path: 'summary', component: SummaryComponent},
-  {path: 'success', component: OrderSuccessfullyComponent},
+  {path: 'success/:id', component: OrderSuccessfullyComponent},
   {path: 'orders', component: OrdersComponent},
   {path: 'orders/:id', component: OrderDetailComponent},
   {path: 'admin-orders', component: OrdersAdminComponent},

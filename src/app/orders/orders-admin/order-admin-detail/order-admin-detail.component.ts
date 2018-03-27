@@ -14,7 +14,7 @@ import {ShippingAddress} from '../../../model/shipping-address';
 export class OrderAdminDetailComponent implements OnInit {
   private id: number;
   private shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null,);
+  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null);
   private paid = false;
   private prepared = false;
   private send = false;

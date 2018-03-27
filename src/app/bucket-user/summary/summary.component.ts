@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {OrdersService} from "../../services/orders.service";
-import {ShippingAddress} from "../../model/shipping-address";
+import {ActivatedRoute, Router} from '@angular/router';
+import {OrdersService} from '../../services/orders.service';
+import {ShippingAddress} from '../../model/shipping-address';
+import {BucketService} from '../bucket.service';
 
 @Component({
   selector: 'app-summary',
@@ -11,10 +12,12 @@ import {ShippingAddress} from "../../model/shipping-address";
 export class SummaryComponent implements OnInit {
   private pay: boolean = false;
   private defaultCountry: String = 'USA';
-  suppliers = [{"name": "InPost", "price": 10}, {"name": "DHL", "price": "23"}];
+  suppliers = [{'name': 'InPost', 'price': 10}, {'name': 'DHL', 'price': '23'}];
+  private id: number;
 
   constructor(private router: Router,
-              private orderService: OrdersService) {
+              private orderService: OrdersService,
+              private bucketService: BucketService) {
   }
 
   selected: string;
@@ -75,9 +78,9 @@ export class SummaryComponent implements OnInit {
   }
 
   onSubmit(data) {
-    let conf =confirm("Are you really sure that you want buy all this products ???");
-    const  shippingAddress: ShippingAddress = new ShippingAddress(
-      localStorage.getItem("login"),
+    const conf = confirm('Are you really sure that you want buy all this products ???');
+    const shippingAddress: ShippingAddress = new ShippingAddress(
+      localStorage.getItem('login'),
       this.selected,
       data.value.city,
       data.value.postcode,
@@ -87,25 +90,18 @@ export class SummaryComponent implements OnInit {
       data.value.supplier
     );
 
-    if (conf){
+    if (conf) {
       this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
-        (response) => {
-          this.router.navigate(['/success'])
+        (response: number) => {
+          this.id = response;
+          this.bucketService.buyAllProduct.emit(true);
+          this.router.navigate(['/success/' + this.id]);
         },
         (error) => console.log(error)
       );
     } else {
-      console.log("not I am not sure!!!")
+      console.log('not I am not sure!!!');
     }
-
-
-  }
-
-  onPay() {
-    this.pay = true;
-  }
-
-  onBuy() {
   }
 
 

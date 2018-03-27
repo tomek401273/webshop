@@ -14,6 +14,7 @@ import {NgForm} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
+import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
 
 @Component({
   selector: 'app-product-list',
@@ -22,19 +23,18 @@ import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 })
 export class ProductListComponent implements OnInit, DoCheck {
   private products: ProductData[] = [];
-  private products2: ProductData[] = [];
-
+  productsTitle: String[] = [];
+  chosenTitle: string;
   private bucketProducts: ProductDataAmount[] = [];
   private pager: any = {};
   private pagedProduct: any[];
   private isAuthenticated = false;
   private typedTitleLengthTemp = 0;
   @ViewChild('form') searchForm: NgForm;
-
-  asyncSelected: string;
-  typeaheadLoading: boolean;
-  typeaheadNoResults: boolean;
-  dataSource: Observable<any>;
+  @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
+  advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
+  private above = 0;
+  private below = 100;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -42,32 +42,35 @@ export class ProductListComponent implements OnInit, DoCheck {
               private bucketService: BucketService,
               private bucketServerService: BucketServerService,
               private logingServiece: LogingService) {
-    this.dataSource = Observable.create((observer: any) => {
-      // Runs on every search
-      observer.next(this.asyncSelected);
-    }).mergeMap((token: string) => this.getStatesAsObservable(token));
   }
 
-  getStatesAsObservable(token: string): Observable<any> {
-    const query = new RegExp(token, 'ig');
+  finish(slider, event) {
+    slider.onFinish = event;
+    this.above = event.from;
+    this.below = event.to;
+  }
 
-    return Observable.of(
-      this.products.filter((state: any) => {
-        return query.test(state._title);
-      })
+  setAdvancedSliderTo() {
+    this.advancedSliderElement.update({from: this.above, to: this.below});
+  }
+
+  onFilterDatabaseWithPriceBetween() {
+    this.showPublicData.filterProductWithPriceBetween(this.above, this.below).subscribe(
+      (products: any[]) => {
+        if (products.length === 0) {
+          this.products = [];
+          this.pagedProduct = [];
+        } else {
+          this.products = products;
+          this.setPage(1);
+        }
+      },
+      (error) => console.log(error)
     );
   }
 
-  changeTypeaheadLoading(e: boolean): void {
-    this.typeaheadLoading = e;
-  }
-
-  typeaheadOnSelect(e: TypeaheadMatch): void {
-    console.log('Selected value: ', e.value);
-  }
-
-
   ngOnInit() {
+    this.getAllProductsTitle();
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
       (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
@@ -90,61 +93,8 @@ export class ProductListComponent implements OnInit, DoCheck {
       );
   }
 
-
-  onSubmitSearch() {
-    if (this.searchForm.value.search.length === 1 && this.typedTitleLengthTemp === 3) {
-      this.getDataFromDatabase();
-      this.typedTitleLengthTemp = 0;
-    }
-
-    if (this.searchForm.value.search.length > 2) {
-      this.typedTitleLengthTemp = 3;
-      this.showPublicData.searchProductInDatabase(this.searchForm.value.search).subscribe(
-        (products: any[]) => {
-          if (products.length === 0) {
-            this.products = [];
-            this.pagedProduct = [];
-          } else {
-            this.products = products;
-            this.setPage(1);
-          }
-        },
-        (error) => console.log(error)
-      );
-    }
-  }
-
-  onFilterProducts(fiter) {
-    this.showPublicData.filterProductWithPriceBetween(fiter.value.above, fiter.value.below).subscribe(
-      (products: any[]) => {
-        if (products.length === 0) {
-          this.products = [];
-          this.pagedProduct = [];
-        } else {
-          this.products = products;
-          this.setPage(1);
-        }
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onFilterReset() {
-    this.getDataFromDatabase();
-  }
-
-
   setPage(page: number) {
     if (page < 1 || page > this.products.length) {
-      return;
-    }
-    this.pager = this.pagerService.getPager(this.products.length, page);
-    this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
-  }
-
-
-  setPage2(page: number) {
-    if (page < 1) {
       return;
     }
     this.pager = this.pagerService.getPager(this.products.length, page);
@@ -185,14 +135,14 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   acutalNumberProductInBucket() {
     let totalNumber = 0;
-    for (let prod of this.bucketProducts) {
+    for (const prod of this.bucketProducts) {
       totalNumber += prod.totalAmount;
     }
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
   addProductToBucket(product: ProductData) {
-    let founded: ProductDataAmount = this.bucketProducts.find(x => x.id === product.id);
+    const founded: ProductDataAmount = this.bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
       this.bucketProducts.push(new ProductDataAmount(
@@ -204,7 +154,7 @@ export class ProductListComponent implements OnInit, DoCheck {
         1));
       return;
     } else {
-      let index = this.bucketProducts.indexOf(founded);
+      const index = this.bucketProducts.indexOf(founded);
       let amount = founded.totalAmount;
       amount++;
       founded.totalAmount = amount;
@@ -214,15 +164,15 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   saveTemp() {
     localStorage.setItem('bucket123', null);
-    let bucketToSave = JSON.stringify(this.bucketProducts);
+    const bucketToSave = JSON.stringify(this.bucketProducts);
     localStorage.setItem('bucket123', bucketToSave);
   }
 
   getTemp() {
-    let bucket = JSON.parse(localStorage.getItem('bucket123'));
+    const bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        let bucketProduct: ProductDataAmount = new ProductDataAmount(
+        const bucketProduct: ProductDataAmount = new ProductDataAmount(
           bucket[i]._id,
           bucket[i]._price,
           bucket[i]._title,
@@ -233,4 +183,34 @@ export class ProductListComponent implements OnInit, DoCheck {
       }
     }
   }
+
+  getAllProductsTitle() {
+    setTimeout(() => {
+      this.productsTitle = this.showPublicData.getProductsTitles();
+    }, 2000);
+  }
+
+  onSearchProductWithTitle() {
+    if (this.chosenTitle.length === 1 && this.typedTitleLengthTemp === 3) {
+      this.getDataFromDatabase();
+      this.typedTitleLengthTemp = 0;
+    }
+
+    if (this.chosenTitle.length > 2) {
+      this.typedTitleLengthTemp = 3;
+      this.showPublicData.searchProductInDatabase(this.chosenTitle).subscribe(
+        (products: any[]) => {
+          if (products.length === 0) {
+            this.products = [];
+            this.pagedProduct = [];
+          } else {
+            this.products = products;
+            this.setPage(1);
+          }
+        },
+        (error) => console.log(error)
+      );
+    }
+  }
+
 }
