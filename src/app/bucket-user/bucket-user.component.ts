@@ -34,7 +34,9 @@ export class BucketUserComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._totalAmount);
+          bucket[i]._totalAmount,
+          null,
+          null);
         this.products.push(bucketProduct);
       }
     }

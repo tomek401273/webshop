@@ -4,6 +4,7 @@ import {ProductData} from "../../model/product-data";
 import {ShowPublicDataSevice} from "../../services/show-public-data.sevice";
 import {PagerService} from "../../services/navigation/pager.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ProductDataAmount} from '../../model/product-data-amount';
 
 @Component({
   selector: 'app-product-edit',
@@ -49,7 +50,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
         (error) => console.log(error)
       );
 
-    this.showPublicData.getProducts()
+    this.showPublicData.getProductsToEdit()
       .subscribe(
         (procucts: any[]) => {
           this.products = procucts;
@@ -78,7 +79,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this.currentPage}});
   }
 
-  onRemove(poroductDeteted: ProductData, id: number) {
+  onRemove(poroductDeteted: ProductDataAmount, id: number) {
     this.serverService.removeProduct(poroductDeteted)
       .subscribe(
         (response) => {

@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
         (response) => {
           setTimeout(() => {
             if (this.logingService.isAuthenticated()) {
-              alert('Your session ares gone. Log in once again');
+              alert('Your session are gone. Log in once again');
               this.logingService.logOut();
             }
           }, 1200000);

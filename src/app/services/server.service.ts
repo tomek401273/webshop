@@ -37,7 +37,7 @@ export class ServerService {
       });
   }
 
-  onTaskRemoved = new EventEmitter<ProductData>();
+  onTaskRemoved = new EventEmitter<ProductDataAmount>();
   onTaskUpdated = new EventEmitter<ProductData>();
 
   removeProduct(product: ProductData) {
@@ -52,7 +52,7 @@ export class ServerService {
     });
   }
 
-  updateTask(product: ProductDataAmount) {
+  updateProduct(product: ProductDataAmount) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')

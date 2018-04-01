@@ -15,6 +15,9 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
+import {parseHttpResponse} from 'selenium-webdriver/http';
+import {DirectoryTitles} from '../model/directory-titles';
+import {ReminderDto} from '../model/dto/reminder-dto';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +25,7 @@ import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, DoCheck {
-  private products: ProductData[] = [];
+  private products: ProductDataAmount[] = [];
   productsTitle: String[] = [];
   chosenTitle: string;
   private bucketProducts: ProductDataAmount[] = [];
@@ -30,6 +33,7 @@ export class ProductListComponent implements OnInit, DoCheck {
   private pagedProduct: any[];
   private isAuthenticated = false;
   private typedTitleLengthTemp = 0;
+  private sale = 'sale';
   @ViewChild('form') searchForm: NgForm;
   @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
   advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
@@ -73,7 +77,7 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.getAllProductsTitle();
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
-      (product: ProductData) => this.products.splice(this.products.indexOf(product), 1)
+      (product: ProductDataAmount) => this.products.splice(this.products.indexOf(product), 1)
     );
     this.getDataFromDatabase();
   }
@@ -86,6 +90,7 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
+          console.log(products);
           this.products = products;
           this.setPage(1);
         },
@@ -151,7 +156,9 @@ export class ProductListComponent implements OnInit, DoCheck {
         product.title,
         product.description,
         product.imageLink,
-        1));
+        1,
+        null,
+        null));
       return;
     } else {
       const index = this.bucketProducts.indexOf(founded);
@@ -178,16 +185,18 @@ export class ProductListComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._totalAmount);
+          bucket[i]._totalAmount,
+          null,
+          null);
         this.bucketProducts.push(bucketProduct);
       }
     }
   }
 
   getAllProductsTitle() {
-    setTimeout(() => {
-      this.productsTitle = this.showPublicData.getProductsTitles();
-    }, 2000);
+    this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
+      this.productsTitle = directoryTitles.titles;
+    });
   }
 
   onSearchProductWithTitle() {
@@ -211,6 +220,19 @@ export class ProductListComponent implements OnInit, DoCheck {
         (error) => console.log(error)
       );
     }
+  }
+
+  onSetSubscription(email, productId) {
+    console.log(email.value);
+    console.log(productId);
+    const reminderDto: ReminderDto = new ReminderDto(productId, email.value);
+    console.log(reminderDto);
+    this.showPublicData.setReminder(reminderDto).subscribe(
+      (response) => {
+        console.log(response);
+      },
+      (error) => console.log(error)
+    );
   }
 
 }

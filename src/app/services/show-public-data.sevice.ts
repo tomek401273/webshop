@@ -1,10 +1,16 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {map} from 'rxjs/operator/map';
+import {Observable} from 'rxjs/Observable';
+import {DirectoryTitles} from '../model/directory-titles';
+import {ReminderDto} from '../model/dto/reminder-dto';
 
 
 @Injectable()
 export class ShowPublicDataSevice {
   private productsTitle: String[] = [];
+  productTitleEmitter = new EventEmitter<DirectoryTitles>();
+  private directoryTitles = new DirectoryTitles(null);
 
   constructor(private httpClient: HttpClient) {
   }
@@ -13,8 +19,12 @@ export class ShowPublicDataSevice {
     return this.httpClient.get('http://localhost:8080/product/all');
   }
 
+  getProductsToEdit() {
+    return this.httpClient.get('http://localhost:8080/product/getAllProductToEdit');
+  }
+
   getProduct(id: number) {
-    let url: string = 'http://localhost:8080/product/' + id;
+    const url: string = 'http://localhost:8080/product/' + id;
     return this.httpClient.get(url);
   }
 
@@ -41,7 +51,7 @@ export class ShowPublicDataSevice {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json');
-    let filterPrice = {
+    const filterPrice = {
       'above': above,
       'below': below
     };
@@ -51,6 +61,7 @@ export class ShowPublicDataSevice {
     });
   }
 
+
   getAllProductsTitleFromDatabase() {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
@@ -58,15 +69,20 @@ export class ShowPublicDataSevice {
     return this.httpClient.get('http://localhost:8080/product/getAllProductsTitle', {
       headers: headers
     }).subscribe(
-      (titles: any[]) => {
-        this.productsTitle = titles;
+      (titles: String[]) => {
+        this.directoryTitles.titles = titles;
+        this.productTitleEmitter.emit(this.directoryTitles);
       },
       (error) => console.log(error)
     );
   }
 
-  getProductsTitles() {
-    return this.productsTitle;
+  setReminder(reminderDto: ReminderDto) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    return this.httpClient.post('http://localhost:8080/product/setReminder', reminderDto, {
+      headers: headers
+    });
   }
-
 }

@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ServerService} from '../../../services/server.service';
-import {ActivatedRoute, Params, Router} from "@angular/router";
-import {ShowPublicDataSevice} from "../../../services/show-public-data.sevice";
-import {CanDeactivateGuard} from "../../../services/protect/can-deactivate-guard";
-import {Observable} from "rxjs/Observable";
-import {ProductDataAmount} from "../../../model/product-data-amount";
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ShowPublicDataSevice} from '../../../services/show-public-data.sevice';
+import {CanDeactivateGuard} from '../../../services/protect/can-deactivate-guard';
+import {Observable} from 'rxjs/Observable';
+import {ProductDataAmount} from '../../../model/product-data-amount';
 
 @Component({
   selector: 'app-edit-detail',
@@ -15,7 +15,7 @@ import {ProductDataAmount} from "../../../model/product-data-amount";
 export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') editProductForm: NgForm;
   private product: ProductDataAmount = new ProductDataAmount(
-    null, null, null, null, null, null);
+    null, null, null, null, null, null, null, null);
   private productUpdated: ProductDataAmount;
   private positonProductOnPage = 1;
   private saveChanges = false;
@@ -27,12 +27,11 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   }
 
   ngOnInit() {
-    let id: number =Number(this.activatedRoute.snapshot.params['id']) | 0;
+    let id: number = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.publicServer.getProduct(id)
       .subscribe(
-        (product: any) =>
-        {
-          console.log("productEdit received: ");
+        (product: any) => {
+          console.log('productEdit received: ');
           console.log(product);
           this.product = product;
         },
@@ -51,12 +50,14 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
       this.editProductForm.value.title,
       this.editProductForm.value.desc,
       this.editProductForm.value.image,
-      this.editProductForm.value.amount);
-    this.serverServie.updateTask(this.productUpdated)
+      this.editProductForm.value.amount,
+      this.editProductForm.value.statusCode,
+      null);
+    this.serverServie.updateProduct(this.productUpdated)
       .subscribe(
         (response: Response) => {
           this.serverServie.onTaskUpdated.emit(this.productUpdated);
-          this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'})
+          this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'});
         },
         (error) => console.log(error));
     this.saveChanges = true;
@@ -68,7 +69,7 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
         || this.editProductForm.value.desc !== this.product.description
         || this.editProductForm.value.image !== this.product.imageLink)
       && !this.saveChanges) {
-      return confirm("Do you want to discard the changes ???");
+      return confirm('Do you want to discard the changes ???');
     } else {
       return true;
     }

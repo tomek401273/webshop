@@ -20,7 +20,7 @@ export class SigninComponent {
   private productIdArray: number[] = [];
   private products: ProductDataAmount[] = [];
   modalRef: BsModalRef;
-  name = 'thomas';
+  name = 'tomek371240@gmail.com';
   password = 'thomas';
   message = '';
 
@@ -32,17 +32,18 @@ export class SigninComponent {
   }
 
   onSubmit(submittedForm) {
-    let log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
+    const log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
 
     this.loggingService.getToken(log)
       .subscribe(
         (response: HttpResponse<String>) => {
-          let token = response.headers.get('Authorization');
-          let role = response.headers.get('Credentials');
+          const token = response.headers.get('Authorization');
+          const role = response.headers.get('Credentials');
           localStorage.setItem('login', submittedForm.value.loginLog);
           localStorage.setItem('token', token);
           localStorage.setItem('role', role);
-
+          console.log('userRole');
+          console.log(role);
           this.getDataFromLocalStorage();
 
           this.bucketServerService.addProductListToCard(this.productIdArray).subscribe(
@@ -76,7 +77,9 @@ export class SigninComponent {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink,
-          bucket[i]._totalAmount
+          bucket[i]._totalAmount,
+          null,
+          null
         );
         this.products.push(bucketProduct);
       }
@@ -103,7 +106,9 @@ export class SigninComponent {
               products[i].productDto.title,
               products[i].productDto.description,
               products[i].productDto.imageLink,
-              products[i].amount
+              products[i].amount,
+              null,
+              null
             );
             this.products.push(bucketProduct);
           }

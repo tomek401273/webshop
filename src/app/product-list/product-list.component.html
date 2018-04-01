@@ -77,8 +77,17 @@
               <br>
               <br>
           <tr>
-            Price: {{product.price}} $<br>
-            <button class="btn btn-primary btn-group-lg" (click)="onAddToCard(product)">Add to Card</button>
+            <div>
+              Price: {{product.price}} $<br>
+              <button class="btn btn-primary btn-group-lg" [disabled]="product.statusCode!==sale"
+                      (click)="onAddToCard(product)">Add to Card
+              </button>
+              <div *ngIf="product.statusCode!==sale">
+                <p>Temporally <br> unavailable</p>
+                <button type="button" class="btn btn-primary btn-sm" (click)="lgModal.show()">Reminder</button>
+              </div>
+
+            </div>
           </tr>
           </td>
           </tr>
@@ -86,6 +95,48 @@
           </tbody>
         </table>
       </div>
+
+      <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" aria-labelledby="myLargeModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title pull-left">Set reminder when product {{product.title}} will be available</h4>
+              <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+                <span aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+              <div class="text-justify">
+                <p>Write your email and press Submit </p>
+                <p>After few secends you will receive email please confirm it </p>
+                <br>
+                <br>
+
+                <input
+                  class="form-control"
+                  type="text"
+                  ngModel
+                  name="email"
+                  #emailSubscription="ngModel"
+                  required
+                  email
+
+                >
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  [disabled]="!emailSubscription.valid"
+                  (click)="onSetSubscription(emailSubscription, product.id)"
+                >Get Subscription
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
     <br>
     <div class="text-center">
@@ -108,3 +159,6 @@
       </ul>
     </div>
   </div>
+</div>
+
+

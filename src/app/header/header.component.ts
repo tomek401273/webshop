@@ -1,8 +1,8 @@
 import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {LogingService} from "../services/loging.service";
-import {Router} from "@angular/router";
-import {BucketService} from "../bucket-user/bucket.service";
-import {isNull} from "util";
+import {LogingService} from '../services/loging.service';
+import {Router} from '@angular/router';
+import {BucketService} from '../bucket-user/bucket.service';
+import {isNull} from 'util';
 
 @Component({
   selector: 'app-header',
@@ -20,13 +20,13 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    if (localStorage.getItem("role") === "admin") {
+    if (localStorage.getItem('role') === 'admin, user') {
       this.adminPanel = true;
     }
 
     this.logingService.loginSuccessful.subscribe(
       (role: String) => {
-        if (role === "admin") {
+        if (role === 'admin, user') {
           this.adminPanel = true;
         }
         if (this.logingService.isAuthenticated()) {
@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   calculateNumberProducts() {
-    let bucket = JSON.parse(localStorage.getItem("bucket123"));
+    let bucket = JSON.parse(localStorage.getItem('bucket123'));
     let total = 0;
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
@@ -67,7 +67,7 @@ export class HeaderComponent implements OnInit, DoCheck {
           this.router.navigate(['/']);
         }
       }
-    )
+    );
     this.calculateNumberProducts();
   }
 }
