@@ -100,7 +100,7 @@ export class SigninComponent {
       (products: any[]) => {
         if (!isNull(products)) {
           for (let i = 0; i < products.length; i++) {
-            let bucketProduct: ProductDataAmount = new ProductDataAmount(
+            const bucketProduct: ProductDataAmount = new ProductDataAmount(
               products[i].productDto.id,
               products[i].productDto.price,
               products[i].productDto.title,

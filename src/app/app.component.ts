@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   constructor(private logingService: LogingService,
               private showPublicDataService: ShowPublicDataSevice) {
     this.showPublicDataService.getAllProductsTitleFromDatabase();
+    this.showPublicDataService.getMaxProductPrice();
 
   }
 

@@ -10,7 +10,9 @@ import {ReminderDto} from '../model/dto/reminder-dto';
 export class ShowPublicDataSevice {
   private productsTitle: String[] = [];
   productTitleEmitter = new EventEmitter<DirectoryTitles>();
+  mavPriceEmitter = new EventEmitter<number>();
   private directoryTitles = new DirectoryTitles(null);
+  private maxPrice: number;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -77,6 +79,10 @@ export class ShowPublicDataSevice {
     );
   }
 
+  getProductTitles() {
+    return this.directoryTitles.titles;
+  }
+
   setReminder(reminderDto: ReminderDto) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
@@ -85,4 +91,32 @@ export class ShowPublicDataSevice {
       headers: headers
     });
   }
+
+  getMaxProductPrice() {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    return this.httpClient.get('http://localhost:8080/product/maxprice', {
+      headers: headers
+    }).subscribe(
+      (response: number) => {
+        this.maxPrice = response;
+        this.mavPriceEmitter.emit(this.maxPrice);
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getMaxPrice() {
+    return this.maxPrice;
+  }
+
+  // getMaxProductPrice() {
+  //   const headers = new HttpHeaders()
+  //     .set('Content-Type', 'application/json')
+  //     .append('Accept', 'application/json');
+  //   return this.httpClient.get('http://localhost:8080/product/maxprice', {
+  //     headers: headers
+  //   });
+  // }
 }

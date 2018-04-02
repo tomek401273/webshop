@@ -55,17 +55,6 @@ export class BucketServerService {
     });
   }
 
-  removeAllProductFromBucket() {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.httpClient.put('http://localhost:8080/bucket/removeAllProductFromBucket', localStorage.getItem('login'), {
-      headers: headers
-    });
-  }
-
   getProductListFromDatabase() {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')

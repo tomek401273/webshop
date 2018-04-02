@@ -38,7 +38,10 @@ export class ProductListComponent implements OnInit, DoCheck {
   @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
   advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
   private above = 0;
-  private below = 100;
+  private below = 120;
+  maxValueProductInShop: number;
+  maxValueCover = 3000;
+  minValueCover = 23;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -46,6 +49,8 @@ export class ProductListComponent implements OnInit, DoCheck {
               private bucketService: BucketService,
               private bucketServerService: BucketServerService,
               private logingServiece: LogingService) {
+    this.getMaxPriceProduct();
+
   }
 
   finish(slider, event) {
@@ -75,11 +80,13 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.getAllProductsTitle();
+    this.getProductTitlesFromService();
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
       (product: ProductDataAmount) => this.products.splice(this.products.indexOf(product), 1)
     );
     this.getDataFromDatabase();
+
   }
 
   ngDoCheck() {
@@ -90,7 +97,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
-          console.log(products);
           this.products = products;
           this.setPage(1);
         },
@@ -114,6 +120,19 @@ export class ProductListComponent implements OnInit, DoCheck {
           this.addProductToBucket(product);
           this.saveTemp();
           this.acutalNumberProductInBucket();
+          if (this.isAuthenticated === true) {
+            this.bucketServerService.addProductToCard(product.id).subscribe(
+              (resposne2) => {
+                if (resposne2 === true) {
+                  alert('successfully added product to bucket');
+                } else {
+                  alert('something go wrong contact with our service');
+                  console.log(resposne2);
+                }
+
+              }
+            );
+          }
           console.log('Avaiable products' + resposne);
         } else {
           alert('This product is not available');
@@ -122,20 +141,6 @@ export class ProductListComponent implements OnInit, DoCheck {
       },
       (error) => console.log(error)
     );
-    if (this.isAuthenticated === true) {
-      this.bucketServerService.addProductToCard(product.id).subscribe(
-        (resposne) => {
-          if (resposne === true) {
-            alert('succesfully added product to bucket');
-          } else {
-            alert('something go wrong contact with our service');
-            console.log(resposne);
-          }
-
-        }
-      );
-    }
-
   }
 
   acutalNumberProductInBucket() {
@@ -199,6 +204,10 @@ export class ProductListComponent implements OnInit, DoCheck {
     });
   }
 
+  getProductTitlesFromService() {
+    this.productsTitle = this.showPublicData.getProductTitles();
+  }
+
   onSearchProductWithTitle() {
     if (this.chosenTitle.length === 1 && this.typedTitleLengthTemp === 3) {
       this.getDataFromDatabase();
@@ -233,6 +242,30 @@ export class ProductListComponent implements OnInit, DoCheck {
       },
       (error) => console.log(error)
     );
+  }
+
+  getMaxPriceProduct() {
+    this.calculateSliderValues(this.showPublicData.getMaxPrice());
+
+    this.showPublicData.mavPriceEmitter.subscribe(
+      (response: number) => {
+        this.calculateSliderValues(response);
+        console.log('minValueCover');
+        console.log(this.minValueCover);
+
+      }
+    );
+  }
+
+  calculateSliderValues(response) {
+    this.maxValueProductInShop = response;
+    this.maxValueCover = this.maxValueProductInShop - (this.maxValueProductInShop / 5);
+    this.minValueCover = this.maxValueProductInShop / 5;
+    if (this.minValueCover > 100) {
+      this.minValueCover = 100;
+    }
+    this.above = this.minValueCover;
+    this.below = this.maxValueCover;
   }
 
 }
