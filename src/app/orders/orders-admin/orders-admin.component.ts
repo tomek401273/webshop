@@ -80,9 +80,8 @@ export class OrdersAdminComponent implements OnInit {
   }
 
   searchOrdersWithDates(dates) {
-    const from: String = dates.viewModel[0].toLocaleDateString('en-GB', {timeZone: 'UTC'});
-    const to: String = dates.viewModel[1].toLocaleDateString('en-GB', {timeZone: 'UTC'});
-
+    const from = dates.value[0].toLocaleDateString();
+    const to = dates.value[1].toLocaleDateString();
     this.ordersService.filterOrdersWithDate(from, to).subscribe(
       (orders: any[]) => {
         this.orders = orders;
