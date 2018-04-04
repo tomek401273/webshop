@@ -49,13 +49,14 @@
     <div class="text-center">
       <h3><span class="label label-warning" *ngIf="!paid">Order is waiting for confirm transaction</span></h3>
       <h3><span class="label label-success" *ngIf="paid">{{order.status}}</span></h3>
-      <button class="btn btn-primary" type="button" *ngIf="paid && !prepared" (click)="onPrepared()"
+      <button class="btn btn-primary" type="button" *ngIf="paid && !prepared && !delivered" (click)="onPrepared()"
               [disabled]="!allProductPacked">Prepared
         Order
       </button>
 
       <div *ngIf="prepared && !send">
-        <button class="btn btn-primary" type="submit" (click)="onSend()" [disabled]="!link.valid"> Send Delivery</button>
+        <button class="btn btn-primary" type="submit" (click)="onSend()" [disabled]="!link.valid"> Send Delivery
+        </button>
         <input
           class="form-control"
           type="text"
@@ -65,6 +66,8 @@
           #link="ngModel"
         >
       </div>
+
+
     </div>
 
     <br>
@@ -90,7 +93,7 @@
         <td>{{productBoughts.product.title}}</td>
         <td>{{productBoughts.product.price}}</td>
         <td>{{productBoughts.amount}}</td>
-        <td>{{productBoughts.totalPrice}}</td>
+        <td>{{productBoughts.amount*productBoughts.product.price}}</td>
       </tr>
 
       </tbody>

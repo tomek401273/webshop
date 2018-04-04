@@ -42,8 +42,6 @@ export class SigninComponent {
           localStorage.setItem('login', submittedForm.value.loginLog);
           localStorage.setItem('token', token);
           localStorage.setItem('role', role);
-          console.log('userRole');
-          console.log(role);
           this.getDataFromLocalStorage();
 
           this.bucketServerService.addProductListToCard(this.productIdArray).subscribe(

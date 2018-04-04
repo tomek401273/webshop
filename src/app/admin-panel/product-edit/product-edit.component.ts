@@ -80,7 +80,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   }
 
   onRemove(poroductDeteted: ProductDataAmount, id: number) {
-    this.serverService.removeProduct(poroductDeteted)
+    this.serverService.removeProduct(poroductDeteted.id)
       .subscribe(
         (response) => {
           this.serverService.onTaskRemoved.emit(poroductDeteted);
@@ -101,7 +101,5 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     }
     this.pager = this.pagerService.getPager(this.productDataEdit.length, page);
     this.pagedProducts = this.productDataEdit.slice(this.pager.startIndex, this.pager.endIndex + 1);
-    console.log("count of pages")
-    console.log(this.pager.pages);
   }
 }

@@ -3,9 +3,18 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {Order} from '../model/order';
 import {ShippingAddress} from '../model/shipping-address';
 import {OrderStatus} from '../model/order-status';
+import {OrderSearch} from '../model/order-search';
+import {UsersLogin} from '../model/users-login';
+import {ShippingAddressMapper} from '../model/dto/shipping-address-mapper';
+import {ShippingAddressDto} from '../model/dto/shipping-address-dto';
 
 @Injectable()
 export class OrdersService {
+  usersLogin: UsersLogin = new UsersLogin(null);
+  usersLoginEmitter = new EventEmitter<UsersLogin>();
+  private shippingMapper: ShippingAddressMapper = new ShippingAddressMapper();
+  private shippingDto: ShippingAddressDto;
+
   constructor(private http: HttpClient) {
   }
 
@@ -43,10 +52,9 @@ export class OrdersService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
+    this.shippingDto = this.shippingMapper.mapToShippingAddressDto(shippingAddress);
 
-    const login = localStorage.getItem('login');
-
-    return this.http.post('http://localhost:8080/buy/buy', shippingAddress, {
+    return this.http.post('http://localhost:8080/buy/buy', this.shippingDto, {
       headers: headers
     });
   }
@@ -92,6 +100,17 @@ export class OrdersService {
       .append('Authorization', localStorage.getItem('token'));
 
     return this.http.put('http://localhost:8080/buy/sendOrder', orderStatus, {
+      headers: headers
+    });
+  }
+
+  deliveredOrder(orderStatus: OrderStatus) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+
+    return this.http.post('http://localhost:8080/buy/delivered', orderStatus, {
       headers: headers
     });
   }
@@ -157,8 +176,37 @@ export class OrdersService {
 
     return this.http.get('http://localhost:8080/buy/getAllUserLogin', {
       headers: headers
-    });
+    }).subscribe(
+      (response: any[]) => {
+        this.usersLogin.logins = response;
+        this.usersLoginEmitter.emit(this.usersLogin);
+      },
+      (error) => console.log(error)
+    );
   }
 
+  getUsersLogin() {
+    return this.usersLogin.logins;
+  }
+
+  searchOrders(orderSearch: OrderSearch) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+
+    const params = {
+      'productTitle': orderSearch.productTitle,
+      'dateFrom': orderSearch.dateFrom,
+      'dateTo': orderSearch.dateTo,
+      'status': orderSearch.status,
+      'userLogin': orderSearch.userLogin
+    };
+
+    return this.http.get('http://localhost:8080/buy/orderSearch', {
+      headers: headers,
+      params: params
+    });
+  }
 
 }

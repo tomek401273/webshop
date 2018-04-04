@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {NgForm} from "@angular/forms";
-import {ServerService} from "../../services/server.service";
-import {CanDeactivateGuard} from "../../services/protect/can-deactivate-guard";
-import {Observable} from "rxjs/Observable";
-import {ProductDataAmount} from "../../model/product-data-amount";
-import {Router} from "@angular/router";
+import {NgForm} from '@angular/forms';
+import {ServerService} from '../../services/server.service';
+import {CanDeactivateGuard} from '../../services/protect/can-deactivate-guard';
+import {Observable} from 'rxjs/Observable';
+import {ProductDataAmount} from '../../model/product-data-amount';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add-new-product',
@@ -37,9 +37,8 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
     this.serverService.addNewProduct(this.productData)
       .subscribe(
         (response) => {
-          console.log(response);
-          alert("Product added successfully");
-          this.router.navigate(['/productEdit'], {queryParams: {lastpage: true}}  )
+          alert('Product added successfully');
+          this.router.navigate(['/productEdit'], {queryParams: {lastpage: true}});
 
         },
         (error) => console.log(error)
@@ -52,7 +51,7 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
         || this.addProductForm.value.title !== null
         || this.addProductForm.value.desc !== null
         || this.addProductForm.value.image !== null) && !this.savedChanges) {
-      return confirm("Do you want to discard the changes ??? ");
+      return confirm('Do you want to discard the changes ??? ');
     } else {
       return true;
     }

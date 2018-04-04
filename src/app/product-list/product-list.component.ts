@@ -127,13 +127,11 @@ export class ProductListComponent implements OnInit, DoCheck {
                   alert('successfully added product to bucket');
                 } else {
                   alert('something go wrong contact with our service');
-                  console.log(resposne2);
                 }
 
               }
             );
           }
-          console.log('Avaiable products' + resposne);
         } else {
           alert('This product is not available');
         }
@@ -232,10 +230,8 @@ export class ProductListComponent implements OnInit, DoCheck {
   }
 
   onSetSubscription(email, productId) {
-    console.log(email.value);
-    console.log(productId);
+
     const reminderDto: ReminderDto = new ReminderDto(productId, email.value);
-    console.log(reminderDto);
     this.showPublicData.setReminder(reminderDto).subscribe(
       (response) => {
         console.log(response);
@@ -250,9 +246,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.showPublicData.mavPriceEmitter.subscribe(
       (response: number) => {
         this.calculateSliderValues(response);
-        console.log('minValueCover');
-        console.log(this.minValueCover);
-
       }
     );
   }

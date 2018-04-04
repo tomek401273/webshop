@@ -1,65 +1,66 @@
 <div class="container">
-  <label class="form-control">Dynamic searching</label>
-  <form (ngSubmit)="onSubmitSearch()" #form="ngForm">
-    <div class="form-group">
-      <input class="form-control"
-             type="text"
-             ngModel
-             name="search"
-             placeholder="Search order contains product"
-             #search="ngModel"
-      >
-      <button type="submit" class=" btn btn-primary">Search in database</button>
-    </div>
-  </form>
-  <hr>
-  <br>
-  <br>
 
+ <div class="row">
+   <div class="col-md-3"></div>
+   <form (ngSubmit)="onSubmit()" #f="ngForm" class="col-md-6">
+     <div class="form-group">
+       <input
+         class="form-control"
+         placeholder="Search orders contains product dynamically"
+         [(ngModel)]="defaultProductTitle"
+         [typeahead]="productsTitle"
+         [ngModelOptions]="{standalone: true}"
+         required
+       >
 
-  <div class="form-group">
-    <input type="text"
-           placeholder="Daterangepicker"
+     </div>
+     <div class="form-group">
+       <input type="text"
+              placeholder="Daterangepicker"
+              class="form-control"
+              bsDaterangepicker
+              [(ngModel)]="defaultDates"
+              name="dates"
+              #dates="ngModel"
+       >
+     </div>
+     <div>
+       <div class="form-group">
+         <label class="form-control">State Product</label>
+         <select
            class="form-control"
-           bsDaterangepicker
+           [ngModel]="defaultState"
+           name="state">
+           <option value="all">All Orders</option>
+           <option value="paid">Paid Orders</option>
+           <option value="prepared">Prepared Orders</option>
+           <option value="send">Send Orders</option>
+           <option value="booked">Booked Orders</option>
+           <option value="delivered">Delivered Orders</option>
+         </select>
+       </div>
+     </div>
 
-           ngModel
-           name="detes"
-           #dates="ngModel"
-    >
-    <button class="btn btn-primary" (click)="searchOrdersWithDates(dates)">Search</button>
-  </div>
-  <div>
-    <form (ngSubmit)="onfilterOrdersWithState(filter)" #filter="ngForm">
-      <div class="form-group">
-        <label class="form-control">State Product</label>
-        <select
-          class="form-control"
-          [ngModel]="defaultState"
-          name="state">
-          <option value="paid">Paid Orders</option>
-          <option value="prepared">Prepared Orders</option>
-          <option value="send">Send Orders</option>
-          <option value="booked">Booked Orders</option>
-        </select>
-
-        <button type="submit" class="btn btn-primary">Search in database</button>
+     <div class="form-group">
+       <label class="form-control">User Login </label>
+       <input
+         class="form-control"
+         placeholder="User login"
+         [(ngModel)]="selected"
+         [typeahead]="usersLogin"
+         [ngModelOptions]="{standalone: true}"
+       >
+     </div>
+     <!--<div class="col-md-4"></div>-->
+      <div class="btn-group center-block">
+        <button type="submit" class="btn btn-primary ">SUBMIT FORM</button>
+        <button type="button" class="btn btn-danger" (click)="onReset()">RESET FORM</button>
       </div>
-    </form>
-  </div>
 
-  <div class="form-group">
-    <label class="form-control">User Login </label>
-    <input
-      class="form-control"
-      placeholder="User login"
-      [(ngModel)]="selected"
-      [typeahead]="usersLogin"
-      [ngModelOptions]="{standalone: true}"
-      required
-      (keyup)="onFilterUser()"
-    >
-  </div>
+
+
+   </form>
+ </div>
 
   <hr>
   <br>

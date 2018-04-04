@@ -3,30 +3,33 @@
     <h2 class="text-center">Shipping Address</h2>
   </div>
 
-  <div class="row text-center">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8">
-      <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8">
+
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
+      <div class="row text-center">
+        <h2 *ngIf="useDiffAddress">Dffrent addres in use</h2>
+
         <div class="form-group">
           <label>Coutry</label>
-          <pre class="card card-block card-header mb-3">Country: {{selected | json}}</pre>
+          <pre class="card card-block card-header mb-3">Country: {{userAddress.country | json}}</pre>
           <input
             class="form-control"
-            [(ngModel)]="selected"
+            [(ngModel)]="userAddress.country"
             [typeahead]="states"
             [ngModelOptions]="{standalone: true}"
             required
           >
-
-
         </div>
+
         <div class="form-group">
           <label for="city">City</label>
           <input
             class="form-control"
             id="city"
             type="text"
-            ngModel
+            [(ngModel)]="userAddress.city"
             name="city"
             required>
         </div>
@@ -36,7 +39,7 @@
             class="form-control"
             id="postcode"
             type="text"
-            ngModel
+            [(ngModel)]="userAddress.postCode"
             name="postcode"
             required
           >
@@ -48,7 +51,7 @@
             class="form-control"
             type="text"
             id="street"
-            ngModel
+            [(ngModel)]="userAddress.street"
             name="street"
             required>
         </div>
@@ -60,7 +63,7 @@
             class="form-control"
             type="text"
             id="name"
-            ngModel
+            [(ngModel)]="userAddress.name"
             name="name"
             required>
         </div>
@@ -70,11 +73,23 @@
             class="form-control"
             type="text"
             id="surname"
-            ngModel
+            [(ngModel)]="userAddress.surname"
             name="surname"
             required>
         </div>
-        <br>
+      </div>
+      <br>
+
+      <hr>
+      <div class="row text-center">
+        <input
+          type="checkbox"
+          class="checkbox checkbox-inline"
+          [ngModelOptions]="{standalone: true}"
+          [(ngModel)]="useDiffAddress"
+          (click)="onUseDifferentAddress()"
+
+          #other> Different address
         <h4>Select your supplier</h4>
         <div class="radio text-left" *ngFor="let supplier of suppliers">
 
@@ -82,20 +97,16 @@
             <input
               type="radio"
               name="supplier"
-              ngModel
+              [(ngModel)]="userAddress.supplier"
               [value]="supplier.name"
               required>
-            Supplier: {{supplier.name}} totalPrice: {{supplier.totalPrice}} $
+            Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
           </label>
         </div>
-        <br><br>
-
 
         <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Buy</button>
-
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 
-</div>
-<br><br><br>
+  <br><br><br>

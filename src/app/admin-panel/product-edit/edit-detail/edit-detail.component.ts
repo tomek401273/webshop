@@ -31,8 +31,6 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
     this.publicServer.getProduct(id)
       .subscribe(
         (product: any) => {
-          console.log('productEdit received: ');
-          console.log(product);
           this.product = product;
         },
         (error) => console.log(error));

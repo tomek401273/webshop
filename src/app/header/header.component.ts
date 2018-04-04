@@ -3,6 +3,7 @@ import {LogingService} from '../services/loging.service';
 import {Router} from '@angular/router';
 import {BucketService} from '../bucket-user/bucket.service';
 import {isNull} from 'util';
+import {OrdersService} from '../services/orders.service';
 
 @Component({
   selector: 'app-header',
@@ -16,18 +17,21 @@ export class HeaderComponent implements OnInit, DoCheck {
 
   constructor(private logingService: LogingService,
               private router: Router,
-              private bucketService: BucketService) {
+              private bucketService: BucketService,
+              private orderService: OrdersService) {
   }
 
   ngOnInit() {
     if (localStorage.getItem('role') === 'admin, user') {
       this.adminPanel = true;
+      this.orderService.getAllUserLogin();
     }
 
     this.logingService.loginSuccessful.subscribe(
       (role: String) => {
         if (role === 'admin, user') {
           this.adminPanel = true;
+          this.orderService.getAllUserLogin();
         }
         if (this.logingService.isAuthenticated()) {
           this.authenticated = true;
@@ -42,6 +46,13 @@ export class HeaderComponent implements OnInit, DoCheck {
         this.actualNumberProducts = +result;
       }
     );
+
+    this.bucketService.buyAllProduct.subscribe(
+      (result) => {
+        this.actualNumberProducts = 0;
+      }
+    );
+
   }
 
   calculateNumberProducts() {

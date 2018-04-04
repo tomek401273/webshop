@@ -29,7 +29,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
       this.getDataFromDatabase();
     } else {
       const bucket = JSON.parse(localStorage.getItem('bucket123'));
-      console.log(bucket);
       if (!isNull(bucket)) {
         for (let i = 0; i < bucket.length; i++) {
           const bucketProduct: ProductDataAmount = new ProductDataAmount(
@@ -91,7 +90,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
               this.adding(bucketProduct);
             } else {
               alert('something go wrong contact with our service');
-              console.log(resposne);
             }
           }
         );
@@ -121,7 +119,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
               this.subtracting(bucketProduct);
             } else {
               alert('something go wrong contact with our service');
-              console.log(resposne);
             }
           });
       } else {
@@ -171,7 +168,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   getDataFromDatabase() {
-    console.log('getDataFromDatabase');
     this.bucketServerService.getProductListFromDatabase().subscribe(
       (products: any[]) => {
         if (!isNull(products)) {

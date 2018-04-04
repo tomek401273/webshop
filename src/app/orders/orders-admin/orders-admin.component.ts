@@ -5,6 +5,10 @@ import {OrdersService} from '../../services/orders.service';
 import {Router} from '@angular/router';
 import {NgForm} from '@angular/forms';
 import {PagerService} from '../../services/navigation/pager.service';
+import {OrderSearch} from '../../model/order-search';
+import {DirectoryTitles} from '../../model/directory-titles';
+import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
+import {UsersLogin} from '../../model/users-login';
 
 @Component({
   selector: 'app-orders-admin',
@@ -14,32 +18,32 @@ import {PagerService} from '../../services/navigation/pager.service';
 export class OrdersAdminComponent implements OnInit {
   private orders: Order[] = [];
   usersLogin: String[] = [];
-  private typedTitleLengthTemp = 0;
-  private defaultState = 'paid';
+  private defaultState = 'all';
   @ViewChild('form') searchForm: NgForm;
   selected: string;
   private pagedProduct: any[];
   private pager: any = {};
-
+  @ViewChild('f') search: NgForm;
+  private defaultProductTitle = '';
+  private defaultDates = '';
+  productsTitle: String[] = [];
 
   constructor(private serverService: ServerService,
               private ordersService: OrdersService,
               private router: Router,
-              private pagerService: PagerService) {
+              private pagerService: PagerService,
+              private showPublicData: ShowPublicDataSevice) {
   }
 
   ngOnInit() {
+    this.getUsersLoginSub();
+    this.getUsersLogin();
+    this.getAllProductsTitle();
+    this.getProductTitlesFromService();
     this.ordersService.getAllOrdersInShop().subscribe(
       (orders: any) => {
         this.orders = orders;
         this.setPage(1);
-      },
-      (error) => console.log(error)
-    );
-
-    this.ordersService.getAllUserLogin().subscribe(
-      (response: any[]) => {
-        this.usersLogin = response;
       },
       (error) => console.log(error)
     );
@@ -49,60 +53,35 @@ export class OrdersAdminComponent implements OnInit {
     this.router.navigate(['/admin-orders/' + order.id]);
   }
 
-  onSubmitSearch() {
-    if (this.searchForm.value.search.length === 1 && this.typedTitleLengthTemp === 3) {
-      this.typedTitleLengthTemp = 0;
+  onSubmit() {
+    const dates = this.search.value.dates;
+    let from: string;
+    let to: string;
+    if (dates === null || dates[0] === undefined) {
+      from = '';
+      to = '';
+    } else {
+      from = dates[0].toLocaleDateString();
+      to = dates[1].toLocaleDateString();
     }
 
-    if (this.searchForm.value.search.length > 2) {
-      this.typedTitleLengthTemp = 3;
-      this.ordersService.searchOrderContainsProduct(this.searchForm.value.search).subscribe(
-        (orders: any[]) => {
-          this.orders = orders;
-          this.pagedProduct = [];
-          this.setPage(1);
-        },
-        (error) => console.log(error)
-      );
-    }
-  }
-
-  onfilterOrdersWithState(filter) {
-    console.log(filter.value.state);
-    this.ordersService.filterOrdersWithState(filter.value.state).subscribe(
+    const orderSearch: OrderSearch = new OrderSearch(this.defaultProductTitle, from, to, this.search.value.state, this.selected);
+    this.ordersService.searchOrders(orderSearch).subscribe(
       (orders: any[]) => {
         this.orders = orders;
         this.pagedProduct = [];
         this.setPage(1);
+
       },
       (error) => console.log(error)
     );
   }
 
-  searchOrdersWithDates(dates) {
-    const from = dates.value[0].toLocaleDateString();
-    const to = dates.value[1].toLocaleDateString();
-    this.ordersService.filterOrdersWithDate(from, to).subscribe(
-      (orders: any[]) => {
-        this.orders = orders;
-        this.pagedProduct = [];
-        this.setPage(1);
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onFilterUser() {
-    if (this.selected.length > 3) {
-      this.ordersService.filterOrdersByUserLogin(this.selected).subscribe(
-        (orders: any[]) => {
-          this.orders = orders;
-          this.pagedProduct = [];
-          this.setPage(1);
-        },
-        (error) => console.log(error)
-      );
-    }
+  onReset() {
+    this.defaultProductTitle = '';
+    this.defaultDates = '';
+    this.defaultState = 'all';
+    this.selected = '';
   }
 
   setPage(page: number) {
@@ -112,4 +91,26 @@ export class OrdersAdminComponent implements OnInit {
     this.pager = this.pagerService.getPager(this.orders.length, page);
     this.pagedProduct = this.orders.slice(this.pager.startIndex, this.pager.endIndex + 1);
   }
+
+  getAllProductsTitle() {
+    this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
+      this.productsTitle = directoryTitles.titles;
+    });
+  }
+
+  getProductTitlesFromService() {
+    this.productsTitle = this.showPublicData.getProductTitles();
+  }
+
+  getUsersLoginSub() {
+    this.ordersService.usersLoginEmitter.subscribe((usersLogin: UsersLogin) => {
+      this.usersLogin = usersLogin.logins;
+    });
+  }
+
+  getUsersLogin() {
+    this.usersLogin = this.ordersService.getUsersLogin();
+  }
+
 }
+

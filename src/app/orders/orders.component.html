@@ -1,26 +1,104 @@
 <div class="container">
-  <table class="table text-center table-striped">
-    <thead>
-    <tr>
-      <td>Order Id</td>
-      <td>Total Value</td>
-      <td>Total Amount</td>
-      <td>Bought Date</td>
-      <td>Status </td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{order.id}}</td>
-      <td>{{order.totalValue}}</td>
-      <td>{{order.totalAmount}}</td>
-      <td>{{order.boughtDate}}</td>
-      <td>{{order.status}}</td>
-      <td><button class="btn btn-info" (click)="showOrderDetail(order)">Show Detail</button></td>
 
-    </tr>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <form (ngSubmit)="onSubmit()" #f="ngForm" class="col-md-6">
+      <div class="form-group">
+        <input
+          class="form-control"
+          placeholder="Search orders contains product dynamically"
+          [(ngModel)]="defaultProductTitle"
+          [typeahead]="productsTitle"
+          [ngModelOptions]="{standalone: true}"
+          required
+        >
+
+      </div>
+      <div class="form-group">
+        <input type="text"
+               placeholder="Daterangepicker"
+               class="form-control"
+               bsDaterangepicker
+               [(ngModel)]="defaultDates"
+               name="dates"
+               #dates="ngModel"
+        >
+      </div>
+      <div>
+        <div class="form-group">
+          <label class="form-control">State Product</label>
+          <select
+            class="form-control"
+            [ngModel]="defaultState"
+            name="state">
+            <option value="all">All Orders</option>
+            <option value="paid">Paid Orders</option>
+            <option value="prepared">Prepared Orders</option>
+            <option value="send">Send Orders</option>
+            <option value="booked">Booked Orders</option>
+          </select>
+        </div>
+      </div>
 
 
-    </tbody>
-  </table>
+      <!--<div class="col-md-4"></div>-->
+      <div class="btn-group center-block">
+        <button type="submit" class="btn btn-primary ">SUBMIT FORM</button>
+        <button type="button" class="btn btn-danger" (click)="onReset()">RESET FORM</button>
+      </div>
+
+
+    </form>
+  </div>
+
+  <hr>
+  <br>
+
+  <div class="container">
+    <table class="table text-center table-striped">
+      <thead>
+      <tr>
+        <td>Order Id</td>
+        <td>Total Value</td>
+        <td>Total Amount</td>
+        <td>Bought Date</td>
+        <td>Status</td>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of pagedProduct">
+        <td>{{order.id}}</td>
+        <td>{{order.totalValue}}</td>
+        <td>{{order.totalAmount}}</td>
+        <td>{{order.boughtDate}}</td>
+        <td>{{order.status}}</td>
+        <td>
+          <button class="btn btn-info" (click)="showOrderDetail(order)">Show Detail</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="text-center">
+    <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+      <li [ngClass]="{disabled:pager.currentPage === 1}">
+        <a (click)="setPage(1)">First</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === 1}">
+        <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+      </li>
+      <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+        <a (click)="setPage(page)">{{page}}</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+      </li>
+      <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+        <a (click)="setPage(pager.totalPages)">Last</a>
+      </li>
+    </ul>
+  </div>
 </div>
+
+

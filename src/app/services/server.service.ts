@@ -40,15 +40,18 @@ export class ServerService {
   onTaskRemoved = new EventEmitter<ProductDataAmount>();
   onTaskUpdated = new EventEmitter<ProductData>();
 
-  removeProduct(product: ProductData) {
+  removeProduct(id: number) {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    this.productDto = this.mapper.mapToProductDto(product);
 
-    return this.http.put('http://localhost:8080/product/deleteProduct', this.productDto, {
-      headers: headers
+    const idSting = String(id);
+    const params = {id: idSting};
+
+    return this.http.delete('http://localhost:8080/product/deleteProduct', {
+      headers: headers,
+      params: params
     });
   }
 

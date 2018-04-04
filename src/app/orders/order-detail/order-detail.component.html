@@ -5,7 +5,7 @@
   <br>
   <div class="row ">
 
-   <div class="col-sm-2"></div>
+    <div class="col-sm-2"></div>
     <div class="col-sm-10">
       <table class="table text-justify line-height-200">
         <thead>
@@ -23,7 +23,7 @@
           <tr>Bought Date: {{order.boughtDate}}</tr>
           <tr>Stratus status: {{order.status}}</tr>
 
-          <tr> <a href="#">Delivery link</a></tr>
+          <tr><a href="#">Delivery link</a></tr>
 
         </td>
         <td>
@@ -67,7 +67,7 @@
         <td>{{productBoughts.product.title}}</td>
         <td>{{productBoughts.product.price}}</td>
         <td>{{productBoughts.amount}}</td>
-        <td>{{productBoughts.totalPrice}}</td>
+        <td>{{productBoughts.amount*productBoughts.product.price}}</td>
       </tr>
 
       </tbody>

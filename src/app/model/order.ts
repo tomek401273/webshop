@@ -13,9 +13,9 @@ export class Order {
   private _linkDelivery: String;
   private _sendDate: String;
   private _deliveryDate: String;
+  private _statusCode: String;
 
-
-  constructor(id: number, totalValue: number, totalAmount: number, boughtDate: number, userLogin: number, productBoughts: ProductBought[], shippingAddressDto: ShippingAddress, status: String, linkDelivery: String, sendDate: String, deliveryDate: String) {
+  constructor(id: number, totalValue: number, totalAmount: number, boughtDate: number, userLogin: number, productBoughts: ProductBought[], shippingAddressDto: ShippingAddress, status: String, linkDelivery: String, sendDate: String, deliveryDate: String, statusCode: String) {
     this._id = id;
     this._totalValue = totalValue;
     this._totalAmount = totalAmount;
@@ -27,6 +27,7 @@ export class Order {
     this._linkDelivery = linkDelivery;
     this._sendDate = sendDate;
     this._deliveryDate = deliveryDate;
+    this._statusCode = statusCode;
   }
 
   get id(): number {
@@ -116,6 +117,15 @@ export class Order {
 
   set deliveryDate(value: String) {
     this._deliveryDate = value;
+  }
+
+
+  get statusCode(): String {
+    return this._statusCode;
+  }
+
+  set statusCode(value: String) {
+    this._statusCode = value;
   }
 }
 

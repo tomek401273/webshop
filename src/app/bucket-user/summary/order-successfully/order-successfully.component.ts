@@ -19,11 +19,10 @@ export class OrderSuccessfullyComponent implements OnInit {
 
   ngOnInit() {
     this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    console.log('Order to paid with id: ' + this.id);
   }
 
   onPay() {
-    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.id, true, null, null, null);
+    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.id, null, 'paid');
     this.redirectToBank = true;
 
     setTimeout(() => {

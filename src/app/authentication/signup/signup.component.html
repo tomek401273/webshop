@@ -1,161 +1,220 @@
 <div class="container">
-  <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-    <form (ngSubmit)="onSubmit()" #form="ngForm">
+  <div class="row text-center">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
 
-      <div class="form-group">
-        <label for="login">*- Login (at least 6 characters)</label>
-        <input class="form-control"
-               type="text"
-               id="login"
-               (input)="onSearchChange($event.target.value)"
-
-               ngModel
-               name="login"
-               required
-               pattern=".{6,}"
-               #login="ngModel"
-        >
-        <div *ngIf="login.valid">
-          <span class="help-block alert-danger" *ngIf=" loginAvailable== false">This login is not available try with another one</span>
-          <span class="help-block alert-success" *ngIf="loginAvailable == true">This login is available</span>
-        </div>
-        <span class="help-block alert-danger" *ngIf="!login.valid && login.touched">Check your input</span>
-      </div>
-
-      <div class="form-group">
-        <label for="name">*- Name</label>
-        <input class="form-control"
-               type="text"
-               id="name"
-               ngModel
-               name="name"
-               required
-               #name="ngModel"
-        >
-        <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
-      </div>
-
-      <div class="form-group">
-        <label for="surname">*- Surname</label>
-        <input class="form-control"
-               type="text"
-               id="surname"
-               ngModel
-               name="surname"
-               required
-               #surname="ngModel">
-        <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
-      </div>
-
-      <div
-        id="passwords"
-        ngModelGroup="passwords"
-        #passwords="ngModelGroup">
+      <form (ngSubmit)="onSubmit()" #form="ngForm">
 
         <div class="form-group">
-          <label for="password">*- Password</label>
+          <label for="login">*- Address email (at least 6 characters)</label>
           <input class="form-control"
                  type="text"
-                 id="password"
+                 id="login"
+                 (input)="onSearchChange($event.target.value)"
+
                  ngModel
-                 name="password"
+                 name="login"
                  required
-                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}"
-                 #password="ngModel"
+                 email
+                 pattern=".{6,}"
+                 #login="ngModel"
+          >
+          <div *ngIf="login.valid">
+            <span class="help-block alert-danger" *ngIf=" loginAvailable== false">This login is not available try with another one</span>
+            <span class="help-block alert-success" *ngIf="loginAvailable == true">This login is available</span>
+          </div>
+          <span class="help-block alert-danger" *ngIf="!login.valid && login.touched">Check your input</span>
+        </div>
+
+        <div class="form-group">
+          <label for="name">*- Name</label>
+          <input class="form-control"
+                 type="text"
+                 id="name"
+                 ngModel
+                 name="name"
+                 required
+                 #name="ngModel"
+          >
+          <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
+        </div>
+
+        <div class="form-group">
+          <label for="surname">*- Surname</label>
+          <input class="form-control"
+                 type="text"
+                 id="surname"
+                 ngModel
+                 name="surname"
+                 required
+                 #surname="ngModel">
+          <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
+        </div>
+
+        <div
+          id="passwords"
+          ngModelGroup="passwords"
+          #passwords="ngModelGroup">
+
+          <div class="form-group">
+            <label for="password">*- Password</label>
+            <input class="form-control"
+                   type="text"
+                   id="password"
+                   ngModel
+                   name="password"
+                   required
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}"
+                   #password="ngModel"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="confirm-password">*- Confirm password</label>
+            <input class="form-control"
+                   type="text"
+                   id="confirm-password"
+                   ngModel
+                   name="confirmed"
+                   required
+                   #conf="ngModel">
+          </div>
+          <span class="help-block alert-danger" *ngIf="password.value != conf.value && conf.touched">Password are not equals</span>
+          <span class="help-block alert-danger" *ngIf="!password.valid && password.touched">Password is too week and easy to hack</span>
+          <span class="help-block center-block">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:</span>
+        </div>
+
+        <br>
+        <div class="form-group">
+          <label>*- Coutry</label>
+          <input
+            class="form-control"
+            [(ngModel)]="country"
+            [typeahead]="states"
+            [ngModelOptions]="{standalone: true}"
+            required
+            pattern="^(?=.*?[a-z])"
+
+          >
+
+
+        </div>
+        <div class="form-group">
+          <label for="city">*- City</label>
+          <input
+            class="form-control"
+            id="city"
+            type="text"
+            ngModel
+            name="city"
+            required>
+        </div>
+        <div class="form-group">
+          <label for="postcode">*- PostCode</label>
+          <input
+            class="form-control"
+            id="postcode"
+            type="text"
+            ngModel
+            name="postcode"
+            required
           >
         </div>
 
         <div class="form-group">
-          <label for="confirm-password">*- Confirm password</label>
-          <input class="form-control"
-                 type="text"
-                 id="confirm-password"
-                 ngModel
-                 name="confirmed"
-                 required
-                 #conf="ngModel">
+          <label for="street">*- Street</label>
+          <input
+            class="form-control"
+            type="text"
+            id="street"
+            ngModel
+            name="street"
+            required>
         </div>
-        <span class="help-block alert-danger" *ngIf="password.value != conf.value && conf.touched">Password are not equals</span>
-        <span class="help-block alert-danger" *ngIf="!password.valid && password.touched">Password is too week and easy to hack</span>
-        <span class="help-block center-block">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:</span>
-      </div>
 
-      <div class="checkbox-inline ">
-        <input
-          type="checkbox"
-          id="statute"
-          [(ngModel)]="controlCheckBoxStatus"
-          name="statute"
-          required
-          (click)="onCheckBoxClicked()"
-        > <label>*- I read and accepted Computer
-        <a
-          (click)="lgModal.show()">WebShop statute.</a></label>
-      </div>
+        <br>
+        <div class="checkbox-inline ">
+          <input
+            type="checkbox"
+            id="statute"
+            [(ngModel)]="controlCheckBoxStatus"
+            name="statute"
+            required
+            (click)="onCheckBoxClicked()"
+          > <label>*- I read and accepted Computer
+          <a
+            (click)="lgModal.show()">WebShop statute.</a></label>
+        </div>
 
-      <br>
-      <br>
-      [*] - required fields
+        <br>
+        <br>
+        [*] - required fields
 
-      <br>
-      <br>
+        <br>
+        <br>
 
-      <button class="btn btn-primary center-block" type="submit"
-              [disabled]="(!form.valid) || (password.value != conf.value) || (!loginAvailable)">Crate new account
-      </button>
-    </form>
-  </div>
-</div>
-
-<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title pull-left">Computer WebShop Status</h4>
-        <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button class="btn btn-primary center-block" type="submit"
+                [disabled]="(!form.valid) || (password.value != conf.value) || (!loginAvailable) || (country.length<4)">
+          Crate new account
         </button>
-      </div>
-      <div class="modal-body">
-        <div class="text-justify">
-          <p> Conditions of Use</p>
-          <p>Last updated: October 3, 2017.</p>
+      </form>
 
-          <p>Welcome to Amazon.com. Amazon Services LLC and/or its affiliates ("Amazon") provide website features and
-            other
-            products and services to you when you visit or shop at Amazon.com, use Amazon products or services, use
-            Amazon
-            applications for mobile, or use software provided by Amazon in connection with any of the foregoing
-            (collectively,
-            "Amazon Services"). Amazon provides the Amazon Services subject to the following conditions.</p>
+    </div>
 
-          <p> By using Amazon Services, you agree to these conditions. Please read them carefully.
-            We offer a wide range of Amazon Services, and sometimes additional terms may apply. When you use an Amazon
-            Service
-            (for example, Your Profile, Gift Cards, Amazon Video, Your Media Library, Amazon devices, or Amazon
-            applications)
-            you also will be subject to the guidelines, terms and agreements applicable to that Amazon Service ("Service
-            Terms"). If these Conditions of Use are inconsistent with the Service Terms, those Service Terms will
-            control.
-          </p>
+    <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
 
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Computer WebShop Status</h4>
+            <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-justify">
+              <p> Conditions of Use</p>
+              <p>Last updated: October 3, 2017.</p>
+
+              <p>Welcome to Amazon.com. Amazon Services LLC and/or its affiliates ("Amazon") provide website features
+                and
+                other
+                products and services to you when you visit or shop at Amazon.com, use Amazon products or services, use
+                Amazon
+                applications for mobile, or use software provided by Amazon in connection with any of the foregoing
+                (collectively,
+                "Amazon Services"). Amazon provides the Amazon Services subject to the following conditions.</p>
+
+              <p> By using Amazon Services, you agree to these conditions. Please read them carefully.
+                We offer a wide range of Amazon Services, and sometimes additional terms may apply. When you use an
+                Amazon
+                Service
+                (for example, Your Profile, Gift Cards, Amazon Video, Your Media Library, Amazon devices, or Amazon
+                applications)
+                you also will be subject to the guidelines, terms and agreements applicable to that Amazon Service
+                ("Service
+                Terms"). If these Conditions of Use are inconsistent with the Service Terms, those Service Terms will
+                control.
+              </p>
+
+
+            </div>
+          </div>
+
+          <div class="text-center">
+            <p>Do you want to confirm ???</p>
+            <button type="button" class="btn btn-default" (click)="onLockCheckBoxStatus()" (click)="lgModal.hide()">No
+            </button>
+            <button type="button" class="btn btn-primary" (click)="onUnlockCheckBoxStatus()" (click)="lgModal.hide()">
+              Yes
+            </button>
+          </div>
+          <br>
+          <br>
 
         </div>
       </div>
-
-      <div class="text-center">
-        <p>Do you want to confirm ???</p>
-        <button type="button" class="btn btn-default" (click)="onLockCheckBoxStatus()" (click)="lgModal.hide()">No
-        </button>
-        <button type="button" class="btn btn-primary" (click)="onUnlockCheckBoxStatus()" (click)="lgModal.hide()">Yes
-        </button>
-      </div>
-      <br>
-      <br>
-
     </div>
   </div>
 </div>
-

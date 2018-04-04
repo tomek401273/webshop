@@ -34,9 +34,12 @@ export class ShowPublicDataSevice {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json');
-    return this.httpClient.put('http://localhost:8080/product/available', id,
+    const idSting = String(id);
+    const params = {id: idSting};
+    return this.httpClient.get('http://localhost:8080/product/available',
       {
-        headers: headers
+        headers: headers,
+        params: params
       });
   }
 
@@ -44,8 +47,11 @@ export class ShowPublicDataSevice {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json');
-    return this.httpClient.post('http://localhost:8080/product/searchProduct', title, {
-      headers: headers
+    const params = {title: title};
+
+    return this.httpClient.get('http://localhost:8080/product/searchProduct', {
+      headers: headers,
+      params: params
     });
   }
 
@@ -58,8 +64,9 @@ export class ShowPublicDataSevice {
       'below': below
     };
 
-    return this.httpClient.post('http://localhost:8080/product/filterPrice', filterPrice, {
-      headers: headers
+    return this.httpClient.get('http://localhost:8080/product/filterPrice', {
+      headers: headers,
+      params: filterPrice
     });
   }
 
@@ -111,12 +118,4 @@ export class ShowPublicDataSevice {
     return this.maxPrice;
   }
 
-  // getMaxProductPrice() {
-  //   const headers = new HttpHeaders()
-  //     .set('Content-Type', 'application/json')
-  //     .append('Accept', 'application/json');
-  //   return this.httpClient.get('http://localhost:8080/product/maxprice', {
-  //     headers: headers
-  //   });
-  // }
 }

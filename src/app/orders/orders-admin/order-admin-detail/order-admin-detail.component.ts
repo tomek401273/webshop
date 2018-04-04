@@ -14,12 +14,13 @@ import {ShippingAddress} from '../../../model/shipping-address';
 export class OrderAdminDetailComponent implements OnInit {
   private id: number;
   private shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null);
+  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null, null);
   private paid = false;
   private prepared = false;
   private send = false;
   private allProductPacked = false;
   private linkDelivery = '';
+  private delivered = false;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute,
@@ -30,19 +31,22 @@ export class OrderAdminDetailComponent implements OnInit {
     this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.ordersService.getOneOrder(this.id).subscribe(
       (order: any) => {
-        console.log(order);
         this.order = order;
-        if ('Transaction confirmed' === this.order.status) {
+        if ('paid' === this.order.statusCode) {
           this.paid = true;
         }
-        if ('Order was prepared and is ready to send ' === this.order.status) {
+        if ('prepared' === this.order.statusCode) {
           this.paid = true;
           this.prepared = true;
         }
-        if ('Order was send check status delivery in link' === this.order.status) {
+        if ('send' === this.order.statusCode) {
           this.paid = true;
           this.prepared = true;
           this.send = true;
+        }
+        if ('delivered' === this.order.statusCode) {
+          this.paid = true;
+          this.delivered = true;
         }
 
         for (let i = 0; i < this.order.productBoughts.length; i++) {
@@ -55,7 +59,7 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   onPrepared() {
-    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, true, true, null, null);
+    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, null, 'prepared');
     this.ordersService.orderPrepared(prepared).subscribe(
       (response: boolean) => {
 
@@ -71,8 +75,6 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   onProductPrepared(id: number) {
-    console.log('on product Prepared: ');
-    console.log(id);
     this.order.productBoughts[id].packed = !this.order.productBoughts[id].packed;
     this.allProductPacked = true;
     for (let i = 0; i < this.order.productBoughts.length; i++) {
@@ -83,9 +85,7 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   onSend() {
-    console.log(this.linkDelivery);
-
-    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, true, true, true, this.linkDelivery);
+    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, this.linkDelivery, 'send');
     this.ordersService.sendOrder(send).subscribe(
       (response: boolean) => {
         if (response) {
@@ -96,6 +96,16 @@ export class OrderAdminDetailComponent implements OnInit {
       (error) => {
         console.log(error);
       }
+    );
+
+    const delivered: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, this.linkDelivery, 'delivered');
+    this.ordersService.deliveredOrder(delivered).subscribe(
+      (responseDelivered: boolean) => {
+        if (responseDelivered) {
+          this.order.status = 'Order was DELIVERD!!!';
+        }
+      },
+      (error) => console.log(error)
     );
 
   }

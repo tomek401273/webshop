@@ -3,8 +3,7 @@ import {OrdersService} from '../../services/orders.service';
 import {Order} from '../../model/order';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ShippingAddress} from '../../model/shipping-address';
-import {OrderStatus} from '../../model/order-status';
-import {isNull} from 'util';
+
 
 @Component({
   selector: 'app-order-detail',
@@ -14,7 +13,7 @@ import {isNull} from 'util';
 export class OrderDetailComponent implements OnInit {
   private id: number;
   private shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null);
+  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null, null);
   private isPaid = false;
 
   constructor(private ordersService: OrdersService,
