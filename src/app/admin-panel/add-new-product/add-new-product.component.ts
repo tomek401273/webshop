@@ -31,7 +31,7 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
       this.addProductForm.value.desc,
       this.addProductForm.value.image,
       this.addProductForm.value.amount,
-      null,
+      this.addProductForm.value.statusCode,
       null);
 
     this.serverService.addNewProduct(this.productData)

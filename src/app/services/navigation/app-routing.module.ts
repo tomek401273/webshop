@@ -16,9 +16,11 @@ import {OrderDetailComponent} from '../../orders/order-detail/order-detail.compo
 import {OrdersAdminComponent} from '../../orders/orders-admin/orders-admin.component';
 import {OrderAdminDetailComponent} from '../../orders/orders-admin/order-admin-detail/order-admin-detail.component';
 import {DeliveryStatusComponent} from '../../delivery-status/delivery-status.component';
+import {ProductComponent} from '../../product-list/product/product.component';
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
+  {path: 'product/:id', component: ProductComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'bucket', component: BucketUserComponent},
   {path: 'summary', component: SummaryComponent},

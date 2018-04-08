@@ -1,5 +1,9 @@
 <div class="container">
-
+<div>
+  <ngb-rating [(rate)]="currentRate"></ngb-rating>
+  <hr>
+  <pre>Rate: <b>{{currentRate}}</b></pre>
+</div>
  <div class="row">
    <div class="col-md-3"></div>
    <form (ngSubmit)="onSubmit()" #f="ngForm" class="col-md-6">

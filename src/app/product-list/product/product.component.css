@@ -1,0 +1,66 @@
+a.change {
+  color: #bc3721;
+}
+
+button.change {
+  color: #bc3721;
+
+}
+
+/*.button {*/
+/*background-color: #4CAF50; !* Green *!*/
+/*border: none;*/
+/*color: white;*/
+/*padding: 20px;*/
+/*text-align: center;*/
+/*text-decoration: none;*/
+/*display: inline-block;*/
+/*font-size: 16px;*/
+/*margin: 4px 2px;*/
+/*cursor: pointer;*/
+/*}*/
+
+/*.button1 {border-radius: 2px;}*/
+/*.button2 {border-radius: 4px;}*/
+/*.button3 {border-radius: 8px;}*/
+/*.button4 {border-radius: 100%;}*/
+/*.button5 {border-radius: 1%;}*/
+
+.btn-circle.btn-xl {
+  width: 70px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.btn-circle-sm {
+  width: 20px;
+  height: 20px;
+  padding: 6px 0px;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+.a-circle-sm {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 30px;
+  text-align: justify-all;
+  font-size: 17px;
+  line-height: 1.42857;
+}

@@ -16,6 +16,11 @@ export class BucketUserComponent implements OnInit, DoCheck {
   private totalValueProducts = 0;
   private totalAmountProducts = 0;
   private isAuthenticated = false;
+  isCoupon = false;
+  isFullFiled = false;
+  wrongCode = false;
+  correctCode = false;
+  wrongMessage: String;
 
   constructor(private bucketService: BucketService,
               private router: Router,
@@ -24,6 +29,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    localStorage.setItem('coupon', null);
     this.isAuthenticated = this.logingServiece.isAuthenticated();
     if (this.isAuthenticated) {
       this.getDataFromDatabase();
@@ -42,6 +48,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
             null);
           this.products.push(bucketProduct);
         }
+        this.isFullFiled = true;
       }
     }
 
@@ -51,6 +58,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
         localStorage.setItem('bucket123', null);
       }
     );
+
 
   }
 
@@ -161,6 +169,10 @@ export class BucketUserComponent implements OnInit, DoCheck {
     const found = this.products.find(x => x.id === product.id);
     const index = this.products.indexOf(found);
     this.products.splice(index, 1);
+    if (this.products.length === 0) {
+      this.isFullFiled = false;
+      this.isCoupon = false;
+    }
   }
 
   onNext() {
@@ -183,9 +195,41 @@ export class BucketUserComponent implements OnInit, DoCheck {
               null
             );
             this.products.push(bucketProduct);
+
           }
+          if (this.products.length > 0) {
+            this.isFullFiled = true;
+
+          }
+
         }
       }
     );
+  }
+
+  checkAvailableCode(code) {
+    if (this.isFullFiled) {
+      console.log(code.value);
+      this.bucketServerService.checkAvailableCoupon(code.value).subscribe(
+        (response: boolean) => {
+          if (response) {
+            this.isCoupon = true;
+            this.correctCode = true;
+            this.wrongCode = false;
+            localStorage.setItem('coupon', code.value);
+          } else {
+            this.isCoupon = false;
+            this.correctCode = false;
+            this.wrongCode = true;
+            this.wrongMessage = 'Code error';
+          }
+        },
+        (error) => console.log(error)
+      );
+    } else {
+      this.wrongCode = true;
+      this.correctCode = false;
+      this.wrongMessage = 'Fulfill bucket';
+    }
   }
 }

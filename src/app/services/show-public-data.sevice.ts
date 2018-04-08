@@ -118,4 +118,16 @@ export class ShowPublicDataSevice {
     return this.maxPrice;
   }
 
+  subscribeNewsletter(name: String, email: String) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    const subscriber = {name: name, email: email};
+
+    return this.httpClient.post('http://localhost:8080/newsletter/subscribe', subscriber, {
+      headers: headers
+    });
+  }
+
+
 }

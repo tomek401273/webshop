@@ -47,27 +47,53 @@ glyphicon glyphicon-remove"></span></button>
         <td></td>
         <td></td>
         <td></td>
-        <td>Total: {{totalValueProducts}}
+        <td><p>Total: {{totalValueProducts}}</p>
+      <div *ngIf="isCoupon">
+        <p>RABAT 10%</p>
+        <p>Total Price After rabat:{{totalValueProducts-(totalValueProducts*0.1)}} </p>
+      </div>
         </td>
         <td>
           <button
             class="btn btn-success submit-next"
-            [disabled]="!isAuthenticated"
+            [disabled]="!isAuthenticated || !isFullFiled"
             (click)="onNext()"> Next <span
             class="glyphicon glyphicon-arrow-right"></span></button>
+          <br>
+          <br>
+          <p class="text-warning" *ngIf="!isFullFiled">Your bucket is empty add something </p>
           <p class="text-warning" *ngIf="!isAuthenticated">Login is requred to continue</p>
         </td>
-
       </tr>
       </tbody>
     </table>
   </div>
-  <div class="row">
-    <div class="col-sm-8 text-center"></div>
-    <div class="col-sm-3">
+  <div class="row center-block">
+    <div class="col-sm-4">
 
+      <div class="panel panel-default">
+        <div class="panel-heading">COUPON CODE</div>
+        <div class="panel-body">
 
+          If you have a coupon code, enter it in the box below and click 'Go'.
+          <br>
+          <br>
+
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Code" ngModel #code="ngModel">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="button" (click)="checkAvailableCode(code)">
+                  Go!
+                </button>
+              </div>
+            </div>
+          <div class="text-center" >
+            <br>
+            <span class="text-warning" *ngIf="wrongCode">{{wrongMessage}}</span>
+            <span class="text-success" *ngIf="correctCode">Code is correct!</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
 </div>

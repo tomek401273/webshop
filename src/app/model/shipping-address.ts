@@ -7,6 +7,7 @@ export class ShippingAddress {
   private _name: string;
   private _surname: string;
   private _supplier: string;
+  private _code: string;
 
 
   constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
@@ -82,5 +83,13 @@ export class ShippingAddress {
 
   set supplier(value: string) {
     this._supplier = value;
+  }
+
+  get code(): string {
+    return this._code;
+  }
+
+  set code(value: string) {
+    this._code = value;
   }
 }

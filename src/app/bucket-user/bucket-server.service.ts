@@ -84,4 +84,16 @@ export class BucketServerService {
       params: params
     });
   }
+
+  checkAvailableCoupon(code) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    const params = {code: code};
+
+    return this.httpClient.get('http://localhost:8080/bucket/coupon', {
+      headers: headers,
+      params: params
+    });
+  }
 }

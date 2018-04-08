@@ -1,35 +1,32 @@
-import {Component, DoCheck, OnDestroy, OnInit, TemplateRef} from '@angular/core';
-import {ServerService} from '../services/server.service';
-import {ProductData} from '../model/product-data';
-import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
-import {PagerService} from '../services/navigation/pager.service';
-import {BucketService} from '../bucket-user/bucket.service';
-import {ProductDataAmount} from '../model/product-data-amount';
-import {isNull, isUndefined} from 'util';
-import {BucketServerService} from '../bucket-user/bucket-server.service';
-import {LogingService} from '../services/loging.service';
-
-import {ViewChild} from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
+import {Component, DoCheck, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProductDataAmount} from '../../model/product-data-amount';
+import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
-import {parseHttpResponse} from 'selenium-webdriver/http';
-import {DirectoryTitles} from '../model/directory-titles';
-import {ReminderDto} from '../model/dto/reminder-dto';
-import {ProductMarkDto} from '../model/dto/product-mark-dto';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {NgForm} from '@angular/forms';
+import {ServerService} from '../../services/server.service';
+import {PagerService} from '../../services/navigation/pager.service';
+import {BucketService} from '../../bucket-user/bucket.service';
+import {BucketServerService} from '../../bucket-user/bucket-server.service';
+import {LogingService} from '../../services/loging.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
-import {Comment} from '../model/comment';
-import {Router} from '@angular/router';
+import {isNull, isUndefined} from 'util';
+import {ReminderDto} from '../../model/dto/reminder-dto';
+import {Comment} from '../../model/comment';
+import {ProductMarkDto} from '../../model/dto/product-mark-dto';
+import {DirectoryTitles} from '../../model/directory-titles';
+import {ProductData} from '../../model/product-data';
 
 @Component({
-  selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css']
 })
-export class ProductListComponent implements OnInit, DoCheck {
+export class ProductComponent implements OnInit, DoCheck {
+  private id: number;
+  private product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
+
   private products: ProductDataAmount[] = [];
   productsTitle: String[] = [];
   chosenTitle: string;
@@ -49,18 +46,32 @@ export class ProductListComponent implements OnInit, DoCheck {
   minValueCover = 23;
   hovered = 0;
   modalRef: BsModalRef;
+  userLogin = '';
 
 
-  constructor(private serverService: ServerService,
+  constructor(private activatedRounte: ActivatedRoute,
+              private router: Router,
+              private showPublicDataService: ShowPublicDataSevice,
+              private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
               private pagerService: PagerService,
               private bucketService: BucketService,
               private bucketServerService: BucketServerService,
               private logingServiece: LogingService,
-              private modalService: BsModalService,
-              private router: Router) {
-    this.getMaxPriceProduct();
+              private modalService: BsModalService) {
+  }
 
+  ngOnInit() {
+    this.id = Number(this.activatedRounte.snapshot.params['id']) | 0;
+    this.showPublicDataService.getProduct(this.id).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.product = response;
+        console.log(this.product);
+      }
+    );
+    this.userLogin = localStorage.getItem('login');
+    console.log(this.userLogin);
   }
 
   finish(slider, event) {
@@ -86,17 +97,6 @@ export class ProductListComponent implements OnInit, DoCheck {
       },
       (error) => console.log(error)
     );
-  }
-
-  ngOnInit() {
-    this.getAllProductsTitle();
-    this.getProductTitlesFromService();
-    this.getTemp();
-    this.serverService.onTaskRemoved.subscribe(
-      (product: ProductDataAmount) => this.products.splice(this.products.indexOf(product), 1)
-    );
-    this.getDataFromDatabase();
-
   }
 
   ngDoCheck() {
@@ -314,18 +314,22 @@ export class ProductListComponent implements OnInit, DoCheck {
   onAddComment(commentMessage, productId) {
     const comment: Comment = new Comment(localStorage.getItem('login'), commentMessage.value, productId);
     this.serverService.addComment(comment).subscribe(
-      (response: boolean) => {
+      (response: Comment[]) => {
+        this.product.commentDtos = response;
         console.log(response);
       },
       (error) => console.log(error)
     );
   }
 
-  onRemoveComment(commentId) {
+  onRemoveComment(commentId, commentPosition) {
     console.log(commentId);
     this.serverService.removeComment(commentId).subscribe(
       (response) => {
         console.log(response);
+        if (response) {
+          this.product.commentDtos.splice(commentPosition, 1);
+        }
       },
       (error) => console.log(error)
     );
@@ -335,16 +339,46 @@ export class ProductListComponent implements OnInit, DoCheck {
     const comment: Comment = new Comment(null, editMessage.value, null);
     comment.id = commentId;
     this.serverService.editComment(comment).subscribe(
-      (response) => {
+      (response: boolean) => {
+        if (response) {
+          this.product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
+          this.product.commentDtos.find(x => x.id === commentId).editComment = false;
+        }
         console.log(response);
       },
       (error) => console.log(error)
     );
   }
 
-  onShowProduct(productId) {
-    console.log(productId);
-    this.router.navigate(['product/' + productId]);
+  mouseHover(e) {
+    e.changeComment = true;
+  }
+
+  mouseLeave(e) {
+    e.changeComment = false;
+  }
+
+  mouseOver(element) {
+    element.changeButton = true;
+  }
+
+  mouseOut(element) {
+    element.changeButton = false;
+  }
+
+  items: string[] = [
+    'The first choice!',
+    'And another choice for you.',
+    'but wait! A third!'
+  ];
+
+  onHidden(): void {
+  }
+
+  onShown(): void {
+  }
+
+  isOpenChange(): void {
   }
 
 }

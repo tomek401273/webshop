@@ -5,6 +5,7 @@ import {ShippingAddress} from '../../model/shipping-address';
 import {BucketService} from '../bucket.service';
 import {BucketServerService} from '../bucket-server.service';
 import {NgForm} from '@angular/forms';
+import {isNull} from 'util';
 
 @Component({
   selector: 'app-summary',
@@ -90,6 +91,9 @@ export class SummaryComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+
+    console.log('coupon Code');
+    console.log(localStorage.getItem('coupon'));
   }
 
   onSubmit(data) {
@@ -104,6 +108,8 @@ export class SummaryComponent implements OnInit {
       this.userAddress.surname,
       this.userAddress.supplier
     );
+    shippingAddress.code = localStorage.getItem('coupon');
+
     if (conf) {
       this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
         (response: number) => {

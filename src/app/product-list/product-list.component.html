@@ -21,7 +21,7 @@
 
 <div class="row">
   <div class="col-md-2">
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
     <div class="col-md-10">
       <br>
       <br>
@@ -58,16 +58,26 @@
       <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">Search
         database
       </button>
+      <div>
+        <br>
+        <br>
+        <h4 class="text-center">Join Newsletter</h4>
+        <p class="text-justify">
+          Be the first to learn about new product releases,
+          exclusive sales and special promotions.
+          <a (click)="openModal(template)">Click here</a> to subscribe to our newsletter
+          and receive <b>10% </b>off your first order!
+      </div>
+
     </div>
   </div>
 
-
-  <div class="container">
+  <div class="container col-md-8">
     <br>
     <br>
     <div class="row " *ngFor="let product of pagedProduct; let i = index">
       <div class=" list-group-item">
-        <h3 class="text-center">{{product.title}}</h3>
+        <a (click)="onShowProduct(product.id)"><h3 class="text-center">{{product.title}}</h3></a>
         <hr>
         <table class="table table-borderless">
           <thead>
@@ -93,6 +103,8 @@
               <br>
           <tr>
             <div>
+
+
               Price: {{product.price}} $<br>
               <button class="btn btn-primary btn-group-lg" [disabled]="product.statusCode!==sale"
                       (click)="onAddToCard(product)">Add to Card
@@ -101,12 +113,60 @@
                 <p>Temporally <br> unavailable</p>
                 <button type="button" class="btn btn-primary btn-sm" (click)="lgModal.show()">Reminder</button>
               </div>
+              <br>
+              <br>
+              <div>
+                <ngb-rating
+                  [(rate)]="product.marksAverage"
+                  (hover)="hovered=$event"
+                  (leave)="hovered=0"
+                  [readonly]="!isAuthenticated"
+                  (click)="onRated(rate2, product.id)"
+                  #rate2>
+                </ngb-rating>
+
+                (Marks: {{product.countMarks}})
+                <hr>
+                <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
+              </div>
+
 
             </div>
           </tr>
           </td>
           </tr>
+          <p>Comments</p>
+          <div *ngFor="let comment of product.commentDtos">
 
+
+            <div class="panel panel-default">
+              <div class="panel-heading"><h4 class="label label-info">{{comment.login}}</h4></div>
+              <div class="panel-body">
+                <p>date created: {{comment.createdDate}}</p>
+                <p>{{comment.message}}</p>
+                <button class="btn btn-danger btn-sm" (click)="onRemoveComment(comment.id)">Remove</button>
+                <button class="btn btn-warning btn-sm" (click)="comment.editComment = !comment.editComment">Edit</button>
+                <div *ngIf="comment.editComment">
+                  <input
+                    class="form-control"
+                    [ngModel]="comment.message"
+                    name="editMessage"
+                    #editComment="ngModel"
+                  >
+                  <button class="btn btn-default btn-sm" (click)="onEditComment(editComment, comment.id)">Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input
+            class="form-control"
+            placeholder="Write comment"
+            ngModel
+            name="comMessage"
+            #commentMessage="ngModel"
+          >
+          <button class="btn btn-primary" (click)="onAddComment(commentMessage, product.id)">Add Comment</button>
           </tbody>
         </table>
       </div>
@@ -176,3 +236,42 @@
   </div>
 </div>
 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">JOIN TO NEWSLETTER</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times; exit</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="submitNewsLetter(form)" #form="ngForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="name"
+          ngModel
+          name="name"
+          required
+          minlength="6"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input
+          class="form-control"
+          type="text"
+          id="email"
+          ngModel
+          name="email"
+          required
+          email
+        >
+      </div>
+      <br>
+      <button class="btn btn-primary center-block" [disabled]="!form.valid" type="submit">Submit</button>
+    </form>
+  </div>
+</ng-template>

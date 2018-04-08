@@ -7,21 +7,18 @@ import {ProductDataAmount} from '../model/product-data-amount';
 import {ProductMapper} from '../model/dto/product-mapper';
 import {ProductDto} from '../model/dto/product-dto';
 import {ProductAmountDto} from '../model/dto/product-amount-dto';
+import {ProductMarkDto} from '../model/dto/product-mark-dto';
+import {Comment} from '../model/comment';
+import {CommentMapper} from '../model/dto/comment-mapper';
 
 @Injectable()
 export class ServerService {
   private productDto: ProductDto;
   private productAmountDto: ProductAmountDto;
+  private commentMapper: CommentMapper = new CommentMapper();
 
   constructor(private http: HttpClient,
               private mapper: ProductMapper) {
-  }
-
-  getProduct() {
-    const headers = new HttpHeaders().set('Authorization', localStorage.getItem('token'));
-    return this.http.get('http://localhost:8080/product/all', {
-      headers: headers
-    });
   }
 
   addNewProduct(product: ProductDataAmount) {
@@ -65,4 +62,51 @@ export class ServerService {
       headers: headers
     });
   }
+
+  markProduct(productMarkDto: ProductMarkDto) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+
+    return this.http.put('http://localhost:8080/product/mark', productMarkDto, {
+      headers: headers
+    });
+  }
+
+  addComment(comment: Comment) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+    const commentDto = this.commentMapper.mapToCommentDto(comment);
+    return this.http.post('http://localhost:8080/comment/add', commentDto, {
+      headers: headers
+    });
+  }
+
+  removeComment(commentId) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+    const params = {commentId: commentId};
+
+    return this.http.delete('http://localhost:8080/comment/remove', {
+      headers: headers,
+      params: params
+    });
+  }
+
+  editComment(comment: Comment) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json')
+      .append('Authorization', localStorage.getItem('token'));
+    const commentDto = this.commentMapper.mapToCommentDto(comment);
+    return this.http.put('http://localhost:8080/comment/update', commentDto, {
+      headers: headers
+    });
+  }
+
 }

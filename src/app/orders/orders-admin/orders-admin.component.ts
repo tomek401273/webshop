@@ -27,7 +27,7 @@ export class OrdersAdminComponent implements OnInit {
   private defaultProductTitle = '';
   private defaultDates = '';
   productsTitle: String[] = [];
-
+  currentRate = 8;
   constructor(private serverService: ServerService,
               private ordersService: OrdersService,
               private router: Router,
