@@ -21,43 +21,63 @@
 
 <div class="row">
   <div class="col-md-2">
+
     <div class="col-md-1"></div>
     <div class="col-md-10">
       <br>
       <br>
-      <h4 class="text-center">Filter product</h4>
-      <br>
-      <ion-range-slider #advancedSliderElement
-                        type="double"
-                        min="0"
-                        [max]="maxValueProductInShop"
-                        grid="true"
-                        [from]=minValueCover
-                        [grid_num]="5"
-                        [to]=maxValueCover
-                        (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
-      <br>
-      <input type="number"
-             class="form-control text-center"
-             [(ngModel)]="above"
-             (keyup)="setAdvancedSliderTo()"
-             (click)="setAdvancedSliderTo()"
-             min="0"
-             [max]="maxValueProductInShop"
+      <div>
+        <h4 class="text-center">Category</h4>
+        <hr>
+        <div class="btn-group-vertical center-block">
+          <button type="button" class="btn btn-default btn-category" (click)="getDataFromDatabase()">All Products</button>
+          <div *ngFor="let category of categoryNames">
+            <button type="button" class="btn btn-default btn-category" (click)="onCategory(category)">{{category}}</button>
+          </div>
 
-      >
-      <input type="number"
-             class="form-control text-center"
-             [(ngModel)]="below"
-             (keyup)="setAdvancedSliderTo()"
-             (click)="setAdvancedSliderTo()"
-             min="0"
-             [max]="maxValueProductInShop"
-      >
-      <br>
-      <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">Search
-        database
-      </button>
+
+        </div>
+      </div>
+
+
+      <div>
+        <br>
+        <br>
+        <h4 class="text-center">Filter product</h4>
+        <hr>
+        <br>
+        <ion-range-slider #advancedSliderElement
+                          type="double"
+                          min="0"
+                          [max]="maxValueProductInShop"
+                          grid="true"
+                          [from]=minValueCover
+                          [grid_num]="5"
+                          [to]=maxValueCover
+                          (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
+        <br>
+        <input type="number"
+               class="form-control text-center"
+               [(ngModel)]="above"
+               (keyup)="setAdvancedSliderTo()"
+               (click)="setAdvancedSliderTo()"
+               min="0"
+               [max]="maxValueProductInShop"
+
+        >
+        <input type="number"
+               class="form-control text-center"
+               [(ngModel)]="below"
+               (keyup)="setAdvancedSliderTo()"
+               (click)="setAdvancedSliderTo()"
+               min="0"
+               [max]="maxValueProductInShop"
+        >
+        <br>
+        <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">Search
+          database
+        </button>
+      </div>
       <div>
         <br>
         <br>
@@ -104,69 +124,15 @@
           <tr>
             <div>
 
-
               Price: {{product.price}} $<br>
               <button class="btn btn-primary btn-group-lg" [disabled]="product.statusCode!==sale"
                       (click)="onAddToCard(product)">Add to Card
               </button>
-              <div *ngIf="product.statusCode!==sale">
-                <p>Temporally <br> unavailable</p>
-                <button type="button" class="btn btn-primary btn-sm" (click)="lgModal.show()">Reminder</button>
-              </div>
-              <br>
-              <br>
-              <div>
-                <ngb-rating
-                  [(rate)]="product.marksAverage"
-                  (hover)="hovered=$event"
-                  (leave)="hovered=0"
-                  [readonly]="!isAuthenticated"
-                  (click)="onRated(rate2, product.id)"
-                  #rate2>
-                </ngb-rating>
-
-                (Marks: {{product.countMarks}})
-                <hr>
-                <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
-              </div>
-
 
             </div>
           </tr>
           </td>
           </tr>
-          <p>Comments</p>
-          <div *ngFor="let comment of product.commentDtos">
-
-
-            <div class="panel panel-default">
-              <div class="panel-heading"><h4 class="label label-info">{{comment.login}}</h4></div>
-              <div class="panel-body">
-                <p>date created: {{comment.createdDate}}</p>
-                <p>{{comment.message}}</p>
-                <button class="btn btn-danger btn-sm" (click)="onRemoveComment(comment.id)">Remove</button>
-                <button class="btn btn-warning btn-sm" (click)="comment.editComment = !comment.editComment">Edit</button>
-                <div *ngIf="comment.editComment">
-                  <input
-                    class="form-control"
-                    [ngModel]="comment.message"
-                    name="editMessage"
-                    #editComment="ngModel"
-                  >
-                  <button class="btn btn-default btn-sm" (click)="onEditComment(editComment, comment.id)">Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <input
-            class="form-control"
-            placeholder="Write comment"
-            ngModel
-            name="comMessage"
-            #commentMessage="ngModel"
-          >
-          <button class="btn btn-primary" (click)="onAddComment(commentMessage, product.id)">Add Comment</button>
           </tbody>
         </table>
       </div>

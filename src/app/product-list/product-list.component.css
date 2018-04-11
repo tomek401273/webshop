@@ -16,3 +16,13 @@
 .table-borderless > thead > tr > th {
   border: none;
 }
+
+.btn-category {
+  width: 200px;
+  height: 40px;
+}
+
+.btn-all-category {
+  width: 1000px;
+  height: 40px;
+}

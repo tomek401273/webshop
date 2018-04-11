@@ -25,9 +25,8 @@ import {ProductData} from '../../model/product-data';
 })
 export class ProductComponent implements OnInit, DoCheck {
   private id: number;
-  private product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
+  product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
 
-  private products: ProductDataAmount[] = [];
   productsTitle: String[] = [];
   chosenTitle: string;
   private bucketProducts: ProductDataAmount[] = [];
@@ -47,7 +46,7 @@ export class ProductComponent implements OnInit, DoCheck {
   hovered = 0;
   modalRef: BsModalRef;
   userLogin = '';
-
+  commentMessage = '';
 
   constructor(private activatedRounte: ActivatedRoute,
               private router: Router,
@@ -74,52 +73,9 @@ export class ProductComponent implements OnInit, DoCheck {
     console.log(this.userLogin);
   }
 
-  finish(slider, event) {
-    slider.onFinish = event;
-    this.above = event.from;
-    this.below = event.to;
-  }
-
-  setAdvancedSliderTo() {
-    this.advancedSliderElement.update({from: this.above, to: this.below});
-  }
-
-  onFilterDatabaseWithPriceBetween() {
-    this.showPublicData.filterProductWithPriceBetween(this.above, this.below).subscribe(
-      (products: any[]) => {
-        if (products.length === 0) {
-          this.products = [];
-          this.pagedProduct = [];
-        } else {
-          this.products = products;
-          this.setPage(1);
-        }
-      },
-      (error) => console.log(error)
-    );
-  }
 
   ngDoCheck() {
     this.isAuthenticated = this.logingServiece.isAuthenticated();
-  }
-
-  getDataFromDatabase() {
-    this.showPublicData.getProducts()
-      .subscribe(
-        (products: any[]) => {
-          this.products = products;
-          this.setPage(1);
-        },
-        (error) => console.log(error)
-      );
-  }
-
-  setPage(page: number) {
-    if (page < 1 || page > this.products.length) {
-      return;
-    }
-    this.pager = this.pagerService.getPager(this.products.length, page);
-    this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
   }
 
   onAddToCard(product: ProductData) {
@@ -188,23 +144,6 @@ export class ProductComponent implements OnInit, DoCheck {
     localStorage.setItem('bucket123', bucketToSave);
   }
 
-  getTemp() {
-    const bucket = JSON.parse(localStorage.getItem('bucket123'));
-    if (!isNull(bucket)) {
-      for (let i = 0; i < bucket.length; i++) {
-        const bucketProduct: ProductDataAmount = new ProductDataAmount(
-          bucket[i]._id,
-          bucket[i]._price,
-          bucket[i]._title,
-          bucket[i]._description,
-          bucket[i]._imageLink,
-          bucket[i]._totalAmount,
-          null,
-          null);
-        this.bucketProducts.push(bucketProduct);
-      }
-    }
-  }
 
   getAllProductsTitle() {
     this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
@@ -212,32 +151,6 @@ export class ProductComponent implements OnInit, DoCheck {
     });
   }
 
-  getProductTitlesFromService() {
-    this.productsTitle = this.showPublicData.getProductTitles();
-  }
-
-  onSearchProductWithTitle() {
-    if (this.chosenTitle.length === 1 && this.typedTitleLengthTemp === 3) {
-      this.getDataFromDatabase();
-      this.typedTitleLengthTemp = 0;
-    }
-
-    if (this.chosenTitle.length > 2) {
-      this.typedTitleLengthTemp = 3;
-      this.showPublicData.searchProductInDatabase(this.chosenTitle).subscribe(
-        (products: any[]) => {
-          if (products.length === 0) {
-            this.products = [];
-            this.pagedProduct = [];
-          } else {
-            this.products = products;
-            this.setPage(1);
-          }
-        },
-        (error) => console.log(error)
-      );
-    }
-  }
 
   onSetSubscription(email, productId) {
 
@@ -250,73 +163,26 @@ export class ProductComponent implements OnInit, DoCheck {
     );
   }
 
-  getMaxPriceProduct() {
-    this.calculateSliderValues(this.showPublicData.getMaxPrice());
-
-    this.showPublicData.mavPriceEmitter.subscribe(
-      (response: number) => {
-        this.calculateSliderValues(response);
-      }
-    );
-  }
-
-  calculateSliderValues(response) {
-    this.maxValueProductInShop = response;
-    this.maxValueCover = this.maxValueProductInShop - (this.maxValueProductInShop / 5);
-    this.minValueCover = this.maxValueProductInShop / 5;
-    if (this.minValueCover > 100) {
-      this.minValueCover = 100;
-    }
-    this.above = this.minValueCover;
-    this.below = this.maxValueCover;
-  }
-
-  onMarkProduct(mark, productId) {
-    const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, mark.value);
-    console.log(productMarkDto);
-    this.serverService.markProduct(productMarkDto).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => console.log(error)
-    );
-  }
-
   onRated(rate, productId) {
     if (this.isAuthenticated) {
       const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, rate.rate);
       this.serverService.markProduct(productMarkDto).subscribe(
-        (response: number) => {
-          this.products.find(x => x.id === productId).marksAverage = response;
-          this.products.find(x => x.id === productId).rated = true;
-          this.setPage(1);
+        (response: ProductMarkDto) => {
+          this.product.marksAverage = response.averageMarks;
+          this.product.countMarks = response.countMarks;
+          this.product.rated = true;
         },
         (error) => console.log(error)
       );
     }
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
-  }
-
-  submitNewsLetter(newsLetter) {
-    console.log(newsLetter.value.name);
-    console.log(newsLetter.value.email);
-    this.showPublicData.subscribeNewsletter(newsLetter.value.name, newsLetter.value.email).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onAddComment(commentMessage, productId) {
-    const comment: Comment = new Comment(localStorage.getItem('login'), commentMessage.value, productId);
+  onAddComment(productId) {
+    const comment: Comment = new Comment(localStorage.getItem('login'), this.commentMessage, productId);
     this.serverService.addComment(comment).subscribe(
       (response: Comment[]) => {
         this.product.commentDtos = response;
-        console.log(response);
+        this.commentMessage = '';
       },
       (error) => console.log(error)
     );
@@ -365,20 +231,5 @@ export class ProductComponent implements OnInit, DoCheck {
   mouseOut(element) {
     element.changeButton = false;
   }
-
-  items: string[] = [
-    'The first choice!',
-    'And another choice for you.',
-    'but wait! A third!'
-  ];
-
-  onHidden(): void {
-  }
-
-  onShown(): void {
-  }
-
-  isOpenChange(): void {
-  }
-
 }
+

@@ -129,5 +129,25 @@ export class ShowPublicDataSevice {
     });
   }
 
+  getCategoryNames() {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    return this.httpClient.get('http://localhost:8080/category/all', {
+      headers: headers
+    });
+  }
+
+  getProductWithCategory(category: string) {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    const params = {category: category};
+    return this.httpClient.get('http://localhost:8080/category/product', {
+      headers: headers,
+      params
+    });
+  }
+
 
 }

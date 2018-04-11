@@ -1,137 +1,82 @@
 <div class="container">
-
-  <h3 class="text-center">{{product.title}}</h3>
-  <table class="table table-borderless">
-    <thead>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td class="col-sm-2"><img
-        src="{{product.imageLink}}"
-        alt="{{product.imageLink}}"
-        class="img-responsive"
-        style="max-height: 250px; max-width: 300px">
-      </td>
-      <td class="col-sm-1"></td>
-      <td class="col-sm-6 text-center text-justify">
-        <br>
-        <br>
-        {{product.description}}
-      </td>
-      <td class="col-sm-1"></td>
-      <td class="col-sm-3 text-center">
-        <br>
-        <br>
-        <br>
-    <tr class="text-center">
-      <div>
-        <div>
-          <ngb-rating
-            [(rate)]="product.marksAverage"
-            (hover)="hovered=$event"
-            (leave)="hovered=0"
-            [readonly]="!isAuthenticated"
-            (click)="onRated(rate2, product.id)"
-            #rate2>
-          </ngb-rating>
-          <p>Count Users Marks: ({{product.countMarks}})</p>
-        </div>
-        <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
-      </div>
-      <div>
-        Price: {{product.price}} $<br>
-        <button class="btn btn-primary buy" [disabled]="product.statusCode!==sale"
-                (click)="onAddToCard(product)">Add to Card
-        </button>
-        <div *ngIf="product.statusCode!==sale">
+  <div class="row">
+    <h3 class="text-center">{{product.title}}</h3>
+    <table class="table table-borderless">
+      <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="col-sm-2"><img
+          src="{{product.imageLink}}"
+          alt="{{product.imageLink}}"
+          class="img-responsive"
+          style="max-height: 250px; max-width: 300px">
+        </td>
+        <td class="col-sm-1"></td>
+        <td class="col-sm-6 text-center text-justify">
           <br>
-          <p>Temporally unavailable</p>
-          <button type="button" class="btn btn-primary reminder" (click)="lgModal.show()">Reminder</button>
+          <br>
+          {{product.description}}
+        </td>
+        <td class="col-sm-1"></td>
+        <td class="col-sm-3 text-center">
+          <br>
+          <br>
+          <br>
+      <tr class="text-center">
+        <div>
+          <div>
+            <ngb-rating
+              [(rate)]="product.marksAverage"
+              (hover)="hovered=$event"
+              (leave)="hovered=0"
+              [readonly]="!isAuthenticated"
+              (click)="onRated(rate2, product.id)"
+              #rate2>
+            </ngb-rating>
+            <p>Count Users Marks: ({{product.countMarks}})</p>
+          </div>
+          <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
         </div>
-        <br>
-        <br>
-      </div>
-    </tr>
-    </tbody>
-  </table>
-  <div>
+        <div>
+          Price: {{product.price}} $<br>
+          <button class="btn btn-primary buy" [disabled]="product.statusCode!==sale"
+                  (click)="onAddToCard(product)">Add to Card
+          </button>
+          <div *ngIf="product.statusCode!==sale">
+            <br>
+            <p>Temporally unavailable</p>
+            <button type="button" class="btn btn-primary reminder" (click)="lgModal.show()">Reminder</button>
+          </div>
+          <br>
+          <br>
+        </div>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="row">
     <h3 class="page-headers text-center"> Users Comments </h3>
     <br>
-
-    <input
-      class="form-control"
-      placeholder="Write comment max 1000"
-      ngModel
-      name="comMessage"
-      #commentMessage="ngModel"
-      maxlength="1000"
-    >
-    <button class="btn btn-primary" (click)="onAddComment(commentMessage, product.id)">Add Comment</button>
-
-  </div>
-
-  <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" aria-labelledby="myLargeModalLabel"
-       aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title pull-left">Set reminder when product {{product.title}} will be available</h4>
-          <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
-            <span aria-hidden="true">x</span></button>
-        </div>
-        <div class="modal-body">
-          <div class="text-justify">
-            <p>Write your email and press Submit </p>
-            <p>After few secends you will receive email please confirm it </p>
-            <br>
-            <br>
-
-            <input
-              class="form-control"
-              type="text"
-              ngModel
-              name="email"
-              #emailSubscription="ngModel"
-              required
-              email
-
-            >
-            <button
-              class="btn btn-primary"
-              type="button"
-              [disabled]="!emailSubscription.valid"
-              (click)="onSetSubscription(emailSubscription, product.id)"
-            >Get Subscription
-            </button>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <h3>User Comment Example</h3>
-    </div>
-  </div>
-
-    <div class="panel panel-default" *ngFor="let comment of product.commentDtos let i = index" (mouseover)="mouseHover(comment)" (mouseleave)="mouseLeave(comment)">
+    <div class="panel panel-default" *ngFor="let comment of product.commentDtos let i = index"
+         (mouseover)="mouseHover(comment)" (mouseleave)="mouseLeave(comment)">
       <div class="panel-heading">
         <strong>{{comment.login}}</strong>
       </div>
       <div class="panel-body" (mouseover)="mouseOver(comment)"
            (mouseout)="mouseOut(comment)">
         <div>
-          <div *ngIf="!comment.editComment" >
+          <div *ngIf="!comment.editComment">
             {{comment.message}}
             <div *ngIf="comment.changeComment && comment.login==userLogin">
-              <div class="btn-group dropdown-backdrop" dropdown  >
+              <div class="btn-group dropdown-backdrop" dropdown>
                 <a type="button"
                    class="btn btn-default a-circle-sm dropdown-toggle"
                    [class.btn-success]="comment.changeButton"
@@ -179,5 +124,79 @@
         <span class="text-muted"> Created: {{comment.createdDate}}</span>
       </div>
     </div>
+    <br>
+    <br>
+  </div>
+  <h3 class="page-headers text-center"> Add your comment </h3>
+
+  <div class="row">
+    <div class="input-group">
+      <input
+        class="form-control"
+        placeholder="Write comment min 10 and max 1000 characters"
+        [(ngModel)]="commentMessage"
+        [disabled]="!isAuthenticated"
+        maxlength="1000"
+      >
+
+      <div class="input-group-btn">
+        <button class="btn btn-primary" (click)="onAddComment(product.id)" [disabled]="commentMessage.length<10">Add
+          Comment
+        </button>
+
+      </div>
+    </div>
+    <br>
+  </div>
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+      <span class="text-center alert-info" *ngIf="!isAuthenticated">If you want comment this product
+        please login or sigin</span>
+
+    </div>
   </div>
 
+  <div class="row">
+    <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Set reminder when product {{product.title}} will be available</h4>
+            <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
+              <span aria-hidden="true">x</span></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-justify">
+              <p>Write your email and press Submit </p>
+              <p>After few secends you will receive email please confirm it </p>
+              <br>
+              <br>
+
+              <input
+                class="form-control"
+                type="text"
+                ngModel
+                name="email"
+                #emailSubscription="ngModel"
+                required
+                email
+
+              >
+              <button
+                class="btn btn-primary"
+                type="button"
+                [disabled]="!emailSubscription.valid"
+                (click)="onSetSubscription(emailSubscription, product.id)"
+              >Get Subscription
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

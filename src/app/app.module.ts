@@ -42,6 +42,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { ProductComponent } from './product-list/product/product.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
     FormsModule,
     AppRoutingModule,
     IonRangeSliderModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    PopoverModule.forRoot(),
   ],
   providers: [
     ServerService,

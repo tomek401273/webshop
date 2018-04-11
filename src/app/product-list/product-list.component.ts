@@ -23,6 +23,7 @@ import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {Comment} from '../model/comment';
 import {Router} from '@angular/router';
+import {Category} from '../model/Category';
 
 @Component({
   selector: 'app-product-list',
@@ -47,8 +48,8 @@ export class ProductListComponent implements OnInit, DoCheck {
   maxValueProductInShop: number;
   maxValueCover = 3000;
   minValueCover = 23;
-  hovered = 0;
   modalRef: BsModalRef;
+  categoryNames: string[] = [];
 
 
   constructor(private serverService: ServerService,
@@ -96,6 +97,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (product: ProductDataAmount) => this.products.splice(this.products.indexOf(product), 1)
     );
     this.getDataFromDatabase();
+    this.getCategoryNames();
 
   }
 
@@ -336,7 +338,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     comment.id = commentId;
     this.serverService.editComment(comment).subscribe(
       (response) => {
-        console.log(response);
       },
       (error) => console.log(error)
     );
@@ -345,6 +346,27 @@ export class ProductListComponent implements OnInit, DoCheck {
   onShowProduct(productId) {
     console.log(productId);
     this.router.navigate(['product/' + productId]);
+  }
+
+  getCategoryNames() {
+    this.showPublicData.getCategoryNames().subscribe(
+      (response: string[]) => {
+        this.categoryNames = response;
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  onCategory(category: string) {
+    console.log(category);
+    this.showPublicData.getProductWithCategory(category).subscribe(
+      (response: Category) => {
+        console.log(response);
+        this.products = response.productDtoList;
+        this.setPage(1);
+      },
+      (error) => console.log(error)
+    );
   }
 
 }

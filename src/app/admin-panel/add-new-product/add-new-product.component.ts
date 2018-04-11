@@ -5,6 +5,7 @@ import {CanDeactivateGuard} from '../../services/protect/can-deactivate-guard';
 import {Observable} from 'rxjs/Observable';
 import {ProductDataAmount} from '../../model/product-data-amount';
 import {Router} from '@angular/router';
+import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 
 @Component({
   selector: 'app-add-new-product',
@@ -15,12 +16,16 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') addProductForm: NgForm;
   productData: ProductDataAmount;
   private savedChanges: boolean;
+  categoryNames: string[] = [];
+
 
   constructor(private  serverService: ServerService,
-              private router: Router) {
+              private router: Router,
+              private showPublicData: ShowPublicDataSevice) {
   }
 
   ngOnInit() {
+    this.getCategoryNames();
   }
 
   onSubmit() {
@@ -33,12 +38,16 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
       this.addProductForm.value.amount,
       this.addProductForm.value.statusCode,
       null);
+    this.productData.category = this.addProductForm.value.category;
+    console.log(this.productData);
 
     this.serverService.addNewProduct(this.productData)
       .subscribe(
-        (response) => {
+        (response: number) => {
           alert('Product added successfully');
-          this.router.navigate(['/productEdit'], {queryParams: {lastpage: true}});
+          // this.router.navigate(['/productEdit'], {queryParams: {lastpage: true}});
+          this.router.navigate(['/product/' + response]);
+
 
         },
         (error) => console.log(error)
@@ -55,5 +64,16 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
     } else {
       return true;
     }
+  }
+
+  getCategoryNames() {
+    this.showPublicData.getCategoryNames().subscribe(
+      (response: string[]) => {
+        console.log(response);
+        this.categoryNames = response;
+        console.log(this.categoryNames);
+      },
+      (error) => console.log(error)
+    );
   }
 }

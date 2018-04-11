@@ -203,7 +203,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
           }
 
         }
-      }
+      },
+      (error) => alert('something go wrong: ' + error)
     );
   }
 

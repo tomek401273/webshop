@@ -11,6 +11,7 @@ export class ProductDataAmount extends ProductData {
   private _marksAverage: number;
   private _rated = false;
   private _commentDtos: Comment [];
+  private _category: string;
 
   constructor(id: number, price: number, title: string, description: string, imageLink: string, totalAmount: number, statusCode: string, statusMessage: string) {
     super(id, price, title, description, imageLink);
@@ -90,5 +91,13 @@ export class ProductDataAmount extends ProductData {
 
   set commentDtos(value: Comment[]) {
     this._commentDtos = value;
+  }
+
+  get category(): string {
+    return this._category;
+  }
+
+  set category(value: string) {
+    this._category = value;
   }
 }

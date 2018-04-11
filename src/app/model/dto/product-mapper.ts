@@ -24,6 +24,7 @@ export class ProductMapper {
       product.totalAmount,
       product.statusCode
     );
+    productAmountDto.category = product.category;
     return productAmountDto;
   }
 }
