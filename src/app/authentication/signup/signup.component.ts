@@ -5,6 +5,7 @@ import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-signup',
@@ -70,6 +71,8 @@ export class SignupComponent {
     'Wisconsin',
     'Wyoming'
   ];
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private logingService: LogingService,
               private modalService: BsModalService,
@@ -97,11 +100,13 @@ export class SignupComponent {
 
       this.logingService.registration(register)
         .subscribe(
-          (resposne) => {
-            alert('Your registration was successfully');
+          () => {
+            this.success.show();
             this.router.navigate(['/']);
           },
-          (error) => console.log(error)
+          () => {
+            this.error.show();
+          }
         );
     } else {
       this.loginAvailable = false;
@@ -134,8 +139,8 @@ export class SignupComponent {
           this.loginAvailable = false;
         }
       },
-      (error) => {
-        console.log(error);
+      () => {
+        this.error.show();
       }
     );
   }

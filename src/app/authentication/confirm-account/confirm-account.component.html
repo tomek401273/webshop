@@ -1,0 +1,19 @@
+<div class="container">
+  <div *ngIf="!authenticationComplete" class="text-center">
+    <h3>Newsletter Confirmation</h3>
+    <span class="text-info">Email confirmation in progress please wait few seconds</span>
+  </div>
+  <div *ngIf="authenticationComplete">
+    <div *ngIf="isSuccessfully" class="text-success text-center">
+      <h3>Successfully confirmation account {{email}} </h3>
+      <br>
+      <p>{{result}}</p>
+    </div>
+    <div *ngIf="!isSuccessfully" class="text-danger text-center">
+      <h3>Error Error</h3>
+      <br>
+      <p>{{result}}</p>
+    </div>
+  </div>
+</div>
+<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

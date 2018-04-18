@@ -17,6 +17,8 @@ import {OrdersAdminComponent} from '../../orders/orders-admin/orders-admin.compo
 import {OrderAdminDetailComponent} from '../../orders/orders-admin/order-admin-detail/order-admin-detail.component';
 import {DeliveryStatusComponent} from '../../delivery-status/delivery-status.component';
 import {ProductComponent} from '../../product-list/product/product.component';
+import {ConfirmNewsletterComponent} from '../../authentication/confirm-newsletter/confirm-newsletter.component';
+import {ConfirmAccountComponent} from '../../authentication/confirm-account/confirm-account.component';
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
@@ -29,7 +31,9 @@ const appRoutes: Routes = [
   {path: 'orders/:id', component: OrderDetailComponent},
   {path: 'admin-orders', component: OrdersAdminComponent},
   {path: 'delivery/:id', component: DeliveryStatusComponent},
+  {path: 'newsletter/confirm', component: ConfirmNewsletterComponent},
   {path: 'admin-orders/:id', component: OrderAdminDetailComponent},
+  {path: 'confirm-account', component: ConfirmAccountComponent},
   {
     path: 'addProduct', canActivate: [AuthGuard],
     component: AddNewProductComponent,

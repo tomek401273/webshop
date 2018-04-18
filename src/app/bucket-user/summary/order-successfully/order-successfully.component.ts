@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {OrderStatus} from '../../../model/order-status';
 import {OrdersService} from '../../../services/orders.service';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-order-successfully',
@@ -12,6 +13,8 @@ export class OrderSuccessfullyComponent implements OnInit {
   private isPaid = false;
   private redirectToBank = false;
   private id: number;
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute) {
@@ -30,17 +33,13 @@ export class OrderSuccessfullyComponent implements OnInit {
       this.ordersService.paymentVerification(payment).subscribe(
         (response: boolean) => {
           if (response) {
+            this.success.show()
             this.isPaid = true;
           }
         },
-        (error) => console.log(error)
+        (error) => this.error.show()
       );
-
-
-
     }, 3000);
-
-
   }
 
 }

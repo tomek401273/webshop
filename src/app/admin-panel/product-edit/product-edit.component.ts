@@ -1,10 +1,11 @@
-import {AfterContentChecked, Component, OnInit} from '@angular/core';
-import {ServerService} from "../../services/server.service";
-import {ProductData} from "../../model/product-data";
-import {ShowPublicDataSevice} from "../../services/show-public-data.sevice";
-import {PagerService} from "../../services/navigation/pager.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {AfterContentChecked, Component, OnInit, ViewChild} from '@angular/core';
+import {ServerService} from '../../services/server.service';
+import {ProductData} from '../../model/product-data';
+import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
+import {PagerService} from '../../services/navigation/pager.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {ProductDataAmount} from '../../model/product-data-amount';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-product-edit',
@@ -19,6 +20,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private currentPage = 1;
   private redirectedPage = 1;
   private lastPage = false;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private router: Router,
               private serverService: ServerService,
@@ -37,7 +39,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
             productUpdated.title,
             productUpdated.description,
             productUpdated.imageLink)
-    )
+    );
   }
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
           this.redirectedPage = params['numberpage'];
           this.lastPage = params['lastpage'];
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
 
     this.showPublicData.getProductsToEdit()
@@ -55,7 +57,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
         (procucts: any[]) => {
           this.products = procucts;
           for (let i = 0; i < this.products.length; i++) {
-            let product: ProductData = this.products[i];
+            const product: ProductData = this.products[i];
             this.productDataEdit.push(new ProductData(
               product.id,
               product.price,
@@ -71,7 +73,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
           }
           this.setPage(this.redirectedPage);
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
   }
 
@@ -86,7 +88,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
           this.serverService.onTaskRemoved.emit(poroductDeteted);
           this.pagedProducts.splice(id, 1);
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
   }
 

@@ -1,27 +1,28 @@
 import {
-  HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,
+  HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest,
   HttpResponse
 } from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Injectable} from '@angular/core';
+import {isNull} from 'util';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor() {
-  }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // console.log('Interceptor!!!' + req);
-    //
-    // console.log('headers Authorization: ' + req.headers.get('Authorization'));
-    //
-    // console.log('url: ' + req.url);
-    // console.log('body login: ' + req.body.login);
-    // console.log('body password: ' + req.body.password);
-    // console.log('params: ' + req.params);
-    // console.log('responseType: ' + req.responseType);
-    // console.log('reportProgres: ' + req.reportProgress);
-    return next.handle(req);
+    if (localStorage.getItem('token') === 'null') {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Accept', 'application/json');
+      const copiedReq = req.clone({headers: headers});
+      return next.handle(copiedReq);
+    } else {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .append('Accept', 'application/json')
+        .append('Authorization', localStorage.getItem('token'));
+      const copiedReq = req.clone({headers: headers});
+      return next.handle(copiedReq);
+    }
   }
-
 }
 

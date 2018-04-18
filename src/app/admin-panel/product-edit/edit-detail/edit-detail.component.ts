@@ -6,6 +6,7 @@ import {ShowPublicDataSevice} from '../../../services/show-public-data.sevice';
 import {CanDeactivateGuard} from '../../../services/protect/can-deactivate-guard';
 import {Observable} from 'rxjs/Observable';
 import {ProductDataAmount} from '../../../model/product-data-amount';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-edit-detail',
@@ -19,6 +20,8 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   private productUpdated: ProductDataAmount;
   private positonProductOnPage = 1;
   private saveChanges = false;
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private publicServer: ShowPublicDataSevice,
               private serverServie: ServerService,
@@ -33,12 +36,12 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
         (product: any) => {
           this.product = product;
         },
-        (error) => console.log(error));
+        () => this.error.show());
 
     this.activatedRoute.queryParams
       .subscribe(
         (params: Params) => this.positonProductOnPage = params['numberpage'],
-        (error) => console.log(error));
+        () => this.error.show());
   }
 
   onSubmit() {
@@ -53,11 +56,12 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
       null);
     this.serverServie.updateProduct(this.productUpdated)
       .subscribe(
-        (response: Response) => {
+        () => {
+          this.success.show();
           this.serverServie.onTaskUpdated.emit(this.productUpdated);
           this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'});
         },
-        (error) => console.log(error));
+        () => this.error.show());
     this.saveChanges = true;
   }
 

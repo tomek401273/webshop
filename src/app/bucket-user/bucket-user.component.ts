@@ -1,10 +1,11 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
+import {Component, DoCheck, OnInit, ViewChild} from '@angular/core';
 import {BucketService} from './bucket.service';
 import {ProductDataAmount} from '../model/product-data-amount';
 import {isNull} from 'util';
 import {Router} from '@angular/router';
 import {BucketServerService} from './bucket-server.service';
 import {LogingService} from '../services/loging.service';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-bucket-user',
@@ -21,6 +22,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
   wrongCode = false;
   correctCode = false;
   wrongMessage: String;
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private bucketService: BucketService,
               private router: Router,
@@ -94,10 +97,11 @@ export class BucketUserComponent implements OnInit, DoCheck {
         this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
           (resposne) => {
             if (resposne === true) {
-              alert('successfully added product to bucket');
+              this.success.text = 'Successfully increase product items';
+              this.success.show();
               this.adding(bucketProduct);
             } else {
-              alert('something go wrong contact with our service');
+              this.error.show();
             }
           }
         );
@@ -123,10 +127,11 @@ export class BucketUserComponent implements OnInit, DoCheck {
         this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
           (resposne) => {
             if (resposne === true) {
-              alert('succesfully removed product from bucket');
+              this.success.text = 'Successfully decrease product items';
+              this.success.show();
               this.subtracting(bucketProduct);
             } else {
-              alert('something go wrong contact with our service');
+              this.error.show();
             }
           });
       } else {
@@ -138,10 +143,12 @@ export class BucketUserComponent implements OnInit, DoCheck {
   onRemove(product: ProductDataAmount) {
     if (this.isAuthenticated) {
       this.bucketServerService.removeSingleProductFromBucket(product.id).subscribe(
-        (respones) => {
+        () => {
+          this.success.text = 'Successfully removed product from bucket';
+          this.success.show();
           this.removing(product);
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
     } else {
       this.removing(product);
@@ -204,13 +211,12 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
         }
       },
-      (error) => alert('something go wrong: ' + error)
+      () => this.error.show()
     );
   }
 
   checkAvailableCode(code) {
     if (this.isFullFiled) {
-      console.log(code.value);
       this.bucketServerService.checkAvailableCoupon(code.value).subscribe(
         (response: boolean) => {
           if (response) {
@@ -225,7 +231,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
             this.wrongMessage = 'Code error';
           }
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
     } else {
       this.wrongCode = true;

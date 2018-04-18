@@ -22,91 +22,49 @@ export class ServerService {
   }
 
   addNewProduct(product: ProductDataAmount) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-
     return this.http.post('http://localhost:8080/product/save',
-      this.productAmountDto, {
-        headers: headers
-      });
+      this.productAmountDto);
   }
 
   onTaskRemoved = new EventEmitter<ProductDataAmount>();
   onTaskUpdated = new EventEmitter<ProductData>();
 
   removeProduct(id: number) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
     const idSting = String(id);
     const params = {id: idSting};
 
     return this.http.delete('http://localhost:8080/product/deleteProduct', {
-      headers: headers,
       params: params
     });
   }
 
   updateProduct(product: ProductDataAmount) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-    return this.http.put('http://localhost:8080/product/updateProduct', this.productAmountDto, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/product/updateProduct', this.productAmountDto);
   }
 
   markProduct(productMarkDto: ProductMarkDto) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.put('http://localhost:8080/product/mark', productMarkDto, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/product/mark', productMarkDto
+    );
   }
 
   addComment(comment: Comment) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     const commentDto = this.commentMapper.mapToCommentDto(comment);
-    return this.http.post('http://localhost:8080/comment/add', commentDto, {
-      headers: headers
-    });
+    return this.http.post('http://localhost:8080/comment/add', commentDto
+    );
   }
 
   removeComment(commentId) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     const params = {commentId: commentId};
 
     return this.http.delete('http://localhost:8080/comment/remove', {
-      headers: headers,
       params: params
     });
   }
 
   editComment(comment: Comment) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     const commentDto = this.commentMapper.mapToCommentDto(comment);
-    return this.http.put('http://localhost:8080/comment/update', commentDto, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/comment/update', commentDto);
   }
-
 }

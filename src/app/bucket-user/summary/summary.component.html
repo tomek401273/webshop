@@ -1,110 +1,96 @@
 <div class="container">
   <div class="row">
     <h2 class="text-center">Shipping Address</h2>
-  </div>
+
+    <swal
+      #confirmBuy
+      title='Are you sure?'
+      type='warning'
+      showCancelButton=true,
+      confirmButtonColor='#3085d6'
+      cancelButtonColor='#d33'
+      confirmButtonText='Yes, buy!'
+      cancelButtonText='No, cancel!'
+      confirmButtonClass='btn btn-success'
+      cancelButtonClass='btn btn-danger'
+      buttonsStyling=false
+      (confirm)="onConfirm()"
+    ></swal>
+    <swal #buySuccess title="Success" text="Buying process was successfully completed" type="success"></swal>
+    <swal #buyError title="Error" text="Somethig go wrong. Please contact with our service" type="error"></swal>
+
+    <div class="row form-group text-center" *ngIf="!useAnotherAddress">
+      <h3>Default Address</h3>
+      <p>Country: {{userAddress.country}}</p>
+      <p>City: {{userAddress.city}}</p>
+      <p>PostCode: {{userAddress.postCode}}</p>
+      <p>Street: {{userAddress.street}}</p>
+      <p>Name: {{userAddress.name}}</p>
+      <p>Surname: {{userAddress.surname}}</p>
+
+    </div>
 
 
-  <div class="col-sm-2"></div>
-  <div class="col-sm-8">
+    <div class="form-group" *ngIf="useAnotherAddress">
+      <label>GOOGLE AUTOCOMPLETE LOCATION</label>
+      <ng4geo-autocomplete [userSettings]="userSettings"
+                           (componentCallback)="autoCompleteCallback1($event)"></ng4geo-autocomplete>
 
-    <form (ngSubmit)="onSubmit()" #form="ngForm">
-      <div class="row text-center">
-        <h2 *ngIf="useDiffAddress">Dffrent addres in use</h2>
+      <div>
 
-        <div class="form-group">
-          <label>Coutry</label>
-          <pre class="card card-block card-header mb-3">Country: {{userAddress.country | json}}</pre>
-          <input
-            class="form-control"
-            [(ngModel)]="userAddress.country"
-            [typeahead]="states"
-            [ngModelOptions]="{standalone: true}"
-            required
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="city">City</label>
-          <input
-            class="form-control"
-            id="city"
-            type="text"
-            [(ngModel)]="userAddress.city"
-            name="city"
-            required>
-        </div>
-        <div class="form-group">
-          <label for="postcode">PostCode</label>
-          <input
-            class="form-control"
-            id="postcode"
-            type="text"
-            [(ngModel)]="userAddress.postCode"
-            name="postcode"
-            required
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="street">Street</label>
-          <input
-            class="form-control"
-            type="text"
-            id="street"
-            [(ngModel)]="userAddress.street"
-            name="street"
-            required>
-        </div>
-
-
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input
-            class="form-control"
-            type="text"
-            id="name"
-            [(ngModel)]="userAddress.name"
-            name="name"
-            required>
-        </div>
-        <div class="form-group">
-          <label for="surname">Surname</label>
-          <input
-            class="form-control"
-            type="text"
-            id="surname"
-            [(ngModel)]="userAddress.surname"
-            name="surname"
-            required>
+      </div>
+      <div *ngIf="addressInput">
+        <span class="text-success" *ngIf="validAddress">Address Data Correct</span>
+        <span class="text-danger" *ngIf="!validAddress">Address Data Invalid</span>
+        <div class="form-group" *ngIf="validAddress">
+          <p>Label: {{validatedAddress.label}}</p>
+          <p>Country: {{validatedAddress.country}}</p>
+          <p>State: {{validatedAddress.state}}</p>
+          <p>County: {{validatedAddress.county}}</p>
+          <p>City: {{validatedAddress.city}}</p>
+          <p>District: {{validatedAddress.district}}</p>
+          <p>Subdistrict: {{validatedAddress.subdistrict}}</p>
+          <p>Street: {{validatedAddress.street}}</p>
+          <p>PostalCode: {{validatedAddress.postalCode}}</p>
         </div>
       </div>
-      <br>
-
+      <button class="btn btn-default" (click)="checkAddress()">Check Valid Data</button>
       <hr>
+      <br>
+    </div>
+    <button class="btn btn-default" (click)="this.useAnotherAddress = !this.useAnotherAddress;"
+            *ngIf="!useAnotherAddress">Use different address
+    </button>
+    <button class="btn btn-default"
+            (click)="this.useAnotherAddress = !this.useAnotherAddress;"
+            *ngIf="useAnotherAddress">Use default address
+    </button>
+
+    <form (ngSubmit)="onSubmit()" #f="ngForm">
       <div class="row text-center">
-        <input
-          type="checkbox"
-          class="checkbox checkbox-inline"
-          [ngModelOptions]="{standalone: true}"
-          [(ngModel)]="useDiffAddress"
-          (click)="onUseDifferentAddress()"
+        <div class="row text-center">
+          <h4>Select your supplier</h4>
+          <div class="radio text-left" *ngFor="let supplier of suppliers">
 
-          #other> Different address
-        <h4>Select your supplier</h4>
-        <div class="radio text-left" *ngFor="let supplier of suppliers">
-
-          <label>
-            <input
-              type="radio"
-              name="supplier"
-              [(ngModel)]="userAddress.supplier"
-              [value]="supplier.name"
-              required>
-            Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
-          </label>
+            <label>
+              <input
+                type="radio"
+                ngModel
+                name="supplierS"
+                [value]="supplier.name"
+                #supplier2="ngModel"
+                required
+              >
+              Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
+            </label>
+          </div>
+          <!--<button class="btn btn-primary" type="submit" [disabled]="!form.valid && checkedAddress && validAddress">Buy-->
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!validAddress && useAnotherAddress || !f.valid">Buy
+          </button>
         </div>
-
-        <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Buy</button>
       </div>
     </form>
   </div>

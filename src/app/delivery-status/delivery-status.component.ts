@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Order} from '../model/order';
 import {ActivatedRoute} from '@angular/router';
 import {OrdersService} from '../services/orders.service';
 import {ShippingAddress} from '../model/shipping-address';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-delivery-status',
@@ -13,6 +14,8 @@ export class DeliveryStatusComponent implements OnInit {
   private shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
   private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null, null);
   private id: number;
+  @ViewChild('error') error: SwalComponent;
+
   constructor(private activatedRoute: ActivatedRoute,
               private ordersService: OrdersService) { }
 
@@ -22,7 +25,7 @@ export class DeliveryStatusComponent implements OnInit {
       (order: any) => {
         this.order = order;
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 

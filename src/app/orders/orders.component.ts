@@ -9,6 +9,7 @@ import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
 import {DirectoryTitles} from '../model/directory-titles';
 import {UsersLogin} from '../model/users-login';
 import {OrderSearch} from '../model/order-search';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-orders',
@@ -21,12 +22,13 @@ export class OrdersComponent implements OnInit {
   private defaultState = 'all';
   @ViewChild('form') searchForm: NgForm;
   selected: string;
-  private pagedProduct: any[];
+  private pagedProduct: Order[] = [];
   private pager: any = {};
   @ViewChild('f') search: NgForm;
   private defaultProductTitle = '';
   private defaultDates = '';
   productsTitle: String[] = [];
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private serverService: ServerService,
               private ordersService: OrdersService,
@@ -47,7 +49,7 @@ export class OrdersComponent implements OnInit {
           this.orders = orders;
           this.setPage(1);
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
   }
 
@@ -75,7 +77,7 @@ export class OrdersComponent implements OnInit {
         this.setPage(1);
 
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 

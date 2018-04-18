@@ -9,6 +9,7 @@ import {OrderSearch} from '../../model/order-search';
 import {DirectoryTitles} from '../../model/directory-titles';
 import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {UsersLogin} from '../../model/users-login';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-orders-admin',
@@ -28,6 +29,7 @@ export class OrdersAdminComponent implements OnInit {
   private defaultDates = '';
   productsTitle: String[] = [];
   currentRate = 8;
+  @ViewChild('error') error: SwalComponent;
   constructor(private serverService: ServerService,
               private ordersService: OrdersService,
               private router: Router,
@@ -45,7 +47,7 @@ export class OrdersAdminComponent implements OnInit {
         this.orders = orders;
         this.setPage(1);
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -73,7 +75,7 @@ export class OrdersAdminComponent implements OnInit {
         this.setPage(1);
 
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 

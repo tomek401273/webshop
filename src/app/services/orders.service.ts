@@ -21,162 +21,47 @@ export class OrdersService {
   orderDetail = new EventEmitter<Order>();
 
   getUserOrders() {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     const params = {login: localStorage.getItem('login')};
-
     return this.http.get('http://localhost:8080/buy/getOrders', {
-      headers: headers,
       params: params
     });
   }
 
   getOneOrder(id: number) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     const idSting = String(id);
     const params = {id: idSting};
-
     return this.http.get('http://localhost:8080/buy/getOrder', {
-      headers: headers,
       params: params
     });
   }
 
   buyAllProductFromBucket(shippingAddress: ShippingAddress) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
     this.shippingDto = this.shippingMapper.mapToShippingAddressDto(shippingAddress);
-
-    return this.http.post('http://localhost:8080/buy/buy', this.shippingDto, {
-      headers: headers
-    });
+    return this.http.post('http://localhost:8080/buy/buy', this.shippingDto);
   }
 
   getAllOrdersInShop() {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.get('http://localhost:8080/buy/getAllOrdersInShop', {
-      headers: headers
-    });
+    return this.http.get('http://localhost:8080/buy/getAllOrdersInShop');
   }
 
   paymentVerification(orderStatus: OrderStatus) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-
-    return this.http.put('http://localhost:8080/buy/paymentVerification', orderStatus, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/buy/paymentVerification', orderStatus);
   }
 
   orderPrepared(orderStatus: OrderStatus) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.put('http://localhost:8080/buy/orderPrepared', orderStatus, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/buy/orderPrepared', orderStatus);
   }
 
   sendOrder(orderStatus: OrderStatus) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.put('http://localhost:8080/buy/sendOrder', orderStatus, {
-      headers: headers
-    });
+    return this.http.put('http://localhost:8080/buy/sendOrder', orderStatus);
   }
 
   deliveredOrder(orderStatus: OrderStatus) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.post('http://localhost:8080/buy/delivered', orderStatus, {
-      headers: headers
-    });
-  }
-
-  searchOrderContainsProduct(title) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-    const params = {title: title};
-    return this.http.get('http://localhost:8080/buy/searchOrderContainsProduct', {
-      headers: headers,
-      params: params
-    });
-  }
-
-  filterOrdersWithState(state) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-    const params = {state: state};
-
-    return this.http.get('http://localhost:8080/buy/filterOrderState', {
-      headers: headers,
-      params: params
-    });
-  }
-
-  filterOrdersWithDate(dateAfter, dateBefore) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    const params = {dateAfter: dateAfter, dateBefore: dateBefore};
-
-    return this.http.get('http://localhost:8080/buy/filterOrderDate', {
-      headers: headers,
-      params: params
-    });
-  }
-
-  filterOrdersByUserLogin(userLogin) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    const params = {userLogin: userLogin};
-
-    return this.http.get('http://localhost:8080/buy/filterOrderByUserLogin', {
-      headers: headers,
-      params: params
-    });
+    return this.http.post('http://localhost:8080/buy/delivered', orderStatus);
   }
 
   getAllUserLogin() {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
-    return this.http.get('http://localhost:8080/buy/getAllUserLogin', {
-      headers: headers
-    }).subscribe(
+    return this.http.get('http://localhost:8080/buy/getAllUserLogin').subscribe(
       (response: any[]) => {
         this.usersLogin.logins = response;
         this.usersLoginEmitter.emit(this.usersLogin);
@@ -190,11 +75,6 @@ export class OrdersService {
   }
 
   searchOrders(orderSearch: OrderSearch) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .append('Accept', 'application/json')
-      .append('Authorization', localStorage.getItem('token'));
-
     const params = {
       'productTitle': orderSearch.productTitle,
       'dateFrom': orderSearch.dateFrom,
@@ -204,9 +84,7 @@ export class OrdersService {
     };
 
     return this.http.get('http://localhost:8080/buy/orderSearch', {
-      headers: headers,
       params: params
     });
   }
-
 }

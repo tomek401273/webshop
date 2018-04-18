@@ -17,6 +17,7 @@ import {Comment} from '../../model/comment';
 import {ProductMarkDto} from '../../model/dto/product-mark-dto';
 import {DirectoryTitles} from '../../model/directory-titles';
 import {ProductData} from '../../model/product-data';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-product',
@@ -28,7 +29,6 @@ export class ProductComponent implements OnInit, DoCheck {
   product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
 
   productsTitle: String[] = [];
-  chosenTitle: string;
   private bucketProducts: ProductDataAmount[] = [];
   private pager: any = {};
   private pagedProduct: any[];
@@ -37,16 +37,11 @@ export class ProductComponent implements OnInit, DoCheck {
   private sale = 'sale';
   @ViewChild('form') searchForm: NgForm;
   @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
-  advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
-  private above = 0;
-  private below = 120;
-  maxValueProductInShop: number;
-  maxValueCover = 3000;
-  minValueCover = 23;
   hovered = 0;
-  modalRef: BsModalRef;
   userLogin = '';
   commentMessage = '';
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private activatedRounte: ActivatedRoute,
               private router: Router,
@@ -64,15 +59,12 @@ export class ProductComponent implements OnInit, DoCheck {
     this.id = Number(this.activatedRounte.snapshot.params['id']) | 0;
     this.showPublicDataService.getProduct(this.id).subscribe(
       (response: any) => {
-        console.log(response);
         this.product = response;
-        console.log(this.product);
-      }
+      },
+      () => this.error.show()
     );
     this.userLogin = localStorage.getItem('login');
-    console.log(this.userLogin);
   }
-
 
   ngDoCheck() {
     this.isAuthenticated = this.logingServiece.isAuthenticated();
@@ -90,20 +82,21 @@ export class ProductComponent implements OnInit, DoCheck {
             this.bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
-                  alert('successfully added product to bucket');
+                  this.success.text = 'Successfully added product to bucket';
+                  this.success.show();
                 } else {
-                  alert('something go wrong contact with our service');
+                  this.error.show();
                 }
-
               }
             );
           }
         } else {
-          alert('This product is not available');
+          this.success.text = 'This product is not available';
+          this.success.show();
         }
 
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -144,22 +137,15 @@ export class ProductComponent implements OnInit, DoCheck {
     localStorage.setItem('bucket123', bucketToSave);
   }
 
-
-  getAllProductsTitle() {
-    this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
-      this.productsTitle = directoryTitles.titles;
-    });
-  }
-
-
   onSetSubscription(email, productId) {
 
     const reminderDto: ReminderDto = new ReminderDto(productId, email.value);
     this.showPublicData.setReminder(reminderDto).subscribe(
-      (response) => {
-        console.log(response);
+      () => {
+        this.success.text = 'Reminder succesully set';
+        this.success.show();
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -171,8 +157,11 @@ export class ProductComponent implements OnInit, DoCheck {
           this.product.marksAverage = response.averageMarks;
           this.product.countMarks = response.countMarks;
           this.product.rated = true;
+          this.success.text = 'Thank you for rated our product';
+          this.success.show();
+
         },
-        (error) => console.log(error)
+        () => this.error.show()
       );
     }
   }
@@ -183,8 +172,10 @@ export class ProductComponent implements OnInit, DoCheck {
       (response: Comment[]) => {
         this.product.commentDtos = response;
         this.commentMessage = '';
+        this.success.text = 'Thank you for comment our product';
+        this.success.show();
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -195,9 +186,11 @@ export class ProductComponent implements OnInit, DoCheck {
         console.log(response);
         if (response) {
           this.product.commentDtos.splice(commentPosition, 1);
+          this.success.text = 'You successfully deleted comment';
+          this.success.show();
         }
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -209,10 +202,13 @@ export class ProductComponent implements OnInit, DoCheck {
         if (response) {
           this.product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
           this.product.commentDtos.find(x => x.id === commentId).editComment = false;
+          this.success.text = 'You successfully edited comment';
+          this.success.show();
+        } else {
+          this.error.show();
         }
-        console.log(response);
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 

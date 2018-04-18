@@ -28,11 +28,15 @@
         <td>
           <tr>Country: {{order.shippingAddressDto.country}}</tr>
           <tr>City: {{order.shippingAddressDto.city}}</tr>
-          <tr>PostCode: {{order.shippingAddressDto.postCode}}</tr>
+          <tr>PostCode: {{order.shippingAddressDto.postalCode}}</tr>
           <tr>Street: {{order.shippingAddressDto.street}}</tr>
           <tr>Name: {{order.shippingAddressDto.name}}</tr>
-          <tr>Surname: {{order.shippingAddressDto.surname}}</tr>
           <tr>Supplier: {{order.shippingAddressDto.supplier}}</tr>
+          <tr>Surname: {{order.shippingAddressDto.surname}}</tr>
+          <tr>County: {{order.shippingAddressDto.county}}</tr>
+          <tr>District: {{order.shippingAddressDto.district}}</tr>
+          <tr>Subdistrict: {{order.shippingAddressDto.subdistrict}}</tr>
+          <tr>State: {{order.shippingAddressDto.state}}</tr>
         </td>
         </tbody>
       </table>
@@ -102,3 +106,4 @@
   </div>
 
 </div>
+<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

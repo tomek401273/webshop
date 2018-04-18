@@ -24,6 +24,7 @@ import {BsModalService} from 'ngx-bootstrap/modal';
 import {Comment} from '../model/comment';
 import {Router} from '@angular/router';
 import {Category} from '../model/Category';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-product-list',
@@ -50,7 +51,8 @@ export class ProductListComponent implements OnInit, DoCheck {
   minValueCover = 23;
   modalRef: BsModalRef;
   categoryNames: string[] = [];
-
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -85,7 +87,7 @@ export class ProductListComponent implements OnInit, DoCheck {
           this.setPage(1);
         }
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -112,7 +114,7 @@ export class ProductListComponent implements OnInit, DoCheck {
           this.products = products;
           this.setPage(1);
         },
-        (error) => console.log(error)
+        (error) => this.error.show()
       );
   }
 
@@ -136,20 +138,20 @@ export class ProductListComponent implements OnInit, DoCheck {
             this.bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
-                  alert('successfully added product to bucket');
+                  this.success.show();
                 } else {
-                  alert('something go wrong contact with our service');
+                  this.error.show();
                 }
 
               }
             );
           }
         } else {
-          alert('This product is not available');
+          this.error.show();
         }
 
       },
-      (error) => console.log(error)
+      (error) => this.error.show()
     );
   }
 
@@ -236,7 +238,7 @@ export class ProductListComponent implements OnInit, DoCheck {
             this.setPage(1);
           }
         },
-        (error) => console.log(error)
+        (error) => this.error.show()
       );
     }
   }
@@ -248,7 +250,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response) => {
         console.log(response);
       },
-      (error) => console.log(error)
+      (error) => this.error.show()
     );
   }
 
@@ -273,78 +275,20 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.below = this.maxValueCover;
   }
 
-  onMarkProduct(mark, productId) {
-    const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, mark.value);
-    console.log(productMarkDto);
-    this.serverService.markProduct(productMarkDto).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onRated(rate, productId) {
-    if (this.isAuthenticated) {
-      const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, rate.rate);
-      this.serverService.markProduct(productMarkDto).subscribe(
-        (response: number) => {
-          this.products.find(x => x.id === productId).marksAverage = response;
-          this.products.find(x => x.id === productId).rated = true;
-          this.setPage(1);
-        },
-        (error) => console.log(error)
-      );
-    }
-  }
-
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
   submitNewsLetter(newsLetter) {
-    console.log(newsLetter.value.name);
-    console.log(newsLetter.value.email);
     this.showPublicData.subscribeNewsletter(newsLetter.value.name, newsLetter.value.email).subscribe(
       (response) => {
         console.log(response);
       },
-      (error) => console.log(error)
-    );
-  }
-
-  onAddComment(commentMessage, productId) {
-    const comment: Comment = new Comment(localStorage.getItem('login'), commentMessage.value, productId);
-    this.serverService.addComment(comment).subscribe(
-      (response: boolean) => {
-        console.log(response);
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onRemoveComment(commentId) {
-    console.log(commentId);
-    this.serverService.removeComment(commentId).subscribe(
-      (response) => {
-        console.log(response);
-      },
-      (error) => console.log(error)
-    );
-  }
-
-  onEditComment(editMessage, commentId) {
-    const comment: Comment = new Comment(null, editMessage.value, null);
-    comment.id = commentId;
-    this.serverService.editComment(comment).subscribe(
-      (response) => {
-      },
-      (error) => console.log(error)
+      (error) => this.error.show()
     );
   }
 
   onShowProduct(productId) {
-    console.log(productId);
     this.router.navigate(['product/' + productId]);
   }
 
@@ -353,7 +297,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response: string[]) => {
         this.categoryNames = response;
       },
-      (error) => console.log(error)
+      (error) => this.error.show()
     );
   }
 
@@ -365,7 +309,7 @@ export class ProductListComponent implements OnInit, DoCheck {
         this.products = response.productDtoList;
         this.setPage(1);
       },
-      (error) => console.log(error)
+      (error) => this.error.show()
     );
   }
 

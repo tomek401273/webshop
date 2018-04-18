@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Log} from '../../model/Log';
 import {ServerService} from '../../services/server.service';
 import {LogingService} from '../../services/loging.service';
@@ -10,6 +10,7 @@ import {BucketServerService} from '../../bucket-user/bucket-server.service';
 import {TemplateRef} from '@angular/core';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-signin',
@@ -23,6 +24,8 @@ export class SigninComponent {
   name = 'tomek371240@gmail.com';
   password = 'thomas';
   message = '';
+  @ViewChild('success') success: SwalComponent;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private server: ServerService,
               private loggingService: LogingService,
@@ -46,9 +49,10 @@ export class SigninComponent {
 
           this.bucketServerService.addProductListToCard(this.productIdArray).subscribe(
             (response2) => {
-              console.log(response2);
+              this.success.text = 'Your product has succesfully restored';
+             this.success.show();
             },
-            (error) => console.log(error)
+            () => this.error.show()
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
@@ -56,7 +60,10 @@ export class SigninComponent {
           this.modalRef.hide();
           // this.router.navigate(['/']);
         },
-        (error) => this.somethingGoWrong()
+        () => {
+          this.somethingGoWrong();
+          this.error.show();
+        }
       );
   }
 
@@ -114,7 +121,7 @@ export class SigninComponent {
         let datatoLocalStorage = JSON.stringify(this.products);
         localStorage.setItem('bucket123', datatoLocalStorage);
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 

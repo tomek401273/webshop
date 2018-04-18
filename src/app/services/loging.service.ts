@@ -17,13 +17,10 @@ export class LogingService {
   logoutEmitter = new EventEmitter<boolean>();
 
   getToken(log: Log) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
     return this.httpClient.post('http://localhost:8080/login', log,
       {
         observe: 'response',
         responseType: 'text',
-        headers: headers
       });
   }
 
@@ -38,8 +35,7 @@ export class LogingService {
   isAuthenticated() {
     if (localStorage.getItem('role') === 'user' || localStorage.getItem('role') === 'admin, user') {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -50,28 +46,22 @@ export class LogingService {
         resolve(this.isAuthenticated());
       })
     );
-
     return promise;
   }
 
   registration(register: Register) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-
     return this.httpClient.post('http://localhost:8080/auth/signup', register, {
       observe: 'response',
       responseType: 'text',
-      headers: headers,
     });
   }
 
   checkLoginAvailable(login) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json').append('Accept', 'application/json');
-    console.log('serviced');
-    console.log(login);
-    return this.httpClient.post('http://localhost:8080/auth/checkLoginAvailable', login, {
+    const params = {login: login};
+    return this.httpClient.get('http://localhost:8080/auth/checkLoginAvailable', {
       observe: 'response',
       responseType: 'text',
-      headers: headers
+      params: params
     });
   }
 }

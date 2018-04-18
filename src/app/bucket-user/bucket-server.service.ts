@@ -67,7 +67,7 @@ export class BucketServerService {
     const params = {login: localStorage.getItem('login')};
 
     return this.httpClient.get('http://localhost:8080/bucket/getAllProductFromBucket', {
-      headers: headers,
+      // headers: headers,
       params: params
     });
   }
@@ -96,4 +96,40 @@ export class BucketServerService {
       params: params
     });
   }
+
+  searchCity(country: string, city: string) {
+    // const headers = new HttpHeaders()
+    //   .set('Access-Control-Allow-Origin', 'http://gd.geobytes.com')
+    // ;
+    // const params = {q: city};
+    // return this.httpClient.get('http://gd.geobytes.com/AutoCompleteCity?callback=?&filter=PL&q=tor', {
+    //   headers: headers,
+    // });
+
+    // const headers = new HttpHeaders().set('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin')
+    //   .append('Access-Control-Allow-Origin', '*')
+    //   .append('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
+
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+
+    const params = {countryAlpha2Code: country, city: city};
+
+    return this.httpClient.get('http://localhost:8080/location/city', {
+      headers: headers,
+      params: params
+    });
+  }
+
+  getAllCountriesOnWorld() {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .append('Accept', 'application/json');
+    return this.httpClient.get('http://localhost:8080/location/country', {
+      headers: headers
+    });
+  }
+
+
 }

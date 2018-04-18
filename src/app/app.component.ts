@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {LogingService} from './services/loging.service';
 import {ShowPublicDataSevice} from './services/show-public-data.sevice';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,12 @@ import {ShowPublicDataSevice} from './services/show-public-data.sevice';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('info') info: SwalComponent;
   constructor(private logingService: LogingService,
               private showPublicDataService: ShowPublicDataSevice) {
     this.showPublicDataService.getAllProductsTitleFromDatabase();
     this.showPublicDataService.getMaxProductPrice();
+    this.showPublicDataService.downloadApprovedCountry();
 
   }
 
@@ -21,7 +24,7 @@ export class AppComponent implements OnInit {
         (response) => {
           setTimeout(() => {
             if (this.logingService.isAuthenticated()) {
-              alert('Your session are gone. Log in once again');
+              this.info.show();
               this.logingService.logOut();
             }
           }, 1200000);

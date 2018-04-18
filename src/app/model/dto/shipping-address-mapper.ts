@@ -7,12 +7,13 @@ export class ShippingAddressMapper {
       shippingAddress.login,
       shippingAddress.country,
       shippingAddress.city,
-      shippingAddress.postCode,
+      shippingAddress.postalCode,
       shippingAddress.street,
       shippingAddress.name,
       shippingAddress.surname,
       shippingAddress.supplier,
-      shippingAddress.code
+      shippingAddress.code,
+      shippingAddress.search
     );
     return shippingAddressDto;
   }

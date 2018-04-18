@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {OrderStatus} from '../../../model/order-status';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Order} from '../../../model/order';
 import {isNull} from 'util';
 import {OrdersService} from '../../../services/orders.service';
 import {ShippingAddress} from '../../../model/shipping-address';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-order-admin-detail',
@@ -21,6 +22,7 @@ export class OrderAdminDetailComponent implements OnInit {
   private allProductPacked = false;
   private linkDelivery = '';
   private delivered = false;
+  @ViewChild('error') error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute,
@@ -32,6 +34,7 @@ export class OrderAdminDetailComponent implements OnInit {
     this.ordersService.getOneOrder(this.id).subscribe(
       (order: any) => {
         this.order = order;
+        console.log(this.order);
         if ('paid' === this.order.statusCode) {
           this.paid = true;
         }
@@ -54,7 +57,7 @@ export class OrderAdminDetailComponent implements OnInit {
         }
 
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
   }
 
@@ -68,8 +71,8 @@ export class OrderAdminDetailComponent implements OnInit {
           this.order.status = 'Order was prepared and is ready to send';
         }
       },
-      (error) => {
-        console.log(error);
+      () => {
+        this.error.show()
       }
     );
   }
@@ -93,8 +96,8 @@ export class OrderAdminDetailComponent implements OnInit {
           this.order.status = 'Order was send check status delivery in link';
         }
       },
-      (error) => {
-        console.log(error);
+      () => {
+        this.error.show();
       }
     );
 
@@ -105,7 +108,7 @@ export class OrderAdminDetailComponent implements OnInit {
           this.order.status = 'Order was DELIVERD!!!';
         }
       },
-      (error) => console.log(error)
+      () => this.error.show()
     );
 
   }

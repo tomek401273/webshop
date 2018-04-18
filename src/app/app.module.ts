@@ -26,7 +26,6 @@ import {SummaryComponent} from './bucket-user/summary/summary.component';
 import {OrderSuccessfullyComponent} from './bucket-user/summary/order-successfully/order-successfully.component';
 import {BucketServerService} from './bucket-user/bucket-server.service';
 import {ProductMapper} from './model/dto/product-mapper';
-import {LoginModelComponent} from './login-model/login-model.component';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
 import {StatuteComponent} from './statute/statute.component';
@@ -39,10 +38,14 @@ import {DeliveryStatusComponent} from './delivery-status/delivery-status.compone
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { ProductComponent } from './product-list/product/product.component';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PopoverModule } from 'ngx-bootstrap/popover';
+import {ProductComponent} from './product-list/product/product.component';
+import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+import {PopoverModule} from 'ngx-bootstrap/popover';
+import { ConfirmNewsletterComponent } from './authentication/confirm-newsletter/confirm-newsletter.component';
+import { ConfirmAccountComponent } from './authentication/confirm-account/confirm-account.component';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 
 @NgModule({
   declarations: [
@@ -58,14 +61,15 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     BucketUserComponent,
     SummaryComponent,
     OrderSuccessfullyComponent,
-    LoginModelComponent,
     StatuteComponent,
     OrdersComponent,
     OrderDetailComponent,
     OrdersAdminComponent,
     OrderAdminDetailComponent,
     DeliveryStatusComponent,
-    ProductComponent
+    ProductComponent,
+    ConfirmNewsletterComponent,
+    ConfirmAccountComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -80,6 +84,12 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     IonRangeSliderModule,
     BsDropdownModule.forRoot(),
     PopoverModule.forRoot(),
+    Ng4GeoautocompleteModule.forRoot(),
+    SweetAlert2Module.forRoot({
+      buttonsStyling: false,
+      customClass: 'modal-content',
+      confirmButtonClass: 'btn btn-primary',
+      cancelButtonClass: 'btn'})
   ],
   providers: [
     ServerService,
@@ -99,3 +109,4 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 })
 export class AppModule {
 }
+

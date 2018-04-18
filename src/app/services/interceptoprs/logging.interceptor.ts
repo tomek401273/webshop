@@ -14,11 +14,11 @@ export class LoggingInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.responseType === 'json') {
-      req = req.clone({ responseType: 'text' });
+      req = req.clone({responseType: 'text'});
 
       return next.handle(req).map(response => {
         if (response instanceof HttpResponse) {
-          response = response.clone<any>({ body: JSON.parse(response.body) });
+          response = response.clone<any>({body: JSON.parse(response.body)});
         }
 
         return response;

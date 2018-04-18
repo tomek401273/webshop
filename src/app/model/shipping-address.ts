@@ -2,19 +2,26 @@ export class ShippingAddress {
   private _login: string;
   private _country: string;
   private _city: string;
-  private _postCode: string;
+  private _postalCode: string;
   private _street: string;
   private _name: string;
   private _surname: string;
   private _supplier: string;
   private _code: string;
+  private _search: string;
+  private _house: number;
+  private _apartment: number;
+  private _county: string;
+  private _district: string;
+  private _state: string;
+  private _subdistrict: string;
 
 
-  constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
+  constructor(login: string, country: string, city: string, postalCode: string, street: string, name: string, surname: string, supplier: string) {
     this._login = login;
     this._country = country;
     this._city = city;
-    this._postCode = postCode;
+    this._postalCode = postalCode;
     this._street = street;
     this._name = name;
     this._surname = surname;
@@ -45,12 +52,12 @@ export class ShippingAddress {
     this._city = value;
   }
 
-  get postCode(): string {
-    return this._postCode;
+  get postalCode(): string {
+    return this._postalCode;
   }
 
-  set postCode(value: string) {
-    this._postCode = value;
+  set postalCode(value: string) {
+    this._postalCode = value;
   }
 
   get street(): string {
@@ -91,5 +98,62 @@ export class ShippingAddress {
 
   set code(value: string) {
     this._code = value;
+  }
+
+
+  get search(): string {
+    return this._search;
+  }
+
+  set search(value: string) {
+    this._search = value;
+  }
+
+  get house(): number {
+    return this._house;
+  }
+
+  set house(value: number) {
+    this._house = value;
+  }
+
+  get apartment(): number {
+    return this._apartment;
+  }
+
+  set apartment(value: number) {
+    this._apartment = value;
+  }
+
+  get county(): string {
+    return this._county;
+  }
+
+  set county(value: string) {
+    this._county = value;
+  }
+
+  get district(): string {
+    return this._district;
+  }
+
+  set district(value: string) {
+    this._district = value;
+  }
+
+  get state(): string {
+    return this._state;
+  }
+
+  set state(value: string) {
+    this._state = value;
+  }
+
+  get subdistrict(): string {
+    return this._subdistrict;
+  }
+
+  set subdistrict(value: string) {
+    this._subdistrict = value;
   }
 }
