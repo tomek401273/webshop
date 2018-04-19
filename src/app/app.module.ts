@@ -42,10 +42,12 @@ import {ProductComponent} from './product-list/product/product.component';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {PopoverModule} from 'ngx-bootstrap/popover';
-import { ConfirmNewsletterComponent } from './authentication/confirm-newsletter/confirm-newsletter.component';
-import { ConfirmAccountComponent } from './authentication/confirm-account/confirm-account.component';
-import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import {ConfirmNewsletterComponent} from './authentication/confirm-newsletter/confirm-newsletter.component';
+import {ConfirmAccountComponent} from './authentication/confirm-account/confirm-account.component';
+import {Ng4GeoautocompleteModule} from 'ng4-geoautocomplete';
+import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
+import {CronJobsModule} from 'ngx-cron-jobs';
+import {CronSelectionModule} from 'angular2-cron-jobs';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,10 @@ import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
       buttonsStyling: false,
       customClass: 'modal-content',
       confirmButtonClass: 'btn btn-primary',
-      cancelButtonClass: 'btn'})
+      cancelButtonClass: 'btn'
+    }),
+    CronJobsModule,
+    CronSelectionModule
   ],
   providers: [
     ServerService,

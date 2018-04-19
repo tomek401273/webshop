@@ -6,6 +6,7 @@ import {isNull} from 'util';
 import {OrdersService} from '../../../services/orders.service';
 import {ShippingAddress} from '../../../model/shipping-address';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-order-admin-detail',
@@ -30,11 +31,16 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    Observable.interval(20000).subscribe(x => {
+      this.getData();
+    });
     this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+  }
+
+  getData() {
     this.ordersService.getOneOrder(this.id).subscribe(
       (order: any) => {
         this.order = order;
-        console.log(this.order);
         if ('paid' === this.order.statusCode) {
           this.paid = true;
         }
@@ -46,6 +52,7 @@ export class OrderAdminDetailComponent implements OnInit {
           this.paid = true;
           this.prepared = true;
           this.send = true;
+          this.checkDeliver();
         }
         if ('delivered' === this.order.statusCode) {
           this.paid = true;
@@ -61,6 +68,10 @@ export class OrderAdminDetailComponent implements OnInit {
     );
   }
 
+  checkDeliver() {
+
+  }
+
   onPrepared() {
     const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, null, 'prepared');
     this.ordersService.orderPrepared(prepared).subscribe(
@@ -72,7 +83,7 @@ export class OrderAdminDetailComponent implements OnInit {
         }
       },
       () => {
-        this.error.show()
+        this.error.show();
       }
     );
   }
@@ -100,20 +111,13 @@ export class OrderAdminDetailComponent implements OnInit {
         this.error.show();
       }
     );
-
-    const delivered: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, this.linkDelivery, 'delivered');
-    this.ordersService.deliveredOrder(delivered).subscribe(
-      (responseDelivered: boolean) => {
-        if (responseDelivered) {
-          this.order.status = 'Order was DELIVERD!!!';
-        }
-      },
-      () => this.error.show()
-    );
-
   }
 
   onDeliveryDetail() {
     this.router.navigate(['/delivery/' + this.order.id]);
+  }
+
+  onCrone() {
+    console.log('Crone Crone');
   }
 }

@@ -100,7 +100,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     );
     this.getDataFromDatabase();
     this.getCategoryNames();
-
   }
 
   ngDoCheck() {
@@ -312,5 +311,4 @@ export class ProductListComponent implements OnInit, DoCheck {
       (error) => this.error.show()
     );
   }
-
 }
