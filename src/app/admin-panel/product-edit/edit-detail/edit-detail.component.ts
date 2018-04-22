@@ -14,14 +14,14 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./edit-detail.component.css']
 })
 export class EditDetailComponent implements OnInit, CanDeactivateGuard {
-  @ViewChild('f') editProductForm: NgForm;
-  private product: ProductDataAmount = new ProductDataAmount(
+  @ViewChild('f') private _editProductForm: NgForm;
+  private _product: ProductDataAmount = new ProductDataAmount(
     null, null, null, null, null, null, null, null);
-  private productUpdated: ProductDataAmount;
-  private positonProductOnPage = 1;
-  private saveChanges = false;
-  @ViewChild('success') success: SwalComponent;
-  @ViewChild('error') error: SwalComponent;
+  private _productUpdated: ProductDataAmount;
+  private _positonProductOnPage = 1;
+  private _saveChanges = false;
+  @ViewChild('_success') private _success: SwalComponent;
+  @ViewChild('_error') private _error: SwalComponent;
 
   constructor(private publicServer: ShowPublicDataSevice,
               private serverServie: ServerService,
@@ -29,48 +29,104 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
               private router: Router) {
   }
 
+  get editProductForm(): NgForm {
+    return this._editProductForm;
+  }
+
+  set editProductForm(value: NgForm) {
+    this._editProductForm = value;
+  }
+
+  get product(): ProductDataAmount {
+    return this._product;
+  }
+
+  set product(value: ProductDataAmount) {
+    this._product = value;
+  }
+
+  get productUpdated(): ProductDataAmount {
+    return this._productUpdated;
+  }
+
+  set productUpdated(value: ProductDataAmount) {
+    this._productUpdated = value;
+  }
+
+  get positonProductOnPage(): number {
+    return this._positonProductOnPage;
+  }
+
+  set positonProductOnPage(value: number) {
+    this._positonProductOnPage = value;
+  }
+
+  get saveChanges(): boolean {
+    return this._saveChanges;
+  }
+
+  set saveChanges(value: boolean) {
+    this._saveChanges = value;
+  }
+
+  get success(): SwalComponent {
+    return this._success;
+  }
+
+  set success(value: SwalComponent) {
+    this._success = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
+  }
+
   ngOnInit() {
     let id: number = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.publicServer.getProduct(id)
       .subscribe(
         (product: any) => {
-          this.product = product;
+          this._product = product;
         },
-        () => this.error.show());
+        () => this._error.show());
 
     this.activatedRoute.queryParams
       .subscribe(
-        (params: Params) => this.positonProductOnPage = params['numberpage'],
-        () => this.error.show());
+        (params: Params) => this._positonProductOnPage = params['numberpage'],
+        () => this._error.show());
   }
 
   onSubmit() {
-    this.productUpdated = new ProductDataAmount(
-      this.product.id,
-      this.editProductForm.value.price,
-      this.editProductForm.value.title,
-      this.editProductForm.value.desc,
-      this.editProductForm.value.image,
-      this.editProductForm.value.amount,
-      this.editProductForm.value.statusCode,
+    this._productUpdated = new ProductDataAmount(
+      this._product.id,
+      this._editProductForm.value.price,
+      this._editProductForm.value.title,
+      this._editProductForm.value.desc,
+      this._editProductForm.value.image,
+      this._editProductForm.value.amount,
+      this._editProductForm.value.statusCode,
       null);
-    this.serverServie.updateProduct(this.productUpdated)
+    this.serverServie.updateProduct(this._productUpdated)
       .subscribe(
         () => {
-          this.success.show();
-          this.serverServie.onTaskUpdated.emit(this.productUpdated);
+          this._success.show();
+          this.serverServie.onTaskUpdated.emit(this._productUpdated);
           this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'});
         },
-        () => this.error.show());
-    this.saveChanges = true;
+        () => this._error.show());
+    this._saveChanges = true;
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if ((this.editProductForm.value.price !== this.product.price
-        || this.editProductForm.value.title !== this.product.title
-        || this.editProductForm.value.desc !== this.product.description
-        || this.editProductForm.value.image !== this.product.imageLink)
-      && !this.saveChanges) {
+    if ((this._editProductForm.value.price !== this._product.price
+        || this._editProductForm.value.title !== this._product.title
+        || this._editProductForm.value.desc !== this._product.description
+        || this._editProductForm.value.image !== this._product.imageLink)
+      && !this._saveChanges) {
       return confirm('Do you want to discard the changes ???');
     } else {
       return true;

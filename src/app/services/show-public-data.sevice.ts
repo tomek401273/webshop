@@ -1,9 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {map} from 'rxjs/operator/map';
-import {Observable} from 'rxjs/Observable';
+import {HttpClient} from '@angular/common/http';
 import {DirectoryTitles} from '../model/directory-titles';
 import {ReminderDto} from '../model/dto/reminder-dto';
+import {Server} from '../model/server';
 
 
 @Injectable()
@@ -19,29 +18,29 @@ export class ShowPublicDataSevice {
   }
 
   getProducts() {
-    return this.httpClient.get('http://localhost:8080/product/all');
+    return this.httpClient.get(Server.address + 'product/all');
   }
 
   getProductsToEdit() {
-    return this.httpClient.get('http://localhost:8080/product/getAllProductToEdit');
+    return this.httpClient.get(Server.address + 'product/getAllProductToEdit');
   }
 
   getProduct(id: number) {
-    const url: string = 'http://localhost:8080/product/' + id;
+    const url: string = Server.address + 'product/' + id;
     return this.httpClient.get(url);
   }
 
   checkAvailable(id: number) {
     const idSting = String(id);
     const params = {id: idSting};
-    return this.httpClient.get('http://localhost:8080/product/available', {
+    return this.httpClient.get(Server.address + 'product/available', {
       params: params
     });
   }
 
   searchProductInDatabase(title) {
     const params = {title: title};
-    return this.httpClient.get('http://localhost:8080/product/searchProduct', {
+    return this.httpClient.get(Server.address + 'product/searchProduct', {
       params: params
     });
   }
@@ -51,13 +50,13 @@ export class ShowPublicDataSevice {
       'above': above,
       'below': below
     };
-    return this.httpClient.get('http://localhost:8080/product/filterPrice', {
+    return this.httpClient.get(Server.address + 'product/filterPrice', {
       params: filterPrice
     });
   }
 
   getAllProductsTitleFromDatabase() {
-    return this.httpClient.get('http://localhost:8080/product/getAllProductsTitle').subscribe(
+    return this.httpClient.get(Server.address + 'product/getAllProductsTitle').subscribe(
       (titles: String[]) => {
         this.directoryTitles.titles = titles;
         this.productTitleEmitter.emit(this.directoryTitles);
@@ -71,11 +70,11 @@ export class ShowPublicDataSevice {
   }
 
   setReminder(reminderDto: ReminderDto) {
-    return this.httpClient.post('http://localhost:8080/product/setReminder', reminderDto);
+    return this.httpClient.post(Server.address + 'product/setReminder', reminderDto);
   }
 
   getMaxProductPrice() {
-    return this.httpClient.get('http://localhost:8080/product/maxprice').subscribe(
+    return this.httpClient.get(Server.address + 'product/maxprice').subscribe(
       (response: number) => {
         this.maxPrice = response;
         this.mavPriceEmitter.emit(this.maxPrice);
@@ -90,33 +89,33 @@ export class ShowPublicDataSevice {
 
   subscribeNewsletter(name: String, email: String) {
     const subscriber = {name: name, email: email};
-    return this.httpClient.post('http://localhost:8080/newsletter/subscribe', subscriber);
+    return this.httpClient.post(Server.address + 'newsletter/subscribe', subscriber);
   }
 
   getCategoryNames() {
-    return this.httpClient.get('http://localhost:8080/category/all');
+    return this.httpClient.get(Server.address + 'category/all');
   }
 
   getProductWithCategory(category: string) {
     const params = {category: category};
-    return this.httpClient.get('http://localhost:8080/category/product', {
+    return this.httpClient.get(Server.address + 'category/product', {
       params
     });
   }
 
   confirmNewsletterEmail(email: string, confirmCode: string) {
     const confirmDto = {email: email, confirmCode: confirmCode};
-    return this.httpClient.post('http://localhost:8080/newsletter/confirm', confirmDto
+    return this.httpClient.post(Server.address + 'newsletter/confirm', confirmDto
     );
   }
 
   confirmAccount(email: string, confirmCode: string) {
     const confirmDto = {email: email, confirmCode: confirmCode};
-    return this.httpClient.post('http://localhost:8080/auth/account/confirm', confirmDto);
+    return this.httpClient.post(Server.address + 'auth/account/confirm', confirmDto);
   }
 
   downloadApprovedCountry() {
-    return this.httpClient.get('http://localhost:8080/location/country/approved').subscribe(
+    return this.httpClient.get(Server.address + 'location/country/approved').subscribe(
       (response: string[]) => {
         this.approvedCountry = response;
       },
@@ -131,7 +130,7 @@ export class ShowPublicDataSevice {
   confirmAddress(address: string) {
     const params = {search: address};
 
-    return this.httpClient.get('http://localhost:8080/location/check', {
+    return this.httpClient.get(Server.address + 'location/check', {
       params: params
     });
   }

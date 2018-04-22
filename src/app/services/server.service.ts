@@ -1,8 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Response} from '@angular/http';
-import 'rxjs/Rx';
 import {ProductData} from '../model/product-data';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ProductDataAmount} from '../model/product-data-amount';
 import {ProductMapper} from '../model/dto/product-mapper';
 import {ProductDto} from '../model/dto/product-dto';
@@ -10,6 +8,7 @@ import {ProductAmountDto} from '../model/dto/product-amount-dto';
 import {ProductMarkDto} from '../model/dto/product-mark-dto';
 import {Comment} from '../model/comment';
 import {CommentMapper} from '../model/dto/comment-mapper';
+import {Server} from '../model/server';
 
 @Injectable()
 export class ServerService {
@@ -23,7 +22,7 @@ export class ServerService {
 
   addNewProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-    return this.http.post('http://localhost:8080/product/save',
+    return this.http.post(Server.address + 'product/save',
       this.productAmountDto);
   }
 
@@ -34,37 +33,37 @@ export class ServerService {
     const idSting = String(id);
     const params = {id: idSting};
 
-    return this.http.delete('http://localhost:8080/product/deleteProduct', {
+    return this.http.delete(Server.address + 'product/deleteProduct', {
       params: params
     });
   }
 
   updateProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-    return this.http.put('http://localhost:8080/product/updateProduct', this.productAmountDto);
+    return this.http.put(Server.address + 'product/updateProduct', this.productAmountDto);
   }
 
   markProduct(productMarkDto: ProductMarkDto) {
-    return this.http.put('http://localhost:8080/product/mark', productMarkDto
+    return this.http.put(Server.address + 'product/mark', productMarkDto
     );
   }
 
   addComment(comment: Comment) {
     const commentDto = this.commentMapper.mapToCommentDto(comment);
-    return this.http.post('http://localhost:8080/comment/add', commentDto
+    return this.http.post(Server.address + 'comment/add', commentDto
     );
   }
 
   removeComment(commentId) {
     const params = {commentId: commentId};
 
-    return this.http.delete('http://localhost:8080/comment/remove', {
+    return this.http.delete(Server.address + 'comment/remove', {
       params: params
     });
   }
 
   editComment(comment: Comment) {
     const commentDto = this.commentMapper.mapToCommentDto(comment);
-    return this.http.put('http://localhost:8080/comment/update', commentDto);
+    return this.http.put(Server.address + 'comment/update', commentDto);
   }
 }

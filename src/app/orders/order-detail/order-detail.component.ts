@@ -12,33 +12,73 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
-  private id: number;
-  private shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, '', null, null, null, null);
-  private isPaid = false;
-  @ViewChild('error') error: SwalComponent;
+  private _id: number;
+  private _shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
+  private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, '', null, null, null, null);
+  private _isPaid = false;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute,
               private router: Router) {
   }
 
+  get id(): number {
+    return this._id;
+  }
+
+  set id(value: number) {
+    this._id = value;
+  }
+
+  get shippingAddress(): ShippingAddress {
+    return this._shippingAddress;
+  }
+
+  set shippingAddress(value: ShippingAddress) {
+    this._shippingAddress = value;
+  }
+
+  get order(): Order {
+    return this._order;
+  }
+
+  set order(value: Order) {
+    this._order = value;
+  }
+
+  get isPaid(): boolean {
+    return this._isPaid;
+  }
+
+  set isPaid(value: boolean) {
+    this._isPaid = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
+  }
+
   ngOnInit() {
-    this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    this.ordersService.getOneOrder(this.id).subscribe(
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this.ordersService.getOneOrder(this._id).subscribe(
       (order: any) => {
-        this.order = order;
-        if ('Order was booked' === this.order.status) {
-          this.isPaid = true;
+        this._order = order;
+        if ('Order was booked' === this._order.status) {
+          this._isPaid = true;
         }
 
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
   onPay() {
-    this.router.navigate(['/success/' + this.order.id]);
+    this.router.navigate(['/success/' + this._order.id]);
   }
 
 }

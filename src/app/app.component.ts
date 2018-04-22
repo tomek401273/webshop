@@ -9,7 +9,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('info') info: SwalComponent;
+  @ViewChild('info') private _info: SwalComponent;
   constructor(private logingService: LogingService,
               private showPublicDataService: ShowPublicDataSevice) {
     this.showPublicDataService.getAllProductsTitleFromDatabase();
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
         (response) => {
           setTimeout(() => {
             if (this.logingService.isAuthenticated()) {
-              this.info.show();
+              this._info.show();
               this.logingService.logOut();
             }
           }, 1200000);
@@ -32,4 +32,11 @@ export class AppComponent implements OnInit {
       );
   }
 
+  get info(): SwalComponent {
+    return this._info;
+  }
+
+  set info(value: SwalComponent) {
+    this._info = value;
+  }
 }

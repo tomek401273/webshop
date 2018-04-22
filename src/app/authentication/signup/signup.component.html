@@ -1,11 +1,11 @@
 <div class="container">
-  <div class="row text-center">
+  <div class="row">
     <div class="col-sm-3"></div>
     <div class="col-sm-6">
 
       <form (ngSubmit)="onSubmit()" #form="ngForm">
 
-        <div class="form-group">
+        <div class="form-group text-center">
           <label for="login">*- Address email (at least 6 characters)</label>
           <input class="form-control"
                  type="text"
@@ -26,7 +26,7 @@
           <span class="help-block alert-danger" *ngIf="!login.valid && login.touched">Check your input</span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group text-center">
           <label for="name">*- Name</label>
           <input class="form-control"
                  type="text"
@@ -39,7 +39,7 @@
           <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group text-center">
           <label for="surname">*- Surname</label>
           <input class="form-control"
                  type="text"
@@ -56,7 +56,7 @@
           ngModelGroup="passwords"
           #passwords="ngModelGroup">
 
-          <div class="form-group">
+          <div class="form-group text-center">
             <label for="password">*- Password</label>
             <input class="form-control"
                    type="text"
@@ -68,8 +68,9 @@
                    #password="ngModel"
             >
           </div>
+          <span class="help-block alert-danger" *ngIf="!password.valid && password.touched">Password is too week and easy to hack</span>
 
-          <div class="form-group">
+          <div class="form-group text-center">
             <label for="confirm-password">*- Confirm password</label>
             <input class="form-control"
                    type="text"
@@ -80,84 +81,102 @@
                    #conf="ngModel">
           </div>
           <span class="help-block alert-danger" *ngIf="password.value != conf.value && conf.touched">Password are not equals</span>
-          <span class="help-block alert-danger" *ngIf="!password.valid && password.touched">Password is too week and easy to hack</span>
           <span class="help-block center-block">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:</span>
         </div>
-
-        <br>
-        <div class="form-group">
-          <label>*- Coutry</label>
-          <input
-            class="form-control"
-            [(ngModel)]="countryDto"
-            [typeahead]="states"
-            [ngModelOptions]="{standalone: true}"
-            required
-            pattern="^(?=.*?[a-z])"
-
-          >
-
-
-        </div>
-        <div class="form-group">
-          <label for="city">*- City</label>
-          <input
-            class="form-control"
-            id="city"
-            type="text"
-            ngModel
-            name="city"
-            required>
-        </div>
-        <div class="form-group">
-          <label for="postcode">*- PostCode</label>
-          <input
-            class="form-control"
-            id="postcode"
-            type="text"
-            ngModel
-            name="postcode"
-            required
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="street">*- Street</label>
-          <input
-            class="form-control"
-            type="text"
-            id="street"
-            ngModel
-            name="street"
-            required>
-        </div>
-
-        <br>
-        <div class="checkbox-inline ">
-          <input
-            type="checkbox"
-            id="statute"
-            [(ngModel)]="controlCheckBoxStatus"
-            name="statute"
-            required
-            (click)="onCheckBoxClicked()"
-          > <label>*- I read and accepted Computer
-          <a
-            (click)="lgModal.show()">WebShop statute.</a></label>
-        </div>
-
-        <br>
-        <br>
-        [*] - required fields
-
-        <br>
-        <br>
-
-        <button class="btn btn-primary center-block" type="submit"
-                [disabled]="(!form.valid) || (password.value != conf.value) || (!loginAvailable)">
-          Crate new account
-        </button>
       </form>
+      <br>
+      <div class="form-group text-center">
+        <app-address
+          (userAddress)="onAddressInput($event)"
+          (permissionToSubmit)="correctAddress($event)"
+        ></app-address>
+      </div>
+      <br>
+      <div class="form-group">
+       <form #house="ngForm">
+         <table>
+           <thead>
+           <tr>
+             <td></td>
+             <td></td>
+             <td></td>
+           </tr>
+           </thead>
+           <tbody class="table table-responsive">
+           <tr>
+             <td>
+               *- House Number:
+             </td>
+             <td></td>
+
+             <td>
+               <input class="form-control input-xs"
+                      type="number"
+                      ngModel
+                      name="houseNumber"
+                      required
+                      min="1"
+                      pattern="^[1-9]{1,3}$"
+
+               >
+             </td>
+           </tr>
+
+           <tr>
+             <td>
+               Apartment Number:
+             </td>
+             <td></td>
+             <td>
+               <input class="form-control input-xs"
+                      type="number"
+                      ngModel
+                      name="apartmentNumber"
+                      min="0"
+                      max="999"
+               >
+             </td>
+           </tr>
+           </tbody>
+         </table>
+       </form>
+      </div>
+
+      <hr>
+      <br>
+
+      <div class="checkbox-inline text-left ">
+        <input
+          type="checkbox"
+          id="statute"
+          [(ngModel)]="controlCheckBoxStatus"
+          name="statute"
+          required
+          (click)="onCheckBoxClicked()"
+        > <label>*- I read and accepted Computer
+        <a
+          (click)="lgModal.show()">WebShop statute.</a></label>
+      </div>
+
+      <br>
+      <br>
+      <p class="text-left">[*] - required fields</p>
+      <br>
+      <br>
+
+
+      <button class="btn btn-primary center-block" type="submit"
+              [disabled]="(!form.valid)
+      || (password.value != conf.value)
+      || (!loginAvailable)
+      || (!controlCheckBoxStatus)
+      || (!validAddress)
+      || (!house.valid)"
+              (click)="onSubmit()"
+      >
+        Crate new account
+      </button>
+
 
     </div>
 

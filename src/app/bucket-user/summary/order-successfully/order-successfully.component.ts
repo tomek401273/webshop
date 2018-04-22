@@ -10,34 +10,74 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./order-successfully.component.css']
 })
 export class OrderSuccessfullyComponent implements OnInit {
-  private isPaid = false;
-  private redirectToBank = false;
-  private id: number;
-  @ViewChild('success') success: SwalComponent;
-  @ViewChild('error') error: SwalComponent;
+  private _isPaid = false;
+  private _redirectToBank = false;
+  private _id: number;
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute) {
   }
 
+  get isPaid(): boolean {
+    return this._isPaid;
+  }
+
+  set isPaid(value: boolean) {
+    this._isPaid = value;
+  }
+
+  get redirectToBank(): boolean {
+    return this._redirectToBank;
+  }
+
+  set redirectToBank(value: boolean) {
+    this._redirectToBank = value;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  set id(value: number) {
+    this._id = value;
+  }
+
+  get success(): SwalComponent {
+    return this._success;
+  }
+
+  set success(value: SwalComponent) {
+    this._success = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
+  }
+
   ngOnInit() {
-    this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
   }
 
   onPay() {
-    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.id, null, 'paid');
-    this.redirectToBank = true;
+    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._id, null, 'paid');
+    this._redirectToBank = true;
 
     setTimeout(() => {
-      this.redirectToBank = false;
+      this._redirectToBank = false;
       this.ordersService.paymentVerification(payment).subscribe(
         (response: boolean) => {
           if (response) {
-            this.success.show()
-            this.isPaid = true;
+            this._success.show()
+            this._isPaid = true;
           }
         },
-        (error) => this.error.show()
+        (error) => this._error.show()
       );
     }, 3000);
   }

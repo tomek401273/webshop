@@ -7,8 +7,8 @@ import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {NgForm} from '@angular/forms';
 import {ServerService} from '../../services/server.service';
 import {PagerService} from '../../services/navigation/pager.service';
-import {BucketService} from '../../bucket-user/bucket.service';
-import {BucketServerService} from '../../bucket-user/bucket-server.service';
+import {BucketService} from '../../services/bucket.service';
+import {BucketServerService} from '../../services/bucket-server.service';
 import {LogingService} from '../../services/loging.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {isNull, isUndefined} from 'util';
@@ -25,94 +25,93 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, DoCheck {
-  private id: number;
-  product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
+  private _id: number;
+  private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
+  private _productsTitle: String[] = [];
+  private _bucketProducts: ProductDataAmount[] = [];
+  private _pager: any = {};
+  private _pagedProduct: any[];
+  private _isAuthenticated = false;
+  private _typedTitleLengthTemp = 0;
+  private _sale = 'sale';
+  @ViewChild('form') private _searchForm: NgForm;
+  @ViewChild('_advancedSliderElement') private _advancedSliderElement: IonRangeSliderComponent;
+  private _hovered = 0;
+  private _userLogin = '';
+  private _commentMessage = '';
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
 
-  productsTitle: String[] = [];
-  private bucketProducts: ProductDataAmount[] = [];
-  private pager: any = {};
-  private pagedProduct: any[];
-  isAuthenticated = false;
-  private typedTitleLengthTemp = 0;
-  private sale = 'sale';
-  @ViewChild('form') searchForm: NgForm;
-  @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
-  hovered = 0;
-  userLogin = '';
-  commentMessage = '';
-  @ViewChild('success') success: SwalComponent;
-  @ViewChild('error') error: SwalComponent;
-
-  constructor(private activatedRounte: ActivatedRoute,
-              private router: Router,
-              private showPublicDataService: ShowPublicDataSevice,
-              private serverService: ServerService,
-              private showPublicData: ShowPublicDataSevice,
-              private pagerService: PagerService,
-              private bucketService: BucketService,
-              private bucketServerService: BucketServerService,
-              private logingServiece: LogingService,
-              private modalService: BsModalService) {
+  constructor(private _activatedRounte: ActivatedRoute,
+              private _router: Router,
+              private _showPublicDataService: ShowPublicDataSevice,
+              private _serverService: ServerService,
+              private _showPublicData: ShowPublicDataSevice,
+              private _pagerService: PagerService,
+              private _bucketService: BucketService,
+              private _bucketServerService: BucketServerService,
+              private _logingServiece: LogingService,
+              private _modalService: BsModalService) {
   }
 
   ngOnInit() {
-    this.id = Number(this.activatedRounte.snapshot.params['id']) | 0;
-    this.showPublicDataService.getProduct(this.id).subscribe(
+    this._id = Number(this._activatedRounte.snapshot.params['id']) | 0;
+    this._showPublicDataService.getProduct(this._id).subscribe(
       (response: any) => {
-        this.product = response;
+        this._product = response;
       },
-      () => this.error.show()
+      () => this._error.show()
     );
-    this.userLogin = localStorage.getItem('login');
+    this._userLogin = localStorage.getItem('login');
   }
 
   ngDoCheck() {
-    this.isAuthenticated = this.logingServiece.isAuthenticated();
+    this._isAuthenticated = this._logingServiece.isAuthenticated();
   }
 
   onAddToCard(product: ProductData) {
-    this.showPublicData.checkAvailable(product.id).subscribe(
+    this._showPublicData.checkAvailable(product.id).subscribe(
       (resposne) => {
         if (resposne > 0) {
 
           this.addProductToBucket(product);
           this.saveTemp();
           this.acutalNumberProductInBucket();
-          if (this.isAuthenticated === true) {
-            this.bucketServerService.addProductToCard(product.id).subscribe(
+          if (this._isAuthenticated === true) {
+            this._bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
-                  this.success.text = 'Successfully added product to bucket';
-                  this.success.show();
+                  this._success.text = 'Successfully added product to bucket';
+                  this._success.show();
                 } else {
-                  this.error.show();
+                  this._error.show();
                 }
               }
             );
           }
         } else {
-          this.success.text = 'This product is not available';
-          this.success.show();
+          this._success.text = 'This product is not available';
+          this._success.show();
         }
 
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
   acutalNumberProductInBucket() {
     let totalNumber = 0;
-    for (const prod of this.bucketProducts) {
+    for (const prod of this._bucketProducts) {
       totalNumber += prod.totalAmount;
     }
-    this.bucketService.bucketStatus.emit(totalNumber.toString());
+    this._bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
   addProductToBucket(product: ProductData) {
-    const founded: ProductDataAmount = this.bucketProducts.find(x => x.id === product.id);
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
-      this.bucketProducts.push(new ProductDataAmount(
+      this._bucketProducts.push(new ProductDataAmount(
         product.id,
         product.price,
         product.title,
@@ -123,92 +122,92 @@ export class ProductComponent implements OnInit, DoCheck {
         null));
       return;
     } else {
-      const index = this.bucketProducts.indexOf(founded);
+      const index = this._bucketProducts.indexOf(founded);
       let amount = founded.totalAmount;
       amount++;
       founded.totalAmount = amount;
-      this.bucketProducts[index] = founded;
+      this._bucketProducts[index] = founded;
     }
   }
 
   saveTemp() {
     localStorage.setItem('bucket123', null);
-    const bucketToSave = JSON.stringify(this.bucketProducts);
+    const bucketToSave = JSON.stringify(this._bucketProducts);
     localStorage.setItem('bucket123', bucketToSave);
   }
 
   onSetSubscription(email, productId) {
 
     const reminderDto: ReminderDto = new ReminderDto(productId, email.value);
-    this.showPublicData.setReminder(reminderDto).subscribe(
+    this._showPublicData.setReminder(reminderDto).subscribe(
       () => {
-        this.success.text = 'Reminder succesully set';
-        this.success.show();
+        this._success.text = 'Reminder succesully set';
+        this._success.show();
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
   onRated(rate, productId) {
-    if (this.isAuthenticated) {
+    if (this._isAuthenticated) {
       const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, rate.rate);
-      this.serverService.markProduct(productMarkDto).subscribe(
+      this._serverService.markProduct(productMarkDto).subscribe(
         (response: ProductMarkDto) => {
-          this.product.marksAverage = response.averageMarks;
-          this.product.countMarks = response.countMarks;
-          this.product.rated = true;
-          this.success.text = 'Thank you for rated our product';
-          this.success.show();
+          this._product.marksAverage = response.averageMarks;
+          this._product.countMarks = response.countMarks;
+          this._product.rated = true;
+          this._success.text = 'Thank you for rated our product';
+          this._success.show();
 
         },
-        () => this.error.show()
+        () => this._error.show()
       );
     }
   }
 
   onAddComment(productId) {
-    const comment: Comment = new Comment(localStorage.getItem('login'), this.commentMessage, productId);
-    this.serverService.addComment(comment).subscribe(
+    const comment: Comment = new Comment(localStorage.getItem('login'), this._commentMessage, productId);
+    this._serverService.addComment(comment).subscribe(
       (response: Comment[]) => {
-        this.product.commentDtos = response;
-        this.commentMessage = '';
-        this.success.text = 'Thank you for comment our product';
-        this.success.show();
+        this._product.commentDtos = response;
+        this._commentMessage = '';
+        this._success.text = 'Thank you for comment our product';
+        this._success.show();
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
   onRemoveComment(commentId, commentPosition) {
     console.log(commentId);
-    this.serverService.removeComment(commentId).subscribe(
+    this._serverService.removeComment(commentId).subscribe(
       (response) => {
         console.log(response);
         if (response) {
-          this.product.commentDtos.splice(commentPosition, 1);
-          this.success.text = 'You successfully deleted comment';
-          this.success.show();
+          this._product.commentDtos.splice(commentPosition, 1);
+          this._success.text = 'You successfully deleted comment';
+          this._success.show();
         }
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
   onEditComment(editMessage, commentId) {
     const comment: Comment = new Comment(null, editMessage.value, null);
     comment.id = commentId;
-    this.serverService.editComment(comment).subscribe(
+    this._serverService.editComment(comment).subscribe(
       (response: boolean) => {
         if (response) {
-          this.product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
-          this.product.commentDtos.find(x => x.id === commentId).editComment = false;
-          this.success.text = 'You successfully edited comment';
-          this.success.show();
+          this._product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
+          this._product.commentDtos.find(x => x.id === commentId).editComment = false;
+          this._success.text = 'You successfully edited comment';
+          this._success.show();
         } else {
-          this.error.show();
+          this._error.show();
         }
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
@@ -226,6 +225,134 @@ export class ProductComponent implements OnInit, DoCheck {
 
   mouseOut(element) {
     element.changeButton = false;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  set id(value: number) {
+    this._id = value;
+  }
+
+  get product(): ProductDataAmount {
+    return this._product;
+  }
+
+  set product(value: ProductDataAmount) {
+    this._product = value;
+  }
+
+  get productsTitle(): String[] {
+    return this._productsTitle;
+  }
+
+  set productsTitle(value: String[]) {
+    this._productsTitle = value;
+  }
+
+  get bucketProducts(): ProductDataAmount[] {
+    return this._bucketProducts;
+  }
+
+  set bucketProducts(value: ProductDataAmount[]) {
+    this._bucketProducts = value;
+  }
+
+  get pager(): any {
+    return this._pager;
+  }
+
+  set pager(value: any) {
+    this._pager = value;
+  }
+
+  get pagedProduct(): any[] {
+    return this._pagedProduct;
+  }
+
+  set pagedProduct(value: any[]) {
+    this._pagedProduct = value;
+  }
+
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated;
+  }
+
+  set isAuthenticated(value: boolean) {
+    this._isAuthenticated = value;
+  }
+
+  get typedTitleLengthTemp(): number {
+    return this._typedTitleLengthTemp;
+  }
+
+  set typedTitleLengthTemp(value: number) {
+    this._typedTitleLengthTemp = value;
+  }
+
+  get sale(): string {
+    return this._sale;
+  }
+
+  set sale(value: string) {
+    this._sale = value;
+  }
+
+  get searchForm(): NgForm {
+    return this._searchForm;
+  }
+
+  set searchForm(value: NgForm) {
+    this._searchForm = value;
+  }
+
+  get advancedSliderElement(): IonRangeSliderComponent {
+    return this._advancedSliderElement;
+  }
+
+  set advancedSliderElement(value: IonRangeSliderComponent) {
+    this._advancedSliderElement = value;
+  }
+
+  get hovered(): number {
+    return this._hovered;
+  }
+
+  set hovered(value: number) {
+    this._hovered = value;
+  }
+
+  get userLogin(): string {
+    return this._userLogin;
+  }
+
+  set userLogin(value: string) {
+    this._userLogin = value;
+  }
+
+  get commentMessage(): string {
+    return this._commentMessage;
+  }
+
+  set commentMessage(value: string) {
+    this._commentMessage = value;
+  }
+
+  get success(): SwalComponent {
+    return this._success;
+  }
+
+  set success(value: SwalComponent) {
+    this._success = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
   }
 }
 

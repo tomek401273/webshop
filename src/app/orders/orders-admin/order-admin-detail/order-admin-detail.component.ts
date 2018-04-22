@@ -14,57 +14,137 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./order-admin-detail.component.css']
 })
 export class OrderAdminDetailComponent implements OnInit {
-  private id: number;
-  private shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private order: Order = new Order(null, null, null, null, null, null, this.shippingAddress, null, null, null, null, null);
-  private paid = false;
-  private prepared = false;
-  private send = false;
-  private allProductPacked = false;
-  private linkDelivery = '';
-  private delivered = false;
-  @ViewChild('error') error: SwalComponent;
+  private _id: number;
+  private _shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
+  private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, null, null, null, null, null);
+  private _paid = false;
+  private _prepared = false;
+  private _send = false;
+  private _allProductPacked = false;
+  private _linkDelivery = '';
+  private _delivered = false;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute,
               private router: Router) {
   }
 
+  get id(): number {
+    return this._id;
+  }
+
+  set id(value: number) {
+    this._id = value;
+  }
+
+  get shippingAddress(): ShippingAddress {
+    return this._shippingAddress;
+  }
+
+  set shippingAddress(value: ShippingAddress) {
+    this._shippingAddress = value;
+  }
+
+  get order(): Order {
+    return this._order;
+  }
+
+  set order(value: Order) {
+    this._order = value;
+  }
+
+  get paid(): boolean {
+    return this._paid;
+  }
+
+  set paid(value: boolean) {
+    this._paid = value;
+  }
+
+  get prepared(): boolean {
+    return this._prepared;
+  }
+
+  set prepared(value: boolean) {
+    this._prepared = value;
+  }
+
+  get send(): boolean {
+    return this._send;
+  }
+
+  set send(value: boolean) {
+    this._send = value;
+  }
+
+  get allProductPacked(): boolean {
+    return this._allProductPacked;
+  }
+
+  set allProductPacked(value: boolean) {
+    this._allProductPacked = value;
+  }
+
+  get linkDelivery(): string {
+    return this._linkDelivery;
+  }
+
+  set linkDelivery(value: string) {
+    this._linkDelivery = value;
+  }
+
+  get delivered(): boolean {
+    return this._delivered;
+  }
+
+  set delivered(value: boolean) {
+    this._delivered = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
+  }
+
   ngOnInit() {
-    Observable.interval(20000).subscribe(x => {
-      this.getData();
-    });
-    this.id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    // Observable.interval(20000).subscribe(x => {
+    //   this.getData();
+    // });
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
   }
 
   getData() {
-    this.ordersService.getOneOrder(this.id).subscribe(
+    this.ordersService.getOneOrder(this._id).subscribe(
       (order: any) => {
-        this.order = order;
-        if ('paid' === this.order.statusCode) {
-          this.paid = true;
+        this._order = order;
+        if ('_paid' === this._order.statusCode) {
+          this._paid = true;
         }
-        if ('prepared' === this.order.statusCode) {
-          this.paid = true;
-          this.prepared = true;
+        if ('_prepared' === this._order.statusCode) {
+          this._paid = true;
+          this._prepared = true;
         }
-        if ('send' === this.order.statusCode) {
-          this.paid = true;
-          this.prepared = true;
-          this.send = true;
+        if ('send' === this._order.statusCode) {
+          this._paid = true;
+          this._prepared = true;
+          this._send = true;
           this.checkDeliver();
         }
-        if ('delivered' === this.order.statusCode) {
-          this.paid = true;
-          this.delivered = true;
+        if ('_delivered' === this._order.statusCode) {
+          this._paid = true;
+          this._delivered = true;
         }
 
-        for (let i = 0; i < this.order.productBoughts.length; i++) {
-          this.order.productBoughts[i].packed = false;
+        for (let i = 0; i < this._order.productBoughts.length; i++) {
+          this._order.productBoughts[i].packed = false;
         }
 
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
@@ -73,48 +153,48 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   onPrepared() {
-    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, null, 'prepared');
+    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, null, '_prepared');
     this.ordersService.orderPrepared(prepared).subscribe(
       (response: boolean) => {
 
         if (response) {
-          this.prepared = true;
-          this.order.status = 'Order was prepared and is ready to send';
+          this._prepared = true;
+          this._order.status = 'Order was prepared and is ready to send';
         }
       },
       () => {
-        this.error.show();
+        this._error.show();
       }
     );
   }
 
   onProductPrepared(id: number) {
-    this.order.productBoughts[id].packed = !this.order.productBoughts[id].packed;
-    this.allProductPacked = true;
-    for (let i = 0; i < this.order.productBoughts.length; i++) {
-      if (!this.order.productBoughts[i].packed) {
-        this.allProductPacked = false;
+    this._order.productBoughts[id].packed = !this._order.productBoughts[id].packed;
+    this._allProductPacked = true;
+    for (let i = 0; i < this._order.productBoughts.length; i++) {
+      if (!this._order.productBoughts[i].packed) {
+        this._allProductPacked = false;
       }
     }
   }
 
   onSend() {
-    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this.order.id, this.linkDelivery, 'send');
+    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, this._linkDelivery, 'send');
     this.ordersService.sendOrder(send).subscribe(
       (response: boolean) => {
         if (response) {
-          this.send = true;
-          this.order.status = 'Order was send check status delivery in link';
+          this._send = true;
+          this._order.status = 'Order was send check status delivery in link';
         }
       },
       () => {
-        this.error.show();
+        this._error.show();
       }
     );
   }
 
   onDeliveryDetail() {
-    this.router.navigate(['/delivery/' + this.order.id]);
+    this.router.navigate(['/delivery/' + this._order.id]);
   }
 
   onCrone() {

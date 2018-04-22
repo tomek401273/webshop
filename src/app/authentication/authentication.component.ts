@@ -8,12 +8,36 @@ import {Router} from '@angular/router';
   styleUrls: ['./authentication.component.css']
 })
 export class AuthenticationComponent implements OnInit, DoCheck {
-  private isAuthenticated = false;
-  private loginUser = '';
-  private roleUser = '';
+  private _isAuthenticated = false;
+  private _loginUser = '';
+  private _roleUser = '';
 
-  constructor(private logginService: LogingService,
-              private router: Router) {
+  constructor(private _logginService: LogingService,
+              private _router: Router) {
+  }
+
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated;
+  }
+
+  set isAuthenticated(value: boolean) {
+    this._isAuthenticated = value;
+  }
+
+  get loginUser(): string {
+    return this._loginUser;
+  }
+
+  set loginUser(value: string) {
+    this._loginUser = value;
+  }
+
+  get roleUser(): string {
+    return this._roleUser;
+  }
+
+  set roleUser(value: string) {
+    this._roleUser = value;
   }
 
   ngOnInit() {
@@ -21,17 +45,17 @@ export class AuthenticationComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck() {
-    this.isAuthenticated = this.logginService.isAuthenticated();
-    this.loginUser = localStorage.getItem('login');
-    this.roleUser = localStorage.getItem('role');
+    this._isAuthenticated = this._logginService.isAuthenticated();
+    this._loginUser = localStorage.getItem('login');
+    this._roleUser = localStorage.getItem('role');
   }
 
   onRedirect(page) {
-    this.router.navigate([page]);
+    this._router.navigate([page]);
   }
 
   onLogOut() {
-    this.logginService.logOut();
+    this._logginService.logOut();
   }
 
 }

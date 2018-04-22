@@ -7,6 +7,7 @@ import {OrderSearch} from '../model/order-search';
 import {UsersLogin} from '../model/users-login';
 import {ShippingAddressMapper} from '../model/dto/shipping-address-mapper';
 import {ShippingAddressDto} from '../model/dto/shipping-address-dto';
+import {Server} from '../model/server';
 
 @Injectable()
 export class OrdersService {
@@ -22,7 +23,7 @@ export class OrdersService {
 
   getUserOrders() {
     const params = {login: localStorage.getItem('login')};
-    return this.http.get('http://localhost:8080/buy/getOrders', {
+    return this.http.get(Server.address + 'buy/getOrders', {
       params: params
     });
   }
@@ -30,38 +31,38 @@ export class OrdersService {
   getOneOrder(id: number) {
     const idSting = String(id);
     const params = {id: idSting};
-    return this.http.get('http://localhost:8080/buy/getOrder', {
+    return this.http.get(Server.address + 'buy/getOrder', {
       params: params
     });
   }
 
   buyAllProductFromBucket(shippingAddress: ShippingAddress) {
     this.shippingDto = this.shippingMapper.mapToShippingAddressDto(shippingAddress);
-    return this.http.post('http://localhost:8080/buy/buy', this.shippingDto);
+    return this.http.post(Server.address + 'buy/buy', this.shippingDto);
   }
 
   getAllOrdersInShop() {
-    return this.http.get('http://localhost:8080/buy/getAllOrdersInShop');
+    return this.http.get(Server.address + 'buy/getAllOrdersInShop');
   }
 
   paymentVerification(orderStatus: OrderStatus) {
-    return this.http.put('http://localhost:8080/buy/paymentVerification', orderStatus);
+    return this.http.put(Server.address + 'buy/paymentVerification', orderStatus);
   }
 
   orderPrepared(orderStatus: OrderStatus) {
-    return this.http.put('http://localhost:8080/buy/orderPrepared', orderStatus);
+    return this.http.put(Server.address + 'buy/orderPrepared', orderStatus);
   }
 
   sendOrder(orderStatus: OrderStatus) {
-    return this.http.put('http://localhost:8080/buy/sendOrder', orderStatus);
+    return this.http.put(Server.address + 'buy/sendOrder', orderStatus);
   }
 
   deliveredOrder(orderStatus: OrderStatus) {
-    return this.http.post('http://localhost:8080/buy/delivered', orderStatus);
+    return this.http.post(Server.address + 'buy/delivered', orderStatus);
   }
 
   getAllUserLogin() {
-    return this.http.get('http://localhost:8080/buy/getAllUserLogin').subscribe(
+    return this.http.get(Server.address + 'buy/getAllUserLogin').subscribe(
       (response: any[]) => {
         this.usersLogin.logins = response;
         this.usersLoginEmitter.emit(this.usersLogin);
@@ -83,7 +84,7 @@ export class OrdersService {
       'userLogin': orderSearch.userLogin
     };
 
-    return this.http.get('http://localhost:8080/buy/orderSearch', {
+    return this.http.get(Server.address + 'buy/orderSearch', {
       params: params
     });
   }

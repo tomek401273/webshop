@@ -1,0 +1,30 @@
+<div class="form-group">
+  <label>*- Address (Street, City, Country)</label>
+  <ng4geo-autocomplete [userSettings]="userSettings"
+
+                       (componentCallback)="autoCompleteCallback1($event)"></ng4geo-autocomplete>
+
+  <div>
+
+  </div>
+  <div *ngIf="addressInput">
+    <div class="form-group">
+      <p>Country: {{validatedAddress.country}}</p>
+      <p>State: {{validatedAddress.state}}</p>
+      <p>County: {{validatedAddress.county}}</p>
+      <p>City: {{validatedAddress.city}}</p>
+      <p>District: {{validatedAddress.district}}</p>
+      <p>Subdistrict: {{validatedAddress.subdistrict}}</p>
+      <p>Street: {{validatedAddress.street}}</p>
+      <p>PostalCode: {{validatedAddress.postalCode}}</p>
+      <hr>
+    </div>
+  </div>
+  <br>
+  <div *ngIf="!addressInput && attemptInput">
+    <span class="text-danger">Incorrect Address</span>
+    <hr>
+  </div>
+  <br>
+</div>
+<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {UserBucketDto} from '../model/dto/user-bucket-dto';
+import {Server} from '../model/server';
 
 @Injectable()
 export class BucketServerService {
@@ -14,7 +15,7 @@ export class BucketServerService {
       .append('Authorization', localStorage.getItem('token'));
     const userBucketDto: UserBucketDto = new UserBucketDto(productId, localStorage.getItem('login'), null);
 
-    return this.httpClient.post('http://localhost:8080/bucket/add', userBucketDto, {
+    return this.httpClient.post(Server.address + 'bucket/add', userBucketDto, {
       headers: headers
     });
   }
@@ -27,7 +28,7 @@ export class BucketServerService {
     const idSting = String(productId);
     const params = {login: localStorage.getItem('login'), productId: idSting};
 
-    return this.httpClient.delete('http://localhost:8080/bucket/removeSingeItemFromBucket', {
+    return this.httpClient.delete(Server.address + 'bucket/removeSingeItemFromBucket', {
       headers: headers,
       params: params
     });
@@ -40,7 +41,7 @@ export class BucketServerService {
       .append('Authorization', localStorage.getItem('token'));
     const userBucketDto: UserBucketDto = new UserBucketDto(null, localStorage.getItem('login'), data);
 
-    return this.httpClient.put('http://localhost:8080/bucket/addList', userBucketDto, {
+    return this.httpClient.put(Server.address + 'bucket/addList', userBucketDto, {
       headers: headers
     });
   }
@@ -53,7 +54,7 @@ export class BucketServerService {
     const idSting = String(productId);
     const params = {login: localStorage.getItem('login'), productId: idSting};
 
-    return this.httpClient.delete('http://localhost:8080/bucket/removeSingleProduct', {
+    return this.httpClient.delete(Server.address + 'bucket/removeSingleProduct', {
       headers: headers,
       params: params
     });
@@ -66,7 +67,7 @@ export class BucketServerService {
       .append('Authorization', localStorage.getItem('token'));
     const params = {login: localStorage.getItem('login')};
 
-    return this.httpClient.get('http://localhost:8080/bucket/getAllProductFromBucket', {
+    return this.httpClient.get(Server.address + 'bucket/getAllProductFromBucket', {
       // headers: headers,
       params: params
     });
@@ -79,7 +80,7 @@ export class BucketServerService {
       .append('Authorization', localStorage.getItem('token'));
     const params = {login: localStorage.getItem('login')};
 
-    return this.httpClient.get('http://localhost:8080/bucket/addressShipping', {
+    return this.httpClient.get(Server.address + 'bucket/addressShipping', {
       headers: headers,
       params: params
     });
@@ -91,7 +92,7 @@ export class BucketServerService {
       .append('Accept', 'application/json');
     const params = {code: code};
 
-    return this.httpClient.get('http://localhost:8080/bucket/coupon', {
+    return this.httpClient.get(Server.address + 'bucket/coupon', {
       headers: headers,
       params: params
     });
@@ -116,7 +117,7 @@ export class BucketServerService {
 
     const params = {countryAlpha2Code: country, city: city};
 
-    return this.httpClient.get('http://localhost:8080/location/city', {
+    return this.httpClient.get(Server.address + 'location/city', {
       headers: headers,
       params: params
     });
@@ -126,7 +127,7 @@ export class BucketServerService {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json');
-    return this.httpClient.get('http://localhost:8080/location/country', {
+    return this.httpClient.get(Server.address + 'location/country', {
       headers: headers
     });
   }

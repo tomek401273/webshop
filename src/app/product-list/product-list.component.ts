@@ -3,10 +3,10 @@ import {ServerService} from '../services/server.service';
 import {ProductData} from '../model/product-data';
 import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
 import {PagerService} from '../services/navigation/pager.service';
-import {BucketService} from '../bucket-user/bucket.service';
+import {BucketService} from '../services/bucket.service';
 import {ProductDataAmount} from '../model/product-data-amount';
 import {isNull, isUndefined} from 'util';
-import {BucketServerService} from '../bucket-user/bucket-server.service';
+import {BucketServerService} from '../services/bucket-server.service';
 import {LogingService} from '../services/loging.service';
 
 import {ViewChild} from '@angular/core';
@@ -32,27 +32,27 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, DoCheck {
-  private products: ProductDataAmount[] = [];
-  productsTitle: String[] = [];
-  chosenTitle: string;
-  private bucketProducts: ProductDataAmount[] = [];
-  private pager: any = {};
-  private pagedProduct: any[];
-  isAuthenticated = false;
-  private typedTitleLengthTemp = 0;
-  private sale = 'sale';
-  @ViewChild('form') searchForm: NgForm;
-  @ViewChild('advancedSliderElement') advancedSliderElement: IonRangeSliderComponent;
-  advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
-  private above = 0;
-  private below = 120;
-  maxValueProductInShop: number;
-  maxValueCover = 3000;
-  minValueCover = 23;
-  modalRef: BsModalRef;
-  categoryNames: string[] = [];
-  @ViewChild('success') success: SwalComponent;
-  @ViewChild('error') error: SwalComponent;
+  private _products: ProductDataAmount[] = [];
+  private _productsTitle: String[] = [];
+  private _chosenTitle: string;
+  private _bucketProducts: ProductDataAmount[] = [];
+  private _pager: any = {};
+  private _pagedProduct: any[];
+  private _isAuthenticated = false;
+  private _typedTitleLengthTemp = 0;
+  private _sale = 'sale';
+  @ViewChild('form') private _searchForm: NgForm;
+  @ViewChild('advancedSliderElement') private _advancedSliderElement: IonRangeSliderComponent;
+  private _advancedSlider = {name: 'Advanced Slider', onFinish: undefined};
+  private _above = 0;
+  private _below = 120;
+  private _maxValueProductInShop: number;
+  private _maxValueCover = 3000;
+  private _minValueCover = 23;
+  private _modalRef: BsModalRef;
+  private _categoryNames: string[] = [];
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -68,26 +68,26 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   finish(slider, event) {
     slider.onFinish = event;
-    this.above = event.from;
-    this.below = event.to;
+    this._above = event.from;
+    this._below = event.to;
   }
 
   setAdvancedSliderTo() {
-    this.advancedSliderElement.update({from: this.above, to: this.below});
+    this._advancedSliderElement.update({from: this._above, to: this._below});
   }
 
   onFilterDatabaseWithPriceBetween() {
-    this.showPublicData.filterProductWithPriceBetween(this.above, this.below).subscribe(
+    this.showPublicData.filterProductWithPriceBetween(this._above, this._below).subscribe(
       (products: any[]) => {
         if (products.length === 0) {
-          this.products = [];
-          this.pagedProduct = [];
+          this._products = [];
+          this._pagedProduct = [];
         } else {
-          this.products = products;
+          this._products = products;
           this.setPage(1);
         }
       },
-      () => this.error.show()
+      () => this._error.show()
     );
   }
 
@@ -96,33 +96,33 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.getProductTitlesFromService();
     this.getTemp();
     this.serverService.onTaskRemoved.subscribe(
-      (product: ProductDataAmount) => this.products.splice(this.products.indexOf(product), 1)
+      (product: ProductDataAmount) => this._products.splice(this._products.indexOf(product), 1)
     );
     this.getDataFromDatabase();
     this.getCategoryNames();
   }
 
   ngDoCheck() {
-    this.isAuthenticated = this.logingServiece.isAuthenticated();
+    this._isAuthenticated = this.logingServiece.isAuthenticated();
   }
 
   getDataFromDatabase() {
     this.showPublicData.getProducts()
       .subscribe(
         (products: any[]) => {
-          this.products = products;
+          this._products = products;
           this.setPage(1);
         },
-        (error) => this.error.show()
+        (error) => this._error.show()
       );
   }
 
   setPage(page: number) {
-    if (page < 1 || page > this.products.length) {
+    if (page < 1 || page > this._products.length) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.products.length, page);
-    this.pagedProduct = this.products.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    this._pager = this.pagerService.getPager(this._products.length, page);
+    this._pagedProduct = this._products.slice(this._pager.startIndex, this._pager.endIndex + 1);
   }
 
   onAddToCard(product: ProductData) {
@@ -133,40 +133,40 @@ export class ProductListComponent implements OnInit, DoCheck {
           this.addProductToBucket(product);
           this.saveTemp();
           this.acutalNumberProductInBucket();
-          if (this.isAuthenticated === true) {
+          if (this._isAuthenticated === true) {
             this.bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
-                  this.success.show();
+                  this._success.show();
                 } else {
-                  this.error.show();
+                  this._error.show();
                 }
 
               }
             );
           }
         } else {
-          this.error.show();
+          this._error.show();
         }
 
       },
-      (error) => this.error.show()
+      (error) => this._error.show()
     );
   }
 
   acutalNumberProductInBucket() {
     let totalNumber = 0;
-    for (const prod of this.bucketProducts) {
+    for (const prod of this._bucketProducts) {
       totalNumber += prod.totalAmount;
     }
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
   addProductToBucket(product: ProductData) {
-    const founded: ProductDataAmount = this.bucketProducts.find(x => x.id === product.id);
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
-      this.bucketProducts.push(new ProductDataAmount(
+      this._bucketProducts.push(new ProductDataAmount(
         product.id,
         product.price,
         product.title,
@@ -177,17 +177,17 @@ export class ProductListComponent implements OnInit, DoCheck {
         null));
       return;
     } else {
-      const index = this.bucketProducts.indexOf(founded);
+      const index = this._bucketProducts.indexOf(founded);
       let amount = founded.totalAmount;
       amount++;
       founded.totalAmount = amount;
-      this.bucketProducts[index] = founded;
+      this._bucketProducts[index] = founded;
     }
   }
 
   saveTemp() {
     localStorage.setItem('bucket123', null);
-    const bucketToSave = JSON.stringify(this.bucketProducts);
+    const bucketToSave = JSON.stringify(this._bucketProducts);
     localStorage.setItem('bucket123', bucketToSave);
   }
 
@@ -204,40 +204,40 @@ export class ProductListComponent implements OnInit, DoCheck {
           bucket[i]._totalAmount,
           null,
           null);
-        this.bucketProducts.push(bucketProduct);
+        this._bucketProducts.push(bucketProduct);
       }
     }
   }
 
   getAllProductsTitle() {
     this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
-      this.productsTitle = directoryTitles.titles;
+      this._productsTitle = directoryTitles.titles;
     });
   }
 
   getProductTitlesFromService() {
-    this.productsTitle = this.showPublicData.getProductTitles();
+    this._productsTitle = this.showPublicData.getProductTitles();
   }
 
   onSearchProductWithTitle() {
-    if (this.chosenTitle.length === 1 && this.typedTitleLengthTemp === 3) {
+    if (this._chosenTitle.length === 1 && this._typedTitleLengthTemp === 3) {
       this.getDataFromDatabase();
-      this.typedTitleLengthTemp = 0;
+      this._typedTitleLengthTemp = 0;
     }
 
-    if (this.chosenTitle.length > 2) {
-      this.typedTitleLengthTemp = 3;
-      this.showPublicData.searchProductInDatabase(this.chosenTitle).subscribe(
+    if (this._chosenTitle.length > 2) {
+      this._typedTitleLengthTemp = 3;
+      this.showPublicData.searchProductInDatabase(this._chosenTitle).subscribe(
         (products: any[]) => {
           if (products.length === 0) {
-            this.products = [];
-            this.pagedProduct = [];
+            this._products = [];
+            this._pagedProduct = [];
           } else {
-            this.products = products;
+            this._products = products;
             this.setPage(1);
           }
         },
-        (error) => this.error.show()
+        (error) => this._error.show()
       );
     }
   }
@@ -249,7 +249,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response) => {
         console.log(response);
       },
-      (error) => this.error.show()
+      (error) => this._error.show()
     );
   }
 
@@ -264,18 +264,18 @@ export class ProductListComponent implements OnInit, DoCheck {
   }
 
   calculateSliderValues(response) {
-    this.maxValueProductInShop = response;
-    this.maxValueCover = this.maxValueProductInShop - (this.maxValueProductInShop / 5);
-    this.minValueCover = this.maxValueProductInShop / 5;
-    if (this.minValueCover > 100) {
-      this.minValueCover = 100;
+    this._maxValueProductInShop = response;
+    this._maxValueCover = this._maxValueProductInShop - (this._maxValueProductInShop / 5);
+    this._minValueCover = this._maxValueProductInShop / 5;
+    if (this._minValueCover > 100) {
+      this._minValueCover = 100;
     }
-    this.above = this.minValueCover;
-    this.below = this.maxValueCover;
+    this._above = this._minValueCover;
+    this._below = this._maxValueCover;
   }
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+    this._modalRef = this.modalService.show(template);
   }
 
   submitNewsLetter(newsLetter) {
@@ -283,7 +283,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response) => {
         console.log(response);
       },
-      (error) => this.error.show()
+      (error) => this._error.show()
     );
   }
 
@@ -294,9 +294,9 @@ export class ProductListComponent implements OnInit, DoCheck {
   getCategoryNames() {
     this.showPublicData.getCategoryNames().subscribe(
       (response: string[]) => {
-        this.categoryNames = response;
+        this._categoryNames = response;
       },
-      (error) => this.error.show()
+      (error) => this._error.show()
     );
   }
 
@@ -305,10 +305,178 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.showPublicData.getProductWithCategory(category).subscribe(
       (response: Category) => {
         console.log(response);
-        this.products = response.productDtoList;
+        this._products = response.productDtoList;
         this.setPage(1);
       },
-      (error) => this.error.show()
+      (error) => this._error.show()
     );
+  }
+
+  get products(): ProductDataAmount[] {
+    return this._products;
+  }
+
+  set products(value: ProductDataAmount[]) {
+    this._products = value;
+  }
+
+  get productsTitle(): String[] {
+    return this._productsTitle;
+  }
+
+  set productsTitle(value: String[]) {
+    this._productsTitle = value;
+  }
+
+  get chosenTitle(): string {
+    return this._chosenTitle;
+  }
+
+  set chosenTitle(value: string) {
+    this._chosenTitle = value;
+  }
+
+  get bucketProducts(): ProductDataAmount[] {
+    return this._bucketProducts;
+  }
+
+  set bucketProducts(value: ProductDataAmount[]) {
+    this._bucketProducts = value;
+  }
+
+  get pager(): any {
+    return this._pager;
+  }
+
+  set pager(value: any) {
+    this._pager = value;
+  }
+
+  get pagedProduct(): any[] {
+    return this._pagedProduct;
+  }
+
+  set pagedProduct(value: any[]) {
+    this._pagedProduct = value;
+  }
+
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated;
+  }
+
+  set isAuthenticated(value: boolean) {
+    this._isAuthenticated = value;
+  }
+
+  get typedTitleLengthTemp(): number {
+    return this._typedTitleLengthTemp;
+  }
+
+  set typedTitleLengthTemp(value: number) {
+    this._typedTitleLengthTemp = value;
+  }
+
+  get sale(): string {
+    return this._sale;
+  }
+
+  set sale(value: string) {
+    this._sale = value;
+  }
+
+  get searchForm(): NgForm {
+    return this._searchForm;
+  }
+
+  set searchForm(value: NgForm) {
+    this._searchForm = value;
+  }
+
+  get advancedSliderElement(): IonRangeSliderComponent {
+    return this._advancedSliderElement;
+  }
+
+  set advancedSliderElement(value: IonRangeSliderComponent) {
+    this._advancedSliderElement = value;
+  }
+
+  get advancedSlider(): { name: string; onFinish: undefined } {
+    return this._advancedSlider;
+  }
+
+  set advancedSlider(value: { name: string; onFinish: undefined }) {
+    this._advancedSlider = value;
+  }
+
+  get above(): number {
+    return this._above;
+  }
+
+  set above(value: number) {
+    this._above = value;
+  }
+
+  get below(): number {
+    return this._below;
+  }
+
+  set below(value: number) {
+    this._below = value;
+  }
+
+  get maxValueProductInShop(): number {
+    return this._maxValueProductInShop;
+  }
+
+  set maxValueProductInShop(value: number) {
+    this._maxValueProductInShop = value;
+  }
+
+  get maxValueCover(): number {
+    return this._maxValueCover;
+  }
+
+  set maxValueCover(value: number) {
+    this._maxValueCover = value;
+  }
+
+  get minValueCover(): number {
+    return this._minValueCover;
+  }
+
+  set minValueCover(value: number) {
+    this._minValueCover = value;
+  }
+
+  get modalRef(): BsModalRef {
+    return this._modalRef;
+  }
+
+  set modalRef(value: BsModalRef) {
+    this._modalRef = value;
+  }
+
+  get categoryNames(): string[] {
+    return this._categoryNames;
+  }
+
+  set categoryNames(value: string[]) {
+    this._categoryNames = value;
+  }
+
+  get success(): SwalComponent {
+    return this._success;
+  }
+
+  set success(value: SwalComponent) {
+    this._success = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
   }
 }

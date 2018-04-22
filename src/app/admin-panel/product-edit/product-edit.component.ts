@@ -13,14 +13,14 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product-edit.component.css']
 })
 export class ProductEditComponent implements OnInit, AfterContentChecked {
-  private products: ProductData[] = [];
-  private productDataEdit: ProductData[] = [];
-  private pager: any = {};
-  private pagedProducts: any[];
-  private currentPage = 1;
-  private redirectedPage = 1;
-  private lastPage = false;
-  @ViewChild('error') error: SwalComponent;
+  private _products: ProductData[] = [];
+  private _productDataEdit: ProductData[] = [];
+  private _pager: any = {};
+  private _pagedProducts: any[];
+  private _currentPage = 1;
+  private _redirectedPage = 1;
+  private _lastPage = false;
+  @ViewChild('_error') private _error: SwalComponent;
 
   constructor(private router: Router,
               private serverService: ServerService,
@@ -29,10 +29,74 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
               private activatedRoute: ActivatedRoute) {
   }
 
+  get products(): ProductData[] {
+    return this._products;
+  }
+
+  set products(value: ProductData[]) {
+    this._products = value;
+  }
+
+  get productDataEdit(): ProductData[] {
+    return this._productDataEdit;
+  }
+
+  set productDataEdit(value: ProductData[]) {
+    this._productDataEdit = value;
+  }
+
+  get pager(): any {
+    return this._pager;
+  }
+
+  set pager(value: any) {
+    this._pager = value;
+  }
+
+  get pagedProducts(): any[] {
+    return this._pagedProducts;
+  }
+
+  set pagedProducts(value: any[]) {
+    this._pagedProducts = value;
+  }
+
+  get currentPage(): number {
+    return this._currentPage;
+  }
+
+  set currentPage(value: number) {
+    this._currentPage = value;
+  }
+
+  get redirectedPage(): number {
+    return this._redirectedPage;
+  }
+
+  set redirectedPage(value: number) {
+    this._redirectedPage = value;
+  }
+
+  get lastPage(): boolean {
+    return this._lastPage;
+  }
+
+  set lastPage(value: boolean) {
+    this._lastPage = value;
+  }
+
+  get error(): SwalComponent {
+    return this._error;
+  }
+
+  set error(value: SwalComponent) {
+    this._error = value;
+  }
+
   ngAfterContentChecked() {
     this.serverService.onTaskUpdated.subscribe(
       (productUpdated: ProductData) =>
-        this.productDataEdit[productUpdated.id - 1] =
+        this._productDataEdit[productUpdated.id - 1] =
           new ProductData(
             productUpdated.id,
             productUpdated.price,
@@ -46,39 +110,39 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this.activatedRoute.queryParams
       .subscribe(
         (params: Params) => {
-          this.redirectedPage = params['numberpage'];
-          this.lastPage = params['lastpage'];
+          this._redirectedPage = params['numberpage'];
+          this._lastPage = params['lastpage'];
         },
-        () => this.error.show()
+        () => this._error.show()
       );
 
     this.showPublicData.getProductsToEdit()
       .subscribe(
         (procucts: any[]) => {
-          this.products = procucts;
-          for (let i = 0; i < this.products.length; i++) {
-            const product: ProductData = this.products[i];
-            this.productDataEdit.push(new ProductData(
+          this._products = procucts;
+          for (let i = 0; i < this._products.length; i++) {
+            const product: ProductData = this._products[i];
+            this._productDataEdit.push(new ProductData(
               product.id,
               product.price,
               product.title,
               product.description,
               product.imageLink));
           }
-          this.redirectedPage = (typeof this.redirectedPage === 'undefined') ? 1 : this.redirectedPage;
+          this._redirectedPage = (typeof this._redirectedPage === 'undefined') ? 1 : this._redirectedPage;
 
-          if (this.lastPage) {
+          if (this._lastPage) {
             this.computeNunberPages();
-            this.redirectedPage = this.pager.pages.length;
+            this._redirectedPage = this._pager.pages.length;
           }
-          this.setPage(this.redirectedPage);
+          this.setPage(this._redirectedPage);
         },
-        () => this.error.show()
+        () => this._error.show()
       );
   }
 
   onEditDetail(id: number) {
-    this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this.currentPage}});
+    this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this._currentPage}});
   }
 
   onRemove(poroductDeteted: ProductDataAmount, id: number) {
@@ -86,22 +150,22 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       .subscribe(
         (response) => {
           this.serverService.onTaskRemoved.emit(poroductDeteted);
-          this.pagedProducts.splice(id, 1);
+          this._pagedProducts.splice(id, 1);
         },
-        () => this.error.show()
+        () => this._error.show()
       );
   }
 
   computeNunberPages() {
-    this.pager = this.pagerService.getPager(this.productDataEdit.length, 1);
+    this._pager = this.pagerService.getPager(this._productDataEdit.length, 1);
   }
 
   setPage(page: number) {
-    this.currentPage = page;
-    if (page < 1 || page > this.products.length) {
+    this._currentPage = page;
+    if (page < 1 || page > this._products.length) {
       return;
     }
-    this.pager = this.pagerService.getPager(this.productDataEdit.length, page);
-    this.pagedProducts = this.productDataEdit.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    this._pager = this.pagerService.getPager(this._productDataEdit.length, page);
+    this._pagedProducts = this._productDataEdit.slice(this._pager.startIndex, this._pager.endIndex + 1);
   }
 }

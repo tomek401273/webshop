@@ -21,10 +21,10 @@ import {SignupComponent} from './authentication/signup/signup.component';
 import {AuthGuard} from './services/protect/auth-guard.service';
 import {CanDeactivateGuard} from './services/protect/can-deactivate-guard';
 import {BucketUserComponent} from './bucket-user/bucket-user.component';
-import {BucketService} from './bucket-user/bucket.service';
+import {BucketService} from './services/bucket.service';
 import {SummaryComponent} from './bucket-user/summary/summary.component';
 import {OrderSuccessfullyComponent} from './bucket-user/summary/order-successfully/order-successfully.component';
-import {BucketServerService} from './bucket-user/bucket-server.service';
+import {BucketServerService} from './services/bucket-server.service';
 import {ProductMapper} from './model/dto/product-mapper';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
@@ -48,6 +48,7 @@ import {Ng4GeoautocompleteModule} from 'ng4-geoautocomplete';
 import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
 import {CronJobsModule} from 'ngx-cron-jobs';
 import {CronSelectionModule} from 'angular2-cron-jobs';
+import { AddressComponent } from './address/address.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {CronSelectionModule} from 'angular2-cron-jobs';
     DeliveryStatusComponent,
     ProductComponent,
     ConfirmNewsletterComponent,
-    ConfirmAccountComponent
+    ConfirmAccountComponent,
+    AddressComponent
   ],
   imports: [
     NgbModule.forRoot(),

@@ -4,6 +4,7 @@ import {Log} from '../model/Log';
 import {ServerService} from './server.service';
 import {Router} from '@angular/router';
 import {Register} from '../model/register';
+import {Server} from '../model/server';
 
 @Injectable()
 export class LogingService {
@@ -17,7 +18,7 @@ export class LogingService {
   logoutEmitter = new EventEmitter<boolean>();
 
   getToken(log: Log) {
-    return this.httpClient.post('http://localhost:8080/login', log,
+    return this.httpClient.post(Server.address + 'login', log,
       {
         observe: 'response',
         responseType: 'text',
@@ -50,7 +51,7 @@ export class LogingService {
   }
 
   registration(register: Register) {
-    return this.httpClient.post('http://localhost:8080/auth/signup', register, {
+    return this.httpClient.post(Server.address + 'auth/signup', register, {
       observe: 'response',
       responseType: 'text',
     });
@@ -58,7 +59,7 @@ export class LogingService {
 
   checkLoginAvailable(login) {
     const params = {login: login};
-    return this.httpClient.get('http://localhost:8080/auth/checkLoginAvailable', {
+    return this.httpClient.get(Server.address + 'auth/checkLoginAvailable', {
       observe: 'response',
       responseType: 'text',
       params: params
