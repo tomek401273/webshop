@@ -29,7 +29,7 @@ export class OrdersService {
   }
 
   getOneOrder(id: number) {
-    const idSting = String(id);
+    const idSting: string = id.toString();
     const params = {id: idSting};
     return this.http.get(Server.address + 'buy/getOrder', {
       params: params
@@ -38,6 +38,8 @@ export class OrdersService {
 
   buyAllProductFromBucket(shippingAddress: ShippingAddress) {
     this.shippingDto = this.shippingMapper.mapToShippingAddressDto(shippingAddress);
+    console.log('oders.service');
+    console.log(this.shippingDto);
     return this.http.post(Server.address + 'buy/buy', this.shippingDto);
   }
 

@@ -20,6 +20,10 @@ export class ProductDataAmount extends ProductData {
     this._statusMessage = statusMessage;
   }
 
+  toString(): string {
+    return super.toString();
+  }
+
   get totalAmount() {
     return this._totalAmount;
   }

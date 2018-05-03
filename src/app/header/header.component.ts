@@ -11,7 +11,6 @@ import {OrdersService} from '../services/orders.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, DoCheck {
-  private _authenticated = false;
   private _actualNumberProducts: number;
   private _adminPanel = false;
 
@@ -19,14 +18,6 @@ export class HeaderComponent implements OnInit, DoCheck {
               private router: Router,
               private bucketService: BucketService,
               private orderService: OrdersService) {
-  }
-
-  get authenticated(): boolean {
-    return this._authenticated;
-  }
-
-  set authenticated(value: boolean) {
-    this._authenticated = value;
   }
 
   get actualNumberProducts(): number {
@@ -45,23 +36,18 @@ export class HeaderComponent implements OnInit, DoCheck {
     this._adminPanel = value;
   }
 
-  ngOnInit() {
-    if (localStorage.getItem('role') === 'admin, user') {
+  isAdmin(role: string) {
+    if (role === 'admin, user') {
       this._adminPanel = true;
       this.orderService.getAllUserLogin();
     }
+  }
 
+  ngOnInit() {
+    this.isAdmin(localStorage.getItem('role'));
     this.logingService.loginSuccessful.subscribe(
-      (role: String) => {
-        if (role === 'admin, user') {
-          this._adminPanel = true;
-          this.orderService.getAllUserLogin();
-        }
-        if (this.logingService.isAuthenticated()) {
-          this._authenticated = true;
-        } else {
-          this._authenticated = false;
-        }
+      (role: string) => {
+        this.isAdmin(role);
       }
     );
 
@@ -96,9 +82,8 @@ export class HeaderComponent implements OnInit, DoCheck {
   ngDoCheck() {
     this.logingService.logoutEmitter.subscribe(
       (logout: boolean) => {
-        if (logout == true) {
+        if (logout) {
           this._adminPanel = false;
-          this._authenticated = false;
           this.router.navigate(['/']);
         }
       }

@@ -13,7 +13,9 @@ export class ShippingAddressMapper {
       shippingAddress.surname,
       shippingAddress.supplier,
       shippingAddress.code,
-      shippingAddress.search
+      shippingAddress.search,
+      shippingAddress.house,
+      shippingAddress.apartment
     );
     return shippingAddressDto;
   }

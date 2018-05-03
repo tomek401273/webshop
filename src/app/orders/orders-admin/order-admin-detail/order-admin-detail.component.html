@@ -21,21 +21,24 @@
           <tr>Total Value: {{order.totalValue}}</tr>
           <tr>Total Amount: {{order.totalAmount}}</tr>
           <tr>Bought Date: {{order.boughtDate}}</tr>
-          <tr>Status: {{order.status}}</tr>
-          <tr><a (click)="onDeliveryDetail()">Delivery link</a></tr>
+          <tr>Stratus status: {{order.status}}</tr>
+
+          <tr><a href="#">Delivery link</a></tr>
 
         </td>
         <td>
           <tr>Country: {{order.shippingAddressDto.country}}</tr>
-          <tr>City: {{order.shippingAddressDto.city}}</tr>
-          <tr>PostCode: {{order.shippingAddressDto.postalCode}}</tr>
-          <tr>Street: {{order.shippingAddressDto.street}}</tr>
+          <tr>PostCode: {{order.shippingAddressDto.postalCode}} - {{order.shippingAddressDto.city}}</tr>
+
+          <tr *ngIf="order.shippingAddressDto.street == null">Locality: {{order.shippingAddressDto.district}}</tr>
+          <tr *ngIf="order.shippingAddressDto.street != null">Locality: {{order.shippingAddressDto.city}}</tr>
+
+          <tr *ngIf="order.shippingAddressDto.street != null">Street: {{order.shippingAddressDto.street}}</tr>
+          <tr>House: {{order.shippingAddressDto.house}}</tr>
+          <tr *ngIf="order.shippingAddressDto.apartment !=0">Apartment: {{order.shippingAddressDto.apartment}}</tr>
           <tr>Name: {{order.shippingAddressDto.name}}</tr>
-          <tr>Supplier: {{order.shippingAddressDto.supplier}}</tr>
           <tr>Surname: {{order.shippingAddressDto.surname}}</tr>
-          <tr>County: {{order.shippingAddressDto.county}}</tr>
-          <tr>District: {{order.shippingAddressDto.district}}</tr>
-          <tr>Subdistrict: {{order.shippingAddressDto.subdistrict}}</tr>
+          <tr>Supplier: {{order.shippingAddressDto.supplier}}</tr>
           <tr>State: {{order.shippingAddressDto.state}}</tr>
         </td>
         </tbody>

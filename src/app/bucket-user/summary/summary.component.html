@@ -22,39 +22,98 @@
     <div class="row form-group text-center" *ngIf="!useAnotherAddress">
       <h3>Default Address</h3>
       <p>Country: {{userAddress.country}}</p>
-      <p>City: {{userAddress.city}}</p>
-      <p>PostCode: {{userAddress.postCode}}</p>
-      <p>Street: {{userAddress.street}}</p>
+      <p>PostCode: {{userAddress.postCode}} - {{userAddress.city}}</p>
+      <div>
+        <p *ngIf="userAddress.street == null">Locality: {{userAddress.district}}</p>
+        <p *ngIf="userAddress.street != null">Locality: {{userAddress.city}}</p>
+      </div>
+      <p *ngIf="userAddress.street != null">Street: {{userAddress.street}}</p>
+      <p>House: {{userAddress.house}}</p>
+      <p *ngIf="userAddress.apartment!=0">Apartment: {{userAddress.apartment}}</p>
       <p>Name: {{userAddress.name}}</p>
       <p>Surname: {{userAddress.surname}}</p>
 
     </div>
 
 
-    <div class="form-group" *ngIf="useAnotherAddress">
-      <label>GOOGLE AUTOCOMPLETE LOCATION</label>
-      <ng4geo-autocomplete [userSettings]="userSettings"
-                           (componentCallback)="autoCompleteCallback1($event)"></ng4geo-autocomplete>
-
-      <div>
-
-      </div>
-      <div *ngIf="addressInput">
-        <span class="text-success" *ngIf="validAddress">Address Data Correct</span>
-        <span class="text-danger" *ngIf="!validAddress">Address Data Invalid</span>
-        <div class="form-group" *ngIf="validAddress">
-          <p>Label: {{validatedAddress.label}}</p>
-          <p>Country: {{validatedAddress.country}}</p>
-          <p>State: {{validatedAddress.state}}</p>
-          <p>County: {{validatedAddress.county}}</p>
-          <p>City: {{validatedAddress.city}}</p>
-          <p>District: {{validatedAddress.district}}</p>
-          <p>Subdistrict: {{validatedAddress.subdistrict}}</p>
-          <p>Street: {{validatedAddress.street}}</p>
-          <p>PostalCode: {{validatedAddress.postalCode}}</p>
+    <div *ngIf="useAnotherAddress" class="form-group">
+      <app-address
+        (userAddress)="onAddressInput($event)"
+        (permissionToSubmit)="correctAddress($event)"
+      ></app-address>
+      <form #user="ngForm">
+        <div class="form-group text-center">
+          <label for="name">*- Name</label>
+          <input class="form-control"
+                 type="text"
+                 id="name"
+                 ngModel
+                 name="name"
+                 required
+                 #name="ngModel"
+          >
+          <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
         </div>
-      </div>
-      <button class="btn btn-default" (click)="checkAddress()">Check Valid Data</button>
+
+        <div class="form-group text-center">
+          <label for="surname">*- Surname</label>
+          <input class="form-control"
+                 type="text"
+                 id="surname"
+                 ngModel
+                 name="surname"
+                 required
+                 #surname="ngModel">
+          <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
+        </div>
+
+
+        <table>
+          <thead>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          </thead>
+          <tbody class="table table-responsive">
+          <tr>
+            <td>
+              *- House Number:
+            </td>
+            <td></td>
+
+            <td>
+              <input class="form-control input-xs"
+                     type="number"
+                     ngModel
+                     name="houseNumber"
+                     required
+                     min="1"
+                     max="999"
+              >
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              Apartment Number:
+            </td>
+            <td></td>
+            <td>
+              <input class="form-control input-xs"
+                     type="number"
+                     ngModel
+                     name="apartmentNumber"
+                     min="0"
+                     max="999"
+              >
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </form>
+
       <hr>
       <br>
     </div>
@@ -81,9 +140,11 @@
                 #supplier2="ngModel"
                 required
               >
-              Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
+              *- Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
             </label>
           </div>
+          <p class="text-left">[*] - required fields</p>
+
           <!--<button class="btn btn-primary" type="submit" [disabled]="!form.valid && checkedAddress && validAddress">Buy-->
           <button
             class="btn btn-primary"
@@ -97,5 +158,3 @@
 
   <br><br><br>
 </div>
-
-

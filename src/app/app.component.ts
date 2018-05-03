@@ -10,6 +10,8 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 })
 export class AppComponent implements OnInit {
   @ViewChild('info') private _info: SwalComponent;
+  private loggingTimeout;
+
   constructor(private logingService: LogingService,
               private showPublicDataService: ShowPublicDataSevice) {
     this.showPublicDataService.getAllProductsTitleFromDatabase();
@@ -19,17 +21,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.controlActiveSession();
     this.logingService.loginSuccessful
       .subscribe(
-        (response) => {
-          setTimeout(() => {
-            if (this.logingService.isAuthenticated()) {
-              this._info.show();
-              this.logingService.logOut();
-            }
-          }, 1200000);
+        () => {
+          this.controlActiveSession();
         }
       );
+
+    this.logingService.logoutEmitter.subscribe(
+      (logout: boolean) => {
+        if (logout) {
+          console.log('Clear clear Timeout');
+          clearTimeout(this.loggingTimeout);
+        }
+      }
+    );
   }
 
   get info(): SwalComponent {
@@ -38,5 +45,20 @@ export class AppComponent implements OnInit {
 
   set info(value: SwalComponent) {
     this._info = value;
+  }
+
+  controlActiveSession() {
+    const currentDate = new Date().getTime();
+    const expiredToken: number = Number(localStorage.getItem('expiredToken'));
+    const remainToken = expiredToken - currentDate;
+
+    if (expiredToken > currentDate) {
+      this.loggingTimeout = setTimeout(() => {
+        if (this.logingService.isAuthenticated()) {
+          this._info.show();
+          this.logingService.logOut();
+        }
+      }, remainToken);
+    }
   }
 }

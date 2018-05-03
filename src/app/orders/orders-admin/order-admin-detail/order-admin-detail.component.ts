@@ -112,9 +112,9 @@ export class OrderAdminDetailComponent implements OnInit {
 
   ngOnInit() {
     // Observable.interval(20000).subscribe(x => {
-    //   this.getData();
     // });
     this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this.getData();
   }
 
   getData() {

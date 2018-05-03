@@ -85,6 +85,10 @@ export class SigninComponent {
           localStorage.setItem('login', submittedForm.value.loginLog);
           localStorage.setItem('token', token);
           localStorage.setItem('role', role);
+
+          const expiredToken = new Date().getTime() + (30 * 60 * 1000);
+          localStorage.setItem('expiredToken', expiredToken.toString());
+
           this.getDataFromLocalStorage();
 
           this._bucketServerService.addProductListToCard(this.productIdArray).subscribe(
@@ -116,7 +120,7 @@ export class SigninComponent {
         }
       }
       for (let i = 0; i < bucket.length; i++) {
-        let bucketProduct: ProductDataAmount = new ProductDataAmount(
+        const bucketProduct: ProductDataAmount = new ProductDataAmount(
           bucket[i]._id,
           bucket[i]._price,
           bucket[i]._title,
@@ -158,7 +162,7 @@ export class SigninComponent {
             this.products.push(bucketProduct);
           }
         }
-        let datatoLocalStorage = JSON.stringify(this.products);
+        const datatoLocalStorage = JSON.stringify(this.products);
         localStorage.setItem('bucket123', datatoLocalStorage);
       },
       () => this.error.show()

@@ -12,7 +12,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 export class ConfirmNewsletterComponent implements OnInit {
   email: string;
   codeConfirm: string;
-  isSuccessfully= false;
+  isSuccessfully = false;
   result: string;
   authenticationComplete = false;
   @ViewChild('success') success: SwalComponent;
@@ -38,16 +38,18 @@ export class ConfirmNewsletterComponent implements OnInit {
           this.isSuccessfully = true;
           this.result = 'Process subscription verification was successfully this is your discount code: ' + confirmDto.discountCode;
         } else {
-          this.error.show();
-          this.isSuccessfully = false;
-          this.result = 'Something go wrong contact with our service';
+          this.somethingGoWrong();
         }
       },
       () => {
-        this.error.show();
-        this.isSuccessfully = false;
-        this.result = 'Something go wrong contact with our service';
+        this.somethingGoWrong();
       }
     );
+  }
+
+  private somethingGoWrong() {
+    this.error.show();
+    this.isSuccessfully = false;
+    this.result = 'Something go wrong contact with our service';
   }
 }

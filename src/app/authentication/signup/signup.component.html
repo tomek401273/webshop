@@ -116,8 +116,7 @@
                       name="houseNumber"
                       required
                       min="1"
-                      pattern="^[1-9]{1,3}$"
-
+                      max="999"
                >
              </td>
            </tr>
@@ -237,5 +236,7 @@
     </div>
   </div>
 </div>
-<swal #success title="Success" text="Registration process end with success" type="success"></swal>
+<swal #success title="Success" text="To complete registration process please click link in email which we send to you.
+ If you haven't email for us check your trash and spam emails or contact with us.
+" type="success"></swal>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

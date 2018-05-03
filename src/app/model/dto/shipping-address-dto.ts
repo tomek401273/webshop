@@ -9,9 +9,10 @@ export class ShippingAddressDto {
   private supplier: string;
   private code: string;
   private search: string;
+  private house: number;
+  private apartment: number;
 
-
-  constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string, code: string, search: string) {
+  constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string, code: string, search: string, house: number, apartment: number) {
     this.login = login;
     this.country = country;
     this.city = city;
@@ -22,5 +23,7 @@ export class ShippingAddressDto {
     this.supplier = supplier;
     this.code = code;
     this.search = search;
+    this.house = house;
+    this.apartment = apartment;
   }
 }

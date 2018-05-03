@@ -14,6 +14,14 @@ export class ProductData {
     this._imageLink = imageLink;
   }
 
+  toString(): string {
+    return 'id: ' + this.id + ' '
+      + 'price: ' + this.price + ' '
+      + 'title: ' + this.title + ' '
+      + 'description: ' + this.description + ' '
+      + 'imageLink: ' + this.imageLink + ' ';
+  }
+
   get id(): number {
     return this._id;
   }

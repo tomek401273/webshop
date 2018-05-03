@@ -39,7 +39,11 @@ export class ServerService {
   }
 
   updateProduct(product: ProductDataAmount) {
+    console.log(product);
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
+    console.log(this.productAmountDto);
+    console.log('--------------------');
+    console.log(product.toString());
     return this.http.put(Server.address + 'product/updateProduct', this.productAmountDto);
   }
 

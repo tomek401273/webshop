@@ -61,7 +61,10 @@ export class ShowPublicDataSevice {
         this.directoryTitles.titles = titles;
         this.productTitleEmitter.emit(this.directoryTitles);
       },
-      (error) => console.log(error)
+      (error) => {
+        console.log(error);
+        console.log(error.error);
+      }
     );
   }
 

@@ -20,8 +20,8 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   private _productUpdated: ProductDataAmount;
   private _positonProductOnPage = 1;
   private _saveChanges = false;
-  @ViewChild('_success') private _success: SwalComponent;
-  @ViewChild('_error') private _error: SwalComponent;
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private publicServer: ShowPublicDataSevice,
               private serverServie: ServerService,

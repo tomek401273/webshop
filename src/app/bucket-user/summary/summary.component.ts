@@ -24,13 +24,12 @@ export class SummaryComponent implements OnInit {
   private _validAddress = false;
   private _addressInput = false;
   private _insertAddress = '';
-  private _validatedAddress: Address = new Address(null, null, null, null, null, null, null, null, null);
   private _useAnotherAddress = false;
   private _enableSubmit = false;
   @ViewChild('f') private _signupForm: NgForm;
-  @ViewChild('_confirmBuy') private _confirmBuy: SwalComponent;
-  @ViewChild('_buySuccess') private _buySuccess: SwalComponent;
-  @ViewChild('_buyError') private _buyError: SwalComponent;
+  @ViewChild('confirmBuy') private _confirmBuy: SwalComponent;
+  @ViewChild('buySuccess') private _buySuccess: SwalComponent;
+  @ViewChild('buyError') private _buyError: SwalComponent;
 
   private _userSettings = {
     inputPlaceholderText: 'Search your delivery location',
@@ -38,17 +37,90 @@ export class SummaryComponent implements OnInit {
     'showCurrentLocation': false,
     'geoTypes': ['(regions)', 'establishment', 'geocode']
   };
+  private _validatedAddress: string;
+  @ViewChild('user') private _userNewData: NgForm;
 
-  autoCompleteCallback1(selectedData: any) {
-    this._insertAddress = selectedData.data.formatted_address;
-    console.log(selectedData.data);
-  }
 
   constructor(private router: Router,
               private orderService: OrdersService,
               private bucketService: BucketService,
               private bucketServerService: BucketServerService,
               private publicServer: ShowPublicDataSevice) {
+  }
+
+  correctAddress(isCorrect: boolean) {
+    console.log('isCorrect Address? ' + isCorrect);
+    this.validAddress = isCorrect;
+  }
+
+  onAddressInput(userAddress: string) {
+    console.log('usser addres correct inject in signUP component');
+    console.log(userAddress);
+    this._validatedAddress = userAddress;
+
+  }
+
+  ngOnInit() {
+    this.bucketServerService.getAddressShippment().subscribe(
+      (response: ShippingAddress) => {
+        console.log(response);
+        this._userAddress = response;
+        this._userAddressBackUp = response;
+      },
+      () => {
+        this._buyError.show();
+      }
+    );
+  }
+
+  onConfirm() {
+    const shippingAddress: ShippingAddress = new ShippingAddress(
+      localStorage.getItem('login'),
+      null,
+      null,
+      null,
+      null,
+      this._userAddress.name,
+      this._userAddress.surname,
+      this._signupForm.value.supplierS
+    );
+    shippingAddress.code = localStorage.getItem('coupon');
+
+    if (this._useAnotherAddress) {
+      shippingAddress.search = this._validatedAddress;
+      shippingAddress.name = this._userNewData.value.name;
+      shippingAddress.surname = this._userNewData.value.surname;
+      shippingAddress.house = this._userNewData.value.houseNumber;
+      shippingAddress.apartment = this._userNewData.value.apartmentNumber;
+    } else {
+      shippingAddress.search = this._userAddress.country + ', ' + this._userAddress.city + ', ' + this._userAddress.district;
+      shippingAddress.house = this._userAddress.house;
+      shippingAddress.apartment = this._userAddress.apartment;
+      if (this._userAddress.street != null) {
+        shippingAddress.search = shippingAddress.search + this._userAddress.street;
+      }
+    }
+    console.log('Confirm && Submit Address');
+    console.log(shippingAddress);
+    this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
+      (response: number) => {
+        if (!isNull(response)) {
+          this._id = response;
+          this.bucketService.buyAllProduct.emit(true);
+          this.router.navigate(['/success/' + this._id]);
+          this._buySuccess.show();
+        } else {
+          this._buyError.show();
+        }
+      },
+      (error) => {
+        this._buyError.show();
+      }
+    );
+  }
+
+  onSubmit() {
+    this._confirmBuy.show();
   }
 
   get suppliers(): ({ name: string; price: number } | { name: string; price: string })[] {
@@ -115,14 +187,6 @@ export class SummaryComponent implements OnInit {
     this._insertAddress = value;
   }
 
-  get validatedAddress(): Address {
-    return this._validatedAddress;
-  }
-
-  set validatedAddress(value: Address) {
-    this._validatedAddress = value;
-  }
-
   get useAnotherAddress(): boolean {
     return this._useAnotherAddress;
   }
@@ -177,85 +241,5 @@ export class SummaryComponent implements OnInit {
 
   set userSettings(value: { inputPlaceholderText: string; geoCountryRestriction: string[]; showCurrentLocation: boolean; geoTypes: string[] }) {
     this._userSettings = value;
-  }
-
-  ngOnInit() {
-    this.bucketServerService.getAddressShippment().subscribe(
-      (response: ShippingAddress) => {
-        console.log(response);
-        this._userAddress = response;
-        console.log(this._userAddress);
-        this._userAddressBackUp = response;
-      },
-      (error) => {
-        this._buyError.show();
-      }
-    );
-  }
-
-  onConfirm() {
-    const shippingAddress: ShippingAddress = new ShippingAddress(
-      localStorage.getItem('login'),
-      this._userAddress.country,
-      this._userAddress.city,
-      this._userAddress.postalCode,
-      this._userAddress.street,
-      this._userAddress.name,
-      this._userAddress.surname,
-      this._signupForm.value.supplierS
-    );
-    shippingAddress.code = localStorage.getItem('coupon');
-
-    if (this._useAnotherAddress) {
-      shippingAddress.search = this._insertAddress;
-    } else {
-      shippingAddress.search = this._userAddress.street + ', ' + this._userAddress.city + ', ' + this._userAddress.country;
-    }
-    this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
-      (response: number) => {
-        if (!isNull(response)) {
-          this._id = response;
-          this.bucketService.buyAllProduct.emit(true);
-          this.router.navigate(['/success/' + this._id]);
-          this._buySuccess.show();
-        } else {
-          this._buyError.show();
-        }
-      },
-      (error) => {
-        this._buyError.show();
-      }
-    );
-  }
-
-
-  onSubmit() {
-    this._confirmBuy.show();
-  }
-
-  checkAddress() {
-    this._addressInput = true;
-
-    if (this._insertAddress.length > 5) {
-      this.publicServer.confirmAddress(this._insertAddress).subscribe(
-        (response: Address) => {
-          if (isNull(response)) {
-            this._validAddress = false;
-            this._insertAddress = '';
-            this._buyError.show();
-          } else {
-            this._validatedAddress = response;
-            this._validAddress = true;
-          }
-        },
-        (error) => {
-          this._validAddress = false;
-          this._insertAddress = '';
-          this._buyError.show();
-        }
-      );
-    } else {
-      this._enableSubmit = false;
-    }
   }
 }
