@@ -43,8 +43,8 @@ export class ServerService {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
     console.log(this.productAmountDto);
     console.log('--------------------');
-    console.log(product.toString());
-    return this.http.put(Server.address + 'product/updateProduct', this.productAmountDto);
+    console.log(product);
+    return this.http.put(Server.address + 'product/updateProduct', product);
   }
 
   markProduct(productMarkDto: ProductMarkDto) {

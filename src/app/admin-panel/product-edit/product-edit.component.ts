@@ -20,7 +20,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private _currentPage = 1;
   private _redirectedPage = 1;
   private _lastPage = false;
-  @ViewChild('_error') private _error: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private router: Router,
               private serverService: ServerService,
@@ -96,13 +96,13 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   ngAfterContentChecked() {
     this.serverService.onTaskUpdated.subscribe(
       (productUpdated: ProductData) =>
-        this._productDataEdit[productUpdated.id - 1] =
+        this._productDataEdit[productUpdated.getId - 1] =
           new ProductData(
-            productUpdated.id,
-            productUpdated.price,
-            productUpdated.title,
-            productUpdated.description,
-            productUpdated.imageLink)
+            productUpdated.getId,
+            productUpdated.getPrice,
+            productUpdated.getTitle,
+            productUpdated.getDescription,
+            productUpdated.getImageLink)
     );
   }
 
@@ -120,15 +120,22 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       .subscribe(
         (procucts: any[]) => {
           this._products = procucts;
-          for (let i = 0; i < this._products.length; i++) {
-            const product: ProductData = this._products[i];
-            this._productDataEdit.push(new ProductData(
-              product.id,
-              product.price,
-              product.title,
-              product.description,
-              product.imageLink));
-          }
+
+          // const product2: ProductData = new ProductData(2, 3, 'title', 'desc', 'imagelink');
+          // console.log(product2.getTitle);
+          // console.log(this._products);
+          // for (let i = 0; i < this._products.length; i++) {
+          //   const product: ProductData = this._products[i];
+          //   console.log(this.products[i].toString());
+          //   this._productDataEdit.push(new ProductData(
+          //     product.getId,
+          //     product.getPrice,
+          //     product.getTitle,
+          //     product.getDescription,
+          //     product.getImageLink));
+          // }
+          // console.log(this._productDataEdit);
+
           this._redirectedPage = (typeof this._redirectedPage === 'undefined') ? 1 : this._redirectedPage;
 
           if (this._lastPage) {
@@ -145,7 +152,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this._currentPage}});
   }
 
-  onRemove(poroductDeteted: ProductDataAmount, id: number) {
+  onRemove(poroductDeteted, id: number) {
     this.serverService.removeProduct(poroductDeteted.id)
       .subscribe(
         (response) => {
@@ -165,7 +172,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     if (page < 1 || page > this._products.length) {
       return;
     }
-    this._pager = this.pagerService.getPager(this._productDataEdit.length, page);
-    this._pagedProducts = this._productDataEdit.slice(this._pager.startIndex, this._pager.endIndex + 1);
+    this._pager = this.pagerService.getPager(this._products.length, page);
+    this._pagedProducts = this._products.slice(this._pager.startIndex, this._pager.endIndex + 1);
   }
 }

@@ -1,17 +1,17 @@
 export class ProductData {
-  private _id: number;
-  private _price: number;
-  private _title: string;
-  private _description: string;
-  private _imageLink: string;
+  private id: number;
+  private price: number;
+  private title: string;
+  private description: string;
+  private imageLink: string;
 
 
   constructor(id: number, price: number, title: string, description: string, imageLink: string) {
-    this._id = id;
-    this._price = price;
-    this._title = title;
-    this._description = description;
-    this._imageLink = imageLink;
+    this.id = id;
+    this.price = price;
+    this.title = title;
+    this.description = description;
+    this.imageLink = imageLink;
   }
 
   toString(): string {
@@ -22,43 +22,48 @@ export class ProductData {
       + 'imageLink: ' + this.imageLink + ' ';
   }
 
-  get id(): number {
-    return this._id;
+  get getId(): number {
+    return this.id;
   }
 
-  set id(value: number) {
-    this._id = value;
+  set setId(value: number) {
+    this.id = value;
   }
 
-  get price(): number {
-    return this._price;
+  get getPrice(): number {
+    return this.price;
   }
 
-  set price(value: number) {
-    this._price = value;
+  set setPrice(value: number) {
+    this.price = value;
   }
 
-  get title(): string {
-    return this._title;
+  get getTitle(): string {
+    return this.title;
   }
 
-  set title(value: string) {
-    this._title = value;
+
+   title2(): string {
+    return 'lubie placki';
   }
 
-  get description(): string {
-    return this._description;
+  set setTitle(value: string) {
+    this.title = value;
   }
 
-  set description(value: string) {
-    this._description = value;
+  get getDescription(): string {
+    return this.description;
   }
 
-  get imageLink(): string {
-    return this._imageLink;
+  set setDescription(value: string) {
+    this.description = value;
   }
 
-  set imageLink(value: string) {
-    this._imageLink = value;
+  get getImageLink(): string {
+    return this.imageLink;
+  }
+
+  set setImageLink(value: string) {
+    this.imageLink = value;
   }
 }

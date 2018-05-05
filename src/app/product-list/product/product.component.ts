@@ -25,7 +25,6 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, DoCheck {
-  private _id: number;
   private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
   private _productsTitle: String[] = [];
   private _bucketProducts: ProductDataAmount[] = [];
@@ -55,8 +54,9 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    this._id = Number(this._activatedRounte.snapshot.params['id']) | 0;
-    this._showPublicDataService.getProduct(this._id).subscribe(
+    // const id = Number(this._activatedRounte.snapshot.params['id']) | 0;
+    const id = Number(this._activatedRounte.snapshot.params['id']);
+    this._showPublicDataService.getProduct(id).subscribe(
       (response: any) => {
         this._product = response;
       },
@@ -70,7 +70,7 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   onAddToCard(product: ProductData) {
-    this._showPublicData.checkAvailable(product.id).subscribe(
+    this._showPublicData.checkAvailable(product.getId).subscribe(
       (resposne) => {
         if (resposne > 0) {
 
@@ -78,7 +78,7 @@ export class ProductComponent implements OnInit, DoCheck {
           this.saveTemp();
           this.acutalNumberProductInBucket();
           if (this._isAuthenticated === true) {
-            this._bucketServerService.addProductToCard(product.id).subscribe(
+            this._bucketServerService.addProductToCard(product.getId).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
                   this._success.text = 'Successfully added product to bucket';
@@ -102,30 +102,30 @@ export class ProductComponent implements OnInit, DoCheck {
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (const prod of this._bucketProducts) {
-      totalNumber += prod.totalAmount;
+      totalNumber += prod.getTotalAmount;
     }
     this._bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
   addProductToBucket(product: ProductData) {
-    const founded: ProductDataAmount = this._bucketProducts.find(x => x.id === product.id);
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.getId);
 
     if (isUndefined(founded)) {
       this._bucketProducts.push(new ProductDataAmount(
-        product.id,
-        product.price,
-        product.title,
-        product.description,
-        product.imageLink,
+        product.getId,
+        product.getPrice,
+        product.getTitle,
+        product.getDescription,
+        product.getImageLink,
         1,
         null,
         null));
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);
-      let amount = founded.totalAmount;
+      let amount = founded.getTotalAmount;
       amount++;
-      founded.totalAmount = amount;
+      founded.setTotalAmount = amount;
       this._bucketProducts[index] = founded;
     }
   }
@@ -153,9 +153,9 @@ export class ProductComponent implements OnInit, DoCheck {
       const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, rate.rate);
       this._serverService.markProduct(productMarkDto).subscribe(
         (response: ProductMarkDto) => {
-          this._product.marksAverage = response.averageMarks;
-          this._product.countMarks = response.countMarks;
-          this._product.rated = true;
+          this._product.setMarksAverage = response.averageMarks;
+          this._product.setCountMarks = response.countMarks;
+          this._product.setRated = true;
           this._success.text = 'Thank you for rated our product';
           this._success.show();
 
@@ -169,7 +169,7 @@ export class ProductComponent implements OnInit, DoCheck {
     const comment: Comment = new Comment(localStorage.getItem('login'), this._commentMessage, productId);
     this._serverService.addComment(comment).subscribe(
       (response: Comment[]) => {
-        this._product.commentDtos = response;
+        this._product.setCommentDtos = response;
         this._commentMessage = '';
         this._success.text = 'Thank you for comment our product';
         this._success.show();
@@ -184,7 +184,7 @@ export class ProductComponent implements OnInit, DoCheck {
       (response) => {
         console.log(response);
         if (response) {
-          this._product.commentDtos.splice(commentPosition, 1);
+          this._product.setCommentDtos.splice(commentPosition, 1);
           this._success.text = 'You successfully deleted comment';
           this._success.show();
         }
@@ -199,8 +199,8 @@ export class ProductComponent implements OnInit, DoCheck {
     this._serverService.editComment(comment).subscribe(
       (response: boolean) => {
         if (response) {
-          this._product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
-          this._product.commentDtos.find(x => x.id === commentId).editComment = false;
+          this._product.setCommentDtos.find(x => x.id === commentId).message = editMessage.value;
+          this._product.setCommentDtos.find(x => x.id === commentId).editComment = false;
           this._success.text = 'You successfully edited comment';
           this._success.show();
         } else {
@@ -225,14 +225,6 @@ export class ProductComponent implements OnInit, DoCheck {
 
   mouseOut(element) {
     element.changeButton = false;
-  }
-
-  get id(): number {
-    return this._id;
-  }
-
-  set id(value: number) {
-    this._id = value;
   }
 
   get product(): ProductDataAmount {

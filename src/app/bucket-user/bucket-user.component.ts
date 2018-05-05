@@ -157,8 +157,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
     this._isAuthenticated = this.logingServiece.isAuthenticated();
     for (let i = 0; i < this._products.length; i++) {
       const prod = this._products[i];
-      const value = prod.price * prod.totalAmount;
-      this._products[i].value = value;
+      const value = prod.getPrice * prod.getTotalAmount;
+      this._products[i].setValue = value;
       this.calcuateTotalValueProducts();
       this.calculateTotalAmountProduct();
     }
@@ -174,15 +174,15 @@ export class BucketUserComponent implements OnInit, DoCheck {
   calcuateTotalValueProducts() {
     this._totalValueProducts = 0;
     for (const product of this._products) {
-      const valueTemp = Number(product.value) | 0;
+      const valueTemp = Number(product.getValue) | 0;
       this._totalValueProducts += valueTemp;
     }
   }
 
   onAddAmountProcuct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.totalAmount < 3) {
+    if (bucketProduct.getTotalAmount < 3) {
       if (this._isAuthenticated) {
-        this.bucketServerService.addProductToCard(bucketProduct.id).subscribe(
+        this.bucketServerService.addProductToCard(bucketProduct.getId).subscribe(
           (resposne) => {
             if (resposne === true) {
               this._success.text = 'Successfully increase product items';
@@ -200,19 +200,19 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   adding(bucketProduct: ProductDataAmount) {
-    const index = this._products.indexOf(this._products.find(x => x.id === bucketProduct.id));
-    bucketProduct.totalAmount++;
+    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
+    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount + 1;
     this._products[index] = bucketProduct;
   }
 
   onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.totalAmount === 1) {
+    if (bucketProduct.getTotalAmount === 1) {
       this.onRemove(bucketProduct);
     }
 
-    if (bucketProduct.totalAmount > 1) {
+    if (bucketProduct.getTotalAmount > 1) {
       if (this._isAuthenticated) {
-        this.bucketServerService.removeSingleItemToBucket(bucketProduct.id).subscribe(
+        this.bucketServerService.removeSingleItemToBucket(bucketProduct.getId).subscribe(
           (resposne) => {
             if (resposne === true) {
               this._success.text = 'Successfully decrease product items';
@@ -230,7 +230,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
   onRemove(product: ProductDataAmount) {
     if (this._isAuthenticated) {
-      this.bucketServerService.removeSingleProductFromBucket(product.id).subscribe(
+      this.bucketServerService.removeSingleProductFromBucket(product.getId).subscribe(
         () => {
           this._success.text = 'Successfully removed product from bucket';
           this._success.show();
@@ -244,8 +244,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   subtracting(bucketProduct: ProductDataAmount) {
-    const index = this._products.indexOf(this._products.find(x => x.id === bucketProduct.id));
-    bucketProduct.totalAmount--;
+    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
+    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount - 1;
     this._products[index] = bucketProduct;
   }
 
@@ -253,7 +253,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   calculateTotalAmountProduct() {
     this._totalAmountProducts = 0;
     for (const prduct of this._products) {
-      const amountTemp = Number(prduct.totalAmount) | 0;
+      const amountTemp = Number(prduct.getTotalAmount) | 0;
       this._totalAmountProducts += amountTemp;
     }
     this.bucketService.bucketStatus.emit(this._totalAmountProducts.toString());
@@ -261,7 +261,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
 
   removing(product: ProductDataAmount) {
-    const found = this._products.find(x => x.id === product.id);
+    const found = this._products.find(x => x.getId === product.getId);
     const index = this._products.indexOf(found);
     this._products.splice(index, 1);
     if (this._products.length === 0) {

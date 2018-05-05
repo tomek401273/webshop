@@ -125,7 +125,8 @@ export class ProductListComponent implements OnInit, DoCheck {
     this._pagedProduct = this._products.slice(this._pager.startIndex, this._pager.endIndex + 1);
   }
 
-  onAddToCard(product: ProductData) {
+  onAddToCard(product) {
+    console.log(product);
     this.showPublicData.checkAvailable(product.id).subscribe(
       (resposne) => {
         if (resposne > 0) {
@@ -157,13 +158,13 @@ export class ProductListComponent implements OnInit, DoCheck {
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (const prod of this._bucketProducts) {
-      totalNumber += prod.totalAmount;
+      totalNumber += prod.getTotalAmount;
     }
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
-  addProductToBucket(product: ProductData) {
-    const founded: ProductDataAmount = this._bucketProducts.find(x => x.id === product.id);
+  addProductToBucket(product) {
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
 
     if (isUndefined(founded)) {
       this._bucketProducts.push(new ProductDataAmount(
@@ -178,9 +179,9 @@ export class ProductListComponent implements OnInit, DoCheck {
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);
-      let amount = founded.totalAmount;
+      let amount = founded.getTotalAmount;
       amount++;
-      founded.totalAmount = amount;
+      founded.setTotalAmount = amount;
       this._bucketProducts[index] = founded;
     }
   }

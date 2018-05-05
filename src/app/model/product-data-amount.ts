@@ -2,106 +2,106 @@ import {ProductData} from './product-data';
 import {Comment} from './comment';
 
 export class ProductDataAmount extends ProductData {
-  private _totalAmount: number;
-  private _value: number;
-  private _statusCode: string;
-  private _statusMessage: string;
-  private _sumMarks: number;
-  private _countMarks: number;
-  private _marksAverage: number;
-  private _rated = false;
-  private _commentDtos: Comment [];
-  private _category: string;
+  private totalAmount: number;
+  private value: number;
+  private statusCode: string;
+  private statusMessage: string;
+  private sumMarks: number;
+  private countMarks: number;
+  private marksAverage: number;
+  private rated = false;
+  private commentDtos: Comment [];
+  private category: string;
 
   constructor(id: number, price: number, title: string, description: string, imageLink: string, totalAmount: number, statusCode: string, statusMessage: string) {
     super(id, price, title, description, imageLink);
-    this._totalAmount = totalAmount;
-    this._statusCode = statusCode;
-    this._statusMessage = statusMessage;
+    this.totalAmount = totalAmount;
+    this.statusCode = statusCode;
+    this.statusMessage = statusMessage;
   }
 
   toString(): string {
     return super.toString();
   }
 
-  get totalAmount() {
-    return this._totalAmount;
+  get getTotalAmount() {
+    return this.totalAmount;
   }
 
-  set totalAmount(value) {
-    this._totalAmount = value;
+  set setTotalAmount(value) {
+    this.totalAmount = value;
   }
 
-  get value() {
-    return this._value;
+  get getValue() {
+    return this.value;
   }
 
-  set value(value) {
-    this._value = value;
+  set setValue(value) {
+    this.value = value;
   }
 
 
-  get statusCode(): string {
-    return this._statusCode;
+  get getStatusCode(): string {
+    return this.statusCode;
   }
 
-  set statusCode(value: string) {
-    this._statusCode = value;
+  set setStatusCode(value: string) {
+    this.statusCode = value;
   }
 
-  get statusMessage(): string {
-    return this._statusMessage;
+  get getStatusMessage(): string {
+    return this.statusMessage;
   }
 
-  set statusMessage(value: string) {
-    this._statusMessage = value;
+  set setStatusMessage(value: string) {
+    this.statusMessage = value;
   }
 
-  get sumMarks(): number {
-    return this._sumMarks;
+  get getSumMarks(): number {
+    return this.sumMarks;
   }
 
-  set sumMarks(value: number) {
-    this._sumMarks = value;
+  set setSumMarks(value: number) {
+    this.sumMarks = value;
   }
 
-  get countMarks(): number {
-    return this._countMarks;
+  get getCountMarks(): number {
+    return this.countMarks;
   }
 
-  set countMarks(value: number) {
-    this._countMarks = value;
+  set setCountMarks(value: number) {
+    this.countMarks = value;
   }
 
-  get marksAverage(): number {
-    return this._marksAverage;
+  get getMarksAverage(): number {
+    return this.marksAverage;
   }
 
-  set marksAverage(value: number) {
-    this._marksAverage = value;
+  set setMarksAverage(value: number) {
+    this.marksAverage = value;
   }
 
-  get rated(): boolean {
-    return this._rated;
+  get getRated(): boolean {
+    return this.rated;
   }
 
-  set rated(value: boolean) {
-    this._rated = value;
+  set setRated(value: boolean) {
+    this.rated = value;
   }
 
-  get commentDtos(): Comment[] {
-    return this._commentDtos;
+  get getCommentDtos(): Comment[] {
+    return this.commentDtos;
   }
 
-  set commentDtos(value: Comment[]) {
-    this._commentDtos = value;
+  set setCommentDtos(value: Comment[]) {
+    this.commentDtos = value;
   }
 
-  get category(): string {
-    return this._category;
+  get getCategory(): string {
+    return this.category;
   }
 
-  set category(value: string) {
-    this._category = value;
+  set setCategory(value: string) {
+    this.category = value;
   }
 }
