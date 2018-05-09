@@ -1,0 +1,11 @@
+table.line-height-200 {
+  line-height: 200%;
+}
+
+@media only screen and (max-width: 992px) {
+  .order-status {
+    /*position: relative;*/
+    /*width: 1px;*/
+    font-size: 19px;
+  }
+}

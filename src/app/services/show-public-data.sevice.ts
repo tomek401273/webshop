@@ -17,6 +17,9 @@ export class ShowPublicDataSevice {
   constructor(private httpClient: HttpClient) {
   }
 
+  category = new EventEmitter<string>();
+  searchedProduct = new EventEmitter<string>();
+
   getProducts() {
     return this.httpClient.get(Server.address + 'product/all');
   }

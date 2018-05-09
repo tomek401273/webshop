@@ -92,6 +92,8 @@ export class ProductListComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    this.onSearchProductWithTitle();
+    this.onCategory();
     this.getAllProductsTitle();
     this.getProductTitlesFromService();
     this.getTemp();
@@ -111,7 +113,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       .subscribe(
         (products: any[]) => {
           this._products = products;
-          this.setPage(1);
+          this.setPage(2);
         },
         (error) => this._error.show()
       );
@@ -221,26 +223,33 @@ export class ProductListComponent implements OnInit, DoCheck {
   }
 
   onSearchProductWithTitle() {
-    if (this._chosenTitle.length === 1 && this._typedTitleLengthTemp === 3) {
-      this.getDataFromDatabase();
-      this._typedTitleLengthTemp = 0;
-    }
+    this.showPublicData.searchedProduct.subscribe(
+      (title: string) => {
+        console.log(title);
+        if (title.length === 1 && this._typedTitleLengthTemp === 3) {
+          this.getDataFromDatabase();
+          this._typedTitleLengthTemp = 0;
+        }
 
-    if (this._chosenTitle.length > 2) {
-      this._typedTitleLengthTemp = 3;
-      this.showPublicData.searchProductInDatabase(this._chosenTitle).subscribe(
-        (products: any[]) => {
-          if (products.length === 0) {
-            this._products = [];
-            this._pagedProduct = [];
-          } else {
-            this._products = products;
-            this.setPage(1);
-          }
-        },
-        (error) => this._error.show()
-      );
-    }
+        if (title.length > 2) {
+          this._typedTitleLengthTemp = 3;
+          this.showPublicData.searchProductInDatabase(title).subscribe(
+            (products: any[]) => {
+              if (products.length === 0) {
+                this._products = [];
+                this._pagedProduct = [];
+              } else {
+                this._products = products;
+                this.setPage(1);
+              }
+            },
+            (error) => this._error.show()
+          );
+        }
+      }
+    );
+
+
   }
 
   onSetSubscription(email, productId) {
@@ -297,19 +306,22 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response: string[]) => {
         this._categoryNames = response;
       },
-      (error) => this._error.show()
+      () => this._error.show()
     );
   }
 
-  onCategory(category: string) {
-    console.log(category);
-    this.showPublicData.getProductWithCategory(category).subscribe(
-      (response: Category) => {
-        console.log(response);
-        this._products = response.productDtoList;
-        this.setPage(1);
-      },
-      (error) => this._error.show()
+  onCategory() {
+    this.showPublicData.category.subscribe(
+      (chosenCategory) => {
+        this.showPublicData.getProductWithCategory(chosenCategory).subscribe(
+          (response: Category) => {
+            console.log(response);
+            this._products = response.productDtoList;
+            this.setPage(1);
+          },
+          () => this._error.show()
+        );
+      }
     );
   }
 

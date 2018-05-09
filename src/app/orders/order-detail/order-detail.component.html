@@ -2,61 +2,50 @@
   <h2 class="text-center">Detail informetion of order nr: {{order.id}}</h2>
   <hr>
   <br>
-  <br>
   <div class="row ">
 
-    <div class="col-sm-2"></div>
-    <div class="col-sm-10">
-      <table class="table text-justify line-height-200">
-        <thead>
-        <td>
-          <tr><h3>Actual order Status</h3></tr>
-        </td>
-        <td>
-          <tr><h3>Shippin Address</h3></tr>
-        </td>
-        </thead>
-        <tbody>
-        <td>
-          <tr>Total Value: {{order.totalValue}}</tr>
-          <tr>Total Amount: {{order.totalAmount}}</tr>
-          <tr>Bought Date: {{order.boughtDate}}</tr>
-          <tr>Stratus status: {{order.status}}</tr>
+    <div class="col-md-2"></div>
+    <div class="col-md-10">
+      <div class="table text-justify line-height-200">
 
-          <tr><a href="#">Delivery link</a></tr>
+        <div class="col-md-12">
+          <div class="col-md-6">
+            <h3>Actual order Status</h3>
+            <p>Total Value: {{order.totalValue}}</p>
+            <p>Total Amount: {{order.totalAmount}}</p>
+            <p>Bought Date: {{order.boughtDate}}</p>
+            <p>Stratus status: {{order.status}}</p>
+            <p><a href="#">Delivery link</a></p>
+          </div>
 
-        </td>
-        <td>
-          <tr>Country: {{order.shippingAddressDto.country}}</tr>
-          <tr>PostCode: {{order.shippingAddressDto.postalCode}} - {{order.shippingAddressDto.city}}</tr>
+          <div class="col-md-6">
+            <h3>Shippin Address</h3>
+            <p>Country: {{order.shippingAddressDto.country}}</p>
+            <p>PostCode: {{order.shippingAddressDto.postalCode}} - {{order.shippingAddressDto.city}}</p>
 
-          <tr *ngIf="order.shippingAddressDto.street == null">Locality: {{order.shippingAddressDto.district}}</tr>
-          <tr *ngIf="order.shippingAddressDto.street != null">Locality: {{order.shippingAddressDto.city}}</tr>
+            <p *ngIf="order.shippingAddressDto.street == null">Locality: {{order.shippingAddressDto.district}}</p>
+            <p *ngIf="order.shippingAddressDto.street != null">Locality: {{order.shippingAddressDto.city}}</p>
 
-          <tr *ngIf="order.shippingAddressDto.street != null">Street: {{order.shippingAddressDto.street}}</tr>
-          <tr>House: {{order.shippingAddressDto.house}}</tr>
-          <tr *ngIf="order.shippingAddressDto.apartment !=0">Apartment: {{order.shippingAddressDto.apartment}}</tr>
-          <tr>Name: {{order.shippingAddressDto.name}}</tr>
-          <tr>Surname: {{order.shippingAddressDto.surname}}</tr>
-          <tr>Supplier: {{order.shippingAddressDto.supplier}}</tr>
-          <tr>State: {{order.shippingAddressDto.state}}</tr>
-        </td>
-        </tbody>
-      </table>
+            <p *ngIf="order.shippingAddressDto.street != null">Street: {{order.shippingAddressDto.street}}</p>
+            <p>House: {{order.shippingAddressDto.house}}</p>
+            <p *ngIf="order.shippingAddressDto.apartment !=0">Apartment: {{order.shippingAddressDto.apartment}}</p>
+            <p>Name: {{order.shippingAddressDto.name}}</p>
+            <p>Surname: {{order.shippingAddressDto.surname}}</p>
+            <p>Supplier: {{order.shippingAddressDto.supplier}}</p>
+            <p>State: {{order.shippingAddressDto.state}}</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <br>
-    <br>
     <div class="text-center" *ngIf="isPaid">
+      <br>
       <button class="btn btn-primary " (click)="onPay()">Pay Order</button>
-
+      <br>
+      <br>
     </div>
 
   </div>
 
-
-  <br>
-  <br>
-  <br>
   <div class="row">
     <h3 class="text-center">List ordered products</h3>
     <table class="table text-center table-striped">

@@ -7,14 +7,73 @@
   border: none;
 }
 
-button.logOut {
+
+ /*For width 400px and larger: */
+@media only screen and (max-width: 400px) {
+  /*div.tableLog {*/
+    /*position: relative;*/
+    /*top: 30px;*/
+    /*left: 80px;*/
+  /*}*/
+
+
+
+  /*button.logAcces {*/
+    /*width: 50px;*/
+  /*}*/
+
+  h1 { font-size: 10px; }
+  button.logOut {
+    width: 160px;
+    position: relative;
+    right: 10px;
+  }
+
+  button.signUp {
+    /*font-size: 13px;*/
+    width: 70px;
+    /*height: 38px;*/
+  }
+
+}
+@media only screen and (min-width: 400px) {
+
+  button.logOut {
   width: 200px;
+  }
+
+  h5.welcome {
+    position: relative;
+    left: 25px;
+    line-height: 1.6;
+  }
+
+  button.signUp {
+    width: 80px;
+    position: relative;
+    bottom: 40px;
+    /*height: 38px;*/
+  }
+
 }
-button.logAcces {
-  width: 100px;
-}
-div.tableLog {
-  position: relative;
-  top: 30px;
-  left: 350px;
-}
+/*@media only screen and (min-width: 400px) {*/
+  /*div.tableLog {*/
+    /*position: relative;*/
+    /*top: 30px;*/
+    /*left: 350px;*/
+  /*}*/
+
+  /*button.logOut {*/
+    /*width: 200px;*/
+  /*}*/
+
+  /*button.logAcces {*/
+    /*width: 100px;*/
+  /*}*/
+/*}*/
+
+
+
+
+
+

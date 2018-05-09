@@ -1,245 +1,181 @@
-<div class="row">
-  <div class="container form-group">
-    <input
-      class="form-control"
-      placeholder="Search product in WebShop"
-      [(ngModel)]="chosenTitle"
-      [typeahead]="productsTitle"
-      [ngModelOptions]="{standalone: true}"
-      required
-      (keyup)="onSearchProductWithTitle()"
-    >
-    <div class="alert-info" *ngIf="typedTitleLengthTemp>0">
-      Count found products: {{products.length}}
-    </div>
-
-    <div *ngIf="products.length==0">
-      <h3 class="alert-danger">Somethin something go wrong try another time</h3>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-2">
-
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-      <br>
-      <br>
-      <div>
-        <h4 class="text-center">Category</h4>
-        <hr>
-        <div class="btn-group-vertical center-block">
-          <button type="button" class="btn btn-default btn-category" (click)="getDataFromDatabase()">All Products</button>
-          <div *ngFor="let category of categoryNames">
-            <button type="button" class="btn btn-default btn-category" (click)="onCategory(category)">{{category}}</button>
-          </div>
+<div class="container-fluid">
+  <!--<div>-->
+  <!--<div class="row form-group">-->
+  <!--<div class="alert-info" *ngIf="typedTitleLengthTemp>0">-->
+  <!--Count found products: {{products.length}}-->
+  <!--</div>-->
+  <!--<div *ngIf="products.length==0">-->
+  <!--<h3 class="alert-danger">Somethin something go wrong try another time</h3>-->
+  <!--</div>-->
+  <!--</div>-->
+  <!--</div>-->
 
 
+
+  <div class="row">
+      <div class="col-md-2 col-xs-12">
+        <div class="col-md-10">
+          <!--<br>-->
+          <!--<br>-->
+          <!--<br>-->
+          <!--<br>-->
+          <h4 class="text-center">Filter product</h4>
+          <hr>
+          <br>
+          <ion-range-slider #advancedSliderElement
+                            type="double"
+                            min="0"
+                            [max]="maxValueProductInShop"
+                            grid="true"
+                            [from]=minValueCover
+                            [grid_num]="5"
+                            [to]=maxValueCover
+                            (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
+          <br>
+          <input type="number"
+                 class="form-control text-center"
+                 [(ngModel)]="above"
+                 (keyup)="setAdvancedSliderTo()"
+                 (click)="setAdvancedSliderTo()"
+                 min="0"
+                 [max]="maxValueProductInShop"
+
+          >
+          <input type="number"
+                 class="form-control text-center"
+                 [(ngModel)]="below"
+                 (keyup)="setAdvancedSliderTo()"
+                 (click)="setAdvancedSliderTo()"
+                 min="0"
+                 [max]="maxValueProductInShop"
+          >
+          <br>
+          <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">
+            Search
+            database
+          </button>
         </div>
       </div>
 
-
-      <div>
+      <div class="col-md-8 col-xs-12">
         <br>
         <br>
-        <h4 class="text-center">Filter product</h4>
-        <hr>
-        <br>
-        <ion-range-slider #advancedSliderElement
-                          type="double"
-                          min="0"
-                          [max]="maxValueProductInShop"
-                          grid="true"
-                          [from]=minValueCover
-                          [grid_num]="5"
-                          [to]=maxValueCover
-                          (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
-        <br>
-        <input type="number"
-               class="form-control text-center"
-               [(ngModel)]="above"
-               (keyup)="setAdvancedSliderTo()"
-               (click)="setAdvancedSliderTo()"
-               min="0"
-               [max]="maxValueProductInShop"
+        <div class="row " *ngFor="let product of pagedProduct; let i = index">
+          <div class=" list-group-item">
+            <a (click)="onShowProduct(product.id)"><h3 class="text-center">{{product.title}}</h3></a>
+            <hr>
+            <table class="table table-borderless">
+              <tbody>
+              <tr>
+                <td class="col-sm-4 col-xs-4">
 
-        >
-        <input type="number"
-               class="form-control text-center"
-               [(ngModel)]="below"
-               (keyup)="setAdvancedSliderTo()"
-               (click)="setAdvancedSliderTo()"
-               min="0"
-               [max]="maxValueProductInShop"
-        >
-        <br>
-        <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">Search
-          database
-        </button>
-      </div>
-      <div>
-        <br>
-        <br>
-        <h4 class="text-center">Join Newsletter</h4>
-        <p class="text-justify">
-          Be the first to learn about new product releases,
-          exclusive sales and special promotions.
-          <a (click)="openModal(template)">Click here</a> to subscribe to our newsletter
-          and receive <b>10% </b>off your first order!
-      </div>
+                  <img
+                    src="{{product.imageLink}}"
+                    alt="{{product.imageLink}}"
+                    class="img-responsive"
+                  >
 
-    </div>
-  </div>
-
-  <div class="container col-md-8">
-    <br>
-    <br>
-    <div class="row " *ngFor="let product of pagedProduct; let i = index">
-      <div class=" list-group-item">
-        <a (click)="onShowProduct(product.id)"><h3 class="text-center">{{product.title}}</h3></a>
-        <hr>
-        <table class="table table-borderless">
-          <thead>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="col-sm-4"><img
-              src="{{product.imageLink}}"
-              alt="{{product.imageLink}}"
-              class="img-responsive"
-              style="max-height: 200px; max-width: 250px"></td>
-            <td class="col-sm-6 text-left bottom-left">
-              {{product.description}}
-            </td>
-            <td class="col-sm-2 text-center">
-              <br>
-              <br>
-              <br>
-          <tr>
-            <div>
-
-              Price: {{product.price}} $<br>
-              <button class="btn btn-primary btn-group-lg" [disabled]="product.statusCode!==sale"
-                      (click)="onAddToCard(product)">Add to Card
-              </button>
-
-            </div>
-          </tr>
-          </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" aria-labelledby="myLargeModalLabel"
-           aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title pull-left">Set reminder when product {{product.title}} will be available</h4>
-              <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
-                <span aria-hidden="true">x</span></button>
-            </div>
-            <div class="modal-body">
-              <div class="text-justify">
-                <p>Write your email and press Submit </p>
-                <p>After few secends you will receive email please confirm it </p>
-                <br>
-                <br>
-
-                <input
-                  class="form-control"
-                  type="text"
-                  ngModel
-                  name="email"
-                  #emailSubscription="ngModel"
-                  required
-                  email
-
-                >
-                <button
-                  class="btn btn-primary"
-                  type="button"
-                  [disabled]="!emailSubscription.valid"
-                  (click)="onSetSubscription(emailSubscription, product.id)"
-                >Get Subscription
-                </button>
-
-              </div>
-            </div>
+                </td>
+                <td class="col-md-6 col-xs-5 text-left bottom-left">
+                  {{product.description}}
+                </td>
+                <td>
+              <tr></tr>
+              <tr></tr>
+              <tr></tr>
+              $ {{product.price}}
+              </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-
-
-    </div>
-    <br>
-    <div class="text-center" *ngIf="products.length>0">
-      <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(1)">First</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === 1}">
-          <a (click)="setPage(pager.currentPage - 1)">Prev</a>
-        </li>
-        <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-          <a (click)="setPage(page)">{{page}}</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.currentPage + 1)">Next</a>
-        </li>
-        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-          <a (click)="setPage(pager.totalPages)">Last</a>
-        </li>
-      </ul>
     </div>
   </div>
+  <div class="row">
+    <div class="">
+      <div class="col-xs-12 text-center ">
+        <div class="" *ngIf="products.length>0">
+          <ul *ngIf="pager.pages && pager.pages.length" class="pagination ">
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+              <a (click)="setPage(1)">First</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+              <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+            </li>
+            <li class="extra-buttons" *ngFor="let page of pager.pages"
+                [ngClass]="{active:pager.currentPage === page}">
+              <a (click)="setPage(page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+              <a (click)="setPage(pager.currentPage + 1)">Next</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+              <a (click)="setPage(pager.totalPages)">Last</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--<div class="col-md-2 col-xs-12">-->
+  <!--<div class="col-md-10">-->
+  <!--<br>-->
+  <!--<br>-->
+  <!--<br>-->
+  <!--<br>-->
+  <!--<h4 class="text-center">Join Newsletter</h4>-->
+  <!--<hr>-->
+  <!--<p class="text-justify">-->
+  <!--Be the first to learn about new product releases,-->
+  <!--exclusive sales and special promotions.-->
+  <!--<a (click)="openModal(template)">Click here</a> to subscribe to our newsletter-->
+  <!--and receive <b>10% </b>off your first order!-->
+  <!--</div>-->
+  <!--</div>-->
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">JOIN TO NEWSLETTER</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times; exit</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="submitNewsLetter(form)" #form="ngForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            class="form-control"
+            type="text"
+            id="name"
+            ngModel
+            name="name"
+            required
+            minlength="6"
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            class="form-control"
+            type="text"
+            id="email"
+            ngModel
+            name="email"
+            required
+            email
+          >
+        </div>
+        <br>
+        <button class="btn btn-primary center-block" [disabled]="!form.valid" type="submit">Submit</button>
+      </form>
+    </div>
+  </ng-template>
+  <swal #success title="Success" text="Successfully added product to bucket" type="success"></swal>
+  <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
+
 </div>
-
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">JOIN TO NEWSLETTER</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-      <span aria-hidden="true">&times; exit</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <form (ngSubmit)="submitNewsLetter(form)" #form="ngForm">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input
-          class="form-control"
-          type="text"
-          id="name"
-          ngModel
-          name="name"
-          required
-          minlength="6"
-        >
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input
-          class="form-control"
-          type="text"
-          id="email"
-          ngModel
-          name="email"
-          required
-          email
-        >
-      </div>
-      <br>
-      <button class="btn btn-primary center-block" [disabled]="!form.valid" type="submit">Submit</button>
-    </form>
-  </div>
-</ng-template>
-<swal #success title="Success" text="Successfully added product to bucket" type="success"></swal>
-<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

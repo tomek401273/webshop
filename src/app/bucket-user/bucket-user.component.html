@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <table class="table text-center table-striped">
+    <table class="table text-center table-striped col-xs-2">
       <thead>
       <tr>
         <td>
@@ -22,52 +22,69 @@
       </thead>
       <tbody>
       <tr *ngFor="let product of products">
-        <td>
-          {{product.title}}
+        <td class="col-md-2">
+          <div class="col-md-12 amount">{{product.title}}</div>
         </td>
         <td>
           {{product.price}}
         </td>
-        <td>
-          <button class="btn btn-default btn-sm" (click)="onSubtractAmountProduct(product)">-</button>
-          {{product.totalAmount}}
-          <button class="btn btn-sm btn-default" (click)="onAddAmountProcuct(product)">+</button>
+        <td class="col-md-2">
+          <!--<div class="col-md-2"></div>-->
+          <div class="col-md-2">
+            <button class="btn btn-default btn-sm " (click)="onSubtractAmountProduct(product)">-</button>
+          </div>
+          <div class="col-md-2 amount">
+            {{product.totalAmount}}
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-sm btn-default" (click)="onAddAmountProcuct(product)">+</button>
+          </div>
         </td>
         <td>
           {{product.value}}
         </td>
 
         <td>
-          <button class="btn btn-danger btn-sm" (click)="onRemove(product)">Remove <span class="
+          <button class="btn btn-danger btn-sm removeProduct" (click)="onRemove(product)">Remove <span class="
 glyphicon glyphicon-remove"></span></button>
 
         </td>
       </tr>
+      <tr  *ngIf="!isCoupon">
+
+        <td></td>
+        <td></td>
+        <td><p>Total:</p></td>
+        <td><p>{{totalValueProducts}}</p></td>
+        <td></td>
+      </tr>
       <tr>
+
+       <td><p>RABAT</p></td>
+       <td><p>10%</p></td>
+       <td><p>Total:</p></td>
+       <td><p>{{totalValueProducts-(totalValueProducts*0.1)}} </p></td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td><p>Total: {{totalValueProducts}}</p>
-      <div *ngIf="isCoupon">
-        <p>RABAT 10%</p>
-        <p>Total Price After rabat:{{totalValueProducts-(totalValueProducts*0.1)}} </p>
-      </div>
-        </td>
-        <td>
-          <button
-            class="btn btn-success submit-next"
-            [disabled]="!isAuthenticated || !isFullFiled"
-            (click)="onNext()"> Next <span
-            class="glyphicon glyphicon-arrow-right"></span></button>
-          <br>
-          <br>
-          <p class="text-warning" *ngIf="!isFullFiled">Your bucket is empty add something </p>
-          <p class="text-warning" *ngIf="!isAuthenticated">Login is requred to continue</p>
-        </td>
       </tr>
       </tbody>
     </table>
   </div>
+
+  <div class="row">
+    <div class="col-md-9 col-xs-9"></div>
+    <div class="col-md-1 col-xs-1">
+      <button
+        class="btn btn-success submit-next"
+        [disabled]="!isAuthenticated || !isFullFiled"
+        (click)="onNext()"> Next <span
+        class="glyphicon glyphicon-arrow-right"></span></button>
+      <br>
+      <br>
+      <p class="text-warning" *ngIf="!isFullFiled">Your bucket is empty add something </p>
+      <p class="text-warning" *ngIf="!isAuthenticated">Login is requred to continue</p>
+    </div>
+  </div>
+
   <div class="row center-block">
     <div class="col-sm-4">
 
@@ -79,15 +96,15 @@ glyphicon glyphicon-remove"></span></button>
           <br>
           <br>
 
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Code" ngModel #code="ngModel">
-              <div class="input-group-btn">
-                <button class="btn btn-default" type="button" (click)="checkAvailableCode(code)">
-                  Go!
-                </button>
-              </div>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Code" ngModel #code="ngModel">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="button" (click)="checkAvailableCode(code)">
+                Go!
+              </button>
             </div>
-          <div class="text-center" >
+          </div>
+          <div class="text-center">
             <br>
             <span class="text-warning" *ngIf="wrongCode">{{wrongMessage}}</span>
             <span class="text-success" *ngIf="correctCode">Code is correct!</span>

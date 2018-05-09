@@ -3,6 +3,35 @@ input.amonut-a {
   left: 100px;
 }
 
-button.submit-next {
-  width: 125px;
+@media only screen and (min-width: 992px) {
+  .amount {
+    position: relative;
+    left: 10px;
+    top: 5px
+  }
+
+  button.submit-next {
+    width: 125px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  table > tbody > tr > td {
+    vertical-align: inherit;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th {
+    height: 50px;
+  }
+  button.removeProduct {
+    width: 74px;
+  }
+
+  button.submit-next {
+    /*width: 100px;*/
+  }
 }

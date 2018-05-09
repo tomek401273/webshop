@@ -1,71 +1,71 @@
 <div class="container">
+
   <div class="row">
-    <h3 class="text-center">{{product.title}}</h3>
-    <table class="table table-borderless">
-      <thead>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="col-sm-2"><img
+      <div class="col-md-2 col-sm-12">
+        <br>
+        <br>
+        <img
           src="{{product.imageLink}}"
           alt="{{product.imageLink}}"
           class="img-responsive"
           style="max-height: 250px; max-width: 300px">
-        </td>
-        <td class="col-sm-1"></td>
-        <td class="col-sm-6 text-center text-justify">
-          <br>
-          <br>
-          {{product.description}}
-        </td>
-        <td class="col-sm-1"></td>
-        <td class="col-sm-3 text-center">
-          <br>
-          <br>
-          <br>
-      <tr class="text-center">
-        <div>
+      </div>
+      <div class="col-md-1 col-sm-1 "></div>
+      <div class="col-md-6 col-sm-12  text-justify description">
+
+        <h3 class="text-center">{{product.title}}</h3>
+        {{product.description}}
+      </div>
+      <!--<div class="col-sm-1"></div>-->
+      <div class="col-md-3 text-center col-sm-12">
+
+        <br>
+        <br>
+        <br>
+        <div class="text-center ">
+          <div class="col-sm-12">
+            <div>
+              <ngb-rating
+                [(rate)]="product.marksAverage"
+                (hover)="hovered=$event"
+                (leave)="hovered=0"
+                [readonly]="!isAuthenticated"
+                (click)="onRated(rate2, product.id)"
+                #rate2>
+              </ngb-rating>
+              <p>Count Users Marks: ({{product.countMarks}})</p>
+            </div>
+            <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
+          </div>
           <div>
-            <ngb-rating
-              [(rate)]="product.marksAverage"
-              (hover)="hovered=$event"
-              (leave)="hovered=0"
-              [readonly]="!isAuthenticated"
-              (click)="onRated(rate2, product.id)"
-              #rate2>
-            </ngb-rating>
-            <p>Count Users Marks: ({{product.countMarks}})</p>
-          </div>
-          <p *ngIf="product.rated" class="text-success">Thanks for rating this item!!!</p>
-        </div>
-        <div>
-          Price: {{product.price}} $<br>
-          <button class="btn btn-primary buy" [disabled]="product.statusCode!==sale"
-                  (click)="onAddToCard(product)">Add to Card
-          </button>
-          <div *ngIf="product.statusCode!==sale">
+            Price: {{product.price}} $<br>
+            <button class="btn btn-primary buy" [disabled]="product.statusCode!==sale"
+                    (click)="onAddToCard(product)">Add to Card
+            </button>
+            <div *ngIf="product.statusCode!==sale">
+              <br>
+              <p>Temporally unavailable</p>
+              <button type="button" class="btn btn-primary reminder" (click)="lgModal.show()">Reminder</button>
+            </div>
             <br>
-            <p>Temporally unavailable</p>
-            <button type="button" class="btn btn-primary reminder" (click)="lgModal.show()">Reminder</button>
+            <br>
           </div>
-          <br>
-          <br>
         </div>
-      </tr>
-      </tbody>
-    </table>
+      </div>
   </div>
 
-
   <div class="row">
-    <h3 class="page-headers text-center"> Users Comments </h3>
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-justify description">
+      <h3 class="text-center">Users Coments
+      </h3>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+  <div class="row">
     <br>
-    <div class="panel panel-default" *ngFor="let comment of product.commentDtos let i = index"
+
+    <div class="panel panel-default col-md-12" *ngFor="let comment of product.commentDtos let i = index"
          (mouseover)="mouseHover(comment)" (mouseleave)="mouseLeave(comment)">
       <div class="panel-heading">
         <strong>{{comment.login}}</strong>
@@ -127,25 +127,34 @@
     <br>
     <br>
   </div>
-  <h3 class="page-headers text-center"> Add your comment </h3>
 
   <div class="row">
-    <div class="input-group">
-      <input
-        class="form-control"
-        placeholder="Write comment min 10 and max 1000 characters"
-        [(ngModel)]="commentMessage"
-        [disabled]="!isAuthenticated"
-        maxlength="1000"
-      >
-
-      <div class="input-group-btn">
-        <button class="btn btn-primary" (click)="onAddComment(product.id)" [disabled]="commentMessage.length<10">Add
-          Comment
-        </button>
-
-      </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-justify description">
+      <h3 class="text-center">Add your comment
+      </h3>
     </div>
+    <div class="col-md-3"></div>
+  </div>
+
+  <div class="row">
+    <!--<div class="col-md-3"></div>-->
+      <div class="input-group col-sm-12">
+        <input
+          class="form-control"
+          placeholder="Write comment min 10 and max 1000 characters"
+          [(ngModel)]="commentMessage"
+          [disabled]="!isAuthenticated"
+          maxlength="1000"
+        >
+
+        <div class="input-group-btn">
+          <button class="btn btn-primary" (click)="onAddComment(product.id)" [disabled]="commentMessage.length<10">Add
+            Comment
+          </button>
+
+        </div>
+      </div>
     <br>
   </div>
   <div class="row">
@@ -200,5 +209,7 @@
   </div>
 
 </div>
+
 <swal #success title="Success" text="Successfully added product to bucket" type="success"></swal>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
+

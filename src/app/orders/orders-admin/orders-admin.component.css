@@ -1,3 +1,46 @@
-.center-block {
-  float: none !important
+/*.center-block {*/
+  /*float: none !important*/
+/*}*/
+
+
+input.amonut-a {
+  position: relative;
+  left: 100px;
+}
+
+@media only screen and (min-width: 992px) {
+  .amount {
+    position: relative;
+    left: 10px;
+    top: 5px
+  }
+
+  button.submit-next {
+    /*width: 100px;*/
+    /*position: relative;*/
+    /*bottom: 60px;*/
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  th {
+    height: 10px;
+  }
+
+  button.show-detail {
+    width: 20px;
+    height: auto;
+  }
+
+
+  .table>tbody>tr>td, .table>thead>tr>td {
+    vertical-align: middle;
+
+  }
+}
+
+.center-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

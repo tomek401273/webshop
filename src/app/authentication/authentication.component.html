@@ -1,29 +1,72 @@
-<div class="table-section tableLog">
-  <table class=" table table-borderless  text-center">
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><h4 *ngIf="isAuthenticated">Welcome {{roleUser}} {{loginUser}}</h4></td>
-    </tr>
-
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>
-        <div *ngIf="isAuthenticated==false">
-          <button class="btn btn-primary logAcces" (click)="onRedirect('/signup')">Sign up</button>
-          <!--<button class="btn btn-primary logAcces" (click)="onRedirect('/login')">Sign in</button>-->
-          <app-signin></app-signin>
-        </div>
-        <div *ngIf="isAuthenticated==true">
-          <button class="btn btn-primary logOut" (click)="onLogOut()">Log out</button>
-        </div>
-      </td>
-    </tr>
-
-  </table>
-
+<div *ngIf="isAuthenticated==true">
+  <h5 *ngIf="isAuthenticated" class="welcome"> {{loginUser}}</h5>
+  <button class="btn btn-primary logOut" (click)="onLogOut()">Log out</button>
+</div>
+<div *ngIf="isAuthenticated==false">
+  <br>
+  <div class="btn btn-group">
+    <button type="button" class="btn btn-primary signUp" (click)="onRedirect('/signup')">Sign up</button>
+    <button type="button" class="btn btn-primary signUp" (click)="openModal(template)">Log in</button>
+  </div>
 </div>
 
+
+<!--<div class="table-section tableLog">-->
+<!--<table class=" table table-borderless">-->
+<!--<tr>-->
+<!---->
+<!--<td>-->
+<!---->
+<!--</td>-->
+<!--</tr>-->
+
+<!--</table>-->
+
+<!--</div>-->
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Login to your account</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times; exit</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm" id="loginForm">
+      <div class="form-group">
+        <label for="idlogin">Login</label>
+        <input
+          type="text"
+          id="idlogin"
+          name="loginLog"
+          class="form-control"
+          required
+          #loginCrt
+          [ngModel]="name"
+        >
+        <span class="help-block" *ngIf="loginCrt.invalid && loginCrt.touched">Please fill login </span>
+      </div>
+      <div class="form-group">
+        <label for="idpassword">Password</label>
+        <input
+          type="text"
+          id="idpassword"
+          name="passwordLog"
+          class="form-control"
+          required
+          #paswordCrt
+          [ngModel]="password">
+        <span class="help-block" *ngIf="paswordCrt.invalid && paswordCrt.touched"></span>
+      </div>
+      <h5 class="text-center" *ngIf="message.length>0"><span class="alert-danger ">Warrning  {{message}} check login and password</span>
+      </h5>
+
+      <br>
+
+      <button class="btn btn-primary center-block" type="submit">LOGGIN</button>
+
+    </form>
+  </div>
+</ng-template>
+<swal #success title="Success" text="Successfully added product to bucket" type="success"></swal>
+<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

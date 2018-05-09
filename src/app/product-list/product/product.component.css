@@ -1,4 +1,41 @@
-a.change {
+@media only screen and (max-width: 1200px) {
+  .img-responsive {
+    /*width: 100px;*/
+    /*text-align: center;*/
+    /*border: 3px solid green;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+  }
+
+  .description {
+    /*text-align: center;*/
+
+  }
+}
+
+@media only screen and (min-width: 991px) {
+  .img-responsive {
+    /*width: 100px;*/
+    /*text-align: center;*/
+    /*border: 3px solid green;*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 280px;
+  }
+  .description {
+    /*text-align: center;*/
+    position: relative;
+    left: 30px;
+  }
+
+
+}
+
+
+  a.change {
   color: #bc3721;
 }
 
@@ -6,25 +43,6 @@ button.change {
   color: #bc3721;
 
 }
-
-/*.button {*/
-/*background-color: #4CAF50; !* Green *!*/
-/*border: none;*/
-/*color: white;*/
-/*padding: 20px;*/
-/*text-align: center;*/
-/*text-decoration: none;*/
-/*display: inline-block;*/
-/*font-size: 16px;*/
-/*margin: 4px 2px;*/
-/*cursor: pointer;*/
-/*}*/
-
-/*.button1 {border-radius: 2px;}*/
-/*.button2 {border-radius: 4px;}*/
-/*.button3 {border-radius: 8px;}*/
-/*.button4 {border-radius: 100%;}*/
-/*.button5 {border-radius: 1%;}*/
 
 .btn-circle.btn-xl {
   width: 70px;
