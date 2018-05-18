@@ -30,6 +30,97 @@ export class OrderAdminDetailComponent implements OnInit {
               private router: Router) {
   }
 
+  ngOnInit() {
+    // Observable.interval(20000).subscribe(x => {
+    // });
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this.getData();
+  }
+
+  getData() {
+    this.ordersService.getOneOrder(this._id).subscribe(
+      (order: any) => {
+        this._order = order;
+        if ('paid' === this._order.statusCode) {
+          this._paid = true;
+        }
+        if ('prepared' === this._order.statusCode) {
+          this._paid = true;
+          this._prepared = true;
+        }
+        if ('send' === this._order.statusCode) {
+          this._paid = true;
+          this._prepared = true;
+          this._send = true;
+          this.checkDeliver();
+        }
+        if ('delivered' === this._order.statusCode) {
+          this._paid = true;
+          this._delivered = true;
+        }
+
+        for (let i = 0; i < this._order.productBoughts.length; i++) {
+          this._order.productBoughts[i].packed = false;
+        }
+
+      },
+      () => this._error.show()
+    );
+  }
+
+  checkDeliver() {
+
+  }
+
+  onPrepared() {
+    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, null, '_prepared');
+    this.ordersService.orderPrepared(prepared).subscribe(
+      (response: boolean) => {
+
+        if (response) {
+          this._prepared = true;
+          this._order.status = 'Order was prepared and is ready to send';
+        }
+      },
+      () => {
+        this._error.show();
+      }
+    );
+  }
+
+  onProductPrepared(id: number) {
+    this._order.productBoughts[id].packed = !this._order.productBoughts[id].packed;
+    this._allProductPacked = true;
+    for (let i = 0; i < this._order.productBoughts.length; i++) {
+      if (!this._order.productBoughts[i].packed) {
+        this._allProductPacked = false;
+      }
+    }
+  }
+
+  onSend() {
+    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, this._linkDelivery, 'send');
+    this.ordersService.sendOrder(send).subscribe(
+      (response: boolean) => {
+        if (response) {
+          this._send = true;
+          this._order.status = 'Order was send check status delivery in link';
+        }
+      },
+      () => {
+        this._error.show();
+      }
+    );
+  }
+
+  onDeliveryDetail() {
+    this.router.navigate(['/delivery/' + this._order.id]);
+  }
+
+  onCrone() {
+    console.log('Crone Crone');
+  }
+
   get id(): number {
     return this._id;
   }
@@ -108,96 +199,5 @@ export class OrderAdminDetailComponent implements OnInit {
 
   set error(value: SwalComponent) {
     this._error = value;
-  }
-
-  ngOnInit() {
-    // Observable.interval(20000).subscribe(x => {
-    // });
-    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    this.getData();
-  }
-
-  getData() {
-    this.ordersService.getOneOrder(this._id).subscribe(
-      (order: any) => {
-        this._order = order;
-        if ('_paid' === this._order.statusCode) {
-          this._paid = true;
-        }
-        if ('_prepared' === this._order.statusCode) {
-          this._paid = true;
-          this._prepared = true;
-        }
-        if ('send' === this._order.statusCode) {
-          this._paid = true;
-          this._prepared = true;
-          this._send = true;
-          this.checkDeliver();
-        }
-        if ('_delivered' === this._order.statusCode) {
-          this._paid = true;
-          this._delivered = true;
-        }
-
-        for (let i = 0; i < this._order.productBoughts.length; i++) {
-          this._order.productBoughts[i].packed = false;
-        }
-
-      },
-      () => this._error.show()
-    );
-  }
-
-  checkDeliver() {
-
-  }
-
-  onPrepared() {
-    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, null, '_prepared');
-    this.ordersService.orderPrepared(prepared).subscribe(
-      (response: boolean) => {
-
-        if (response) {
-          this._prepared = true;
-          this._order.status = 'Order was prepared and is ready to send';
-        }
-      },
-      () => {
-        this._error.show();
-      }
-    );
-  }
-
-  onProductPrepared(id: number) {
-    this._order.productBoughts[id].packed = !this._order.productBoughts[id].packed;
-    this._allProductPacked = true;
-    for (let i = 0; i < this._order.productBoughts.length; i++) {
-      if (!this._order.productBoughts[i].packed) {
-        this._allProductPacked = false;
-      }
-    }
-  }
-
-  onSend() {
-    const send: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, this._linkDelivery, 'send');
-    this.ordersService.sendOrder(send).subscribe(
-      (response: boolean) => {
-        if (response) {
-          this._send = true;
-          this._order.status = 'Order was send check status delivery in link';
-        }
-      },
-      () => {
-        this._error.show();
-      }
-    );
-  }
-
-  onDeliveryDetail() {
-    this.router.navigate(['/delivery/' + this._order.id]);
-  }
-
-  onCrone() {
-    console.log('Crone Crone');
   }
 }

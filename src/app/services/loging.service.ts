@@ -5,6 +5,7 @@ import {ServerService} from './server.service';
 import {Router} from '@angular/router';
 import {Register} from '../model/register';
 import {Server} from '../model/server';
+import {ChangePassword} from '../model/change-password';
 
 @Injectable()
 export class LogingService {
@@ -52,6 +53,20 @@ export class LogingService {
 
   registration(register: Register) {
     return this.httpClient.post(Server.address + 'auth/signup', register, {
+      observe: 'response',
+      responseType: 'text',
+    });
+  }
+
+  updateAccount(register: Register) {
+    return this.httpClient.put(Server.address + 'auth/update/account', register, {
+      observe: 'response',
+      responseType: 'text',
+    });
+  }
+
+  changePassword(changePassword: ChangePassword) {
+    return this.httpClient.put(Server.address + 'auth/update/password', changePassword, {
       observe: 'response',
       responseType: 'text',
     });

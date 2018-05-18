@@ -26,6 +26,32 @@
                     name="desc"></textarea>
         </div>
         <div class="form-group">
+          <div *ngIf="currentFileUpload" class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped"
+                 role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+                 aria-valuemin="0" aria-valuemax="100"
+                 [ngStyle]="{width:progress.percentage+'%'}">
+              {{progress.percentage}}%
+            </div>
+          </div>
+
+          <div class="center-element">
+            <label *ngIf="selectedFiles">{{photoName}}</label>
+          </div>
+          <div class="center-element btn-group">
+            <button class="btn btn-default btn-file photo"> Browse
+              <input type="file" (change)="selectFile($event)">
+            </button>
+            <button class="btn btn-success photo" [disabled]="!selectedFiles || photoSize >= 1048576"
+                    (click)="upload()">Upload
+            </button>
+          </div>
+
+
+        </div>
+
+
+        <div class="form-group">
           <label for="image">Imge Link: </label>
           <input id="image"
                  type="text"
@@ -63,7 +89,7 @@
             name="category"
 
           >
-              <option value="{{category}}"  *ngFor="let category of categoryNames">{{category}}</option>
+            <option value="{{category}}" *ngFor="let category of categoryNames">{{category}}</option>
 
           </select>
         </div>
@@ -81,11 +107,12 @@
 
 <!--<button class="btn btn-default" (click)="onDiscard()">Cilick</button>-->
 <swal
-#discard
-title="Discard"
-text="Do you want to discard the changes ???"
-type="question"
-[showCancelButton]="true"
-[focusCancel]="true"
-(confirm)="this.discardChanges = true"
+  #discard
+  title="Discard"
+  text="Do you want to discard the changes ???"
+  type="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  (confirm)="this.discardChanges = true"
 ></swal>
+

@@ -2,7 +2,7 @@ export class ShippingAddress {
   private _login: string;
   private _country: string;
   private _city: string;
-  private _postalCode: string;
+  private _postCode: string;
   private _street: string;
   private _name: string;
   private _surname: string;
@@ -17,11 +17,11 @@ export class ShippingAddress {
   private _subdistrict: string;
 
 
-  constructor(login: string, country: string, city: string, postalCode: string, street: string, name: string, surname: string, supplier: string) {
+  constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
     this._login = login;
     this._country = country;
     this._city = city;
-    this._postalCode = postalCode;
+    this._postCode = postCode;
     this._street = street;
     this._name = name;
     this._surname = surname;
@@ -52,12 +52,12 @@ export class ShippingAddress {
     this._city = value;
   }
 
-  get postalCode(): string {
-    return this._postalCode;
+  get postCode(): string {
+    return this._postCode;
   }
 
-  set postalCode(value: string) {
-    this._postalCode = value;
+  set postCode(value: string) {
+    this._postCode = value;
   }
 
   get street(): string {

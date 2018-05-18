@@ -28,12 +28,13 @@
         <td>
           {{product.price}}
         </td>
-        <td class="col-md-2">
-          <!--<div class="col-md-2"></div>-->
-          <div class="col-md-2">
+        <td class="col-md-2 amount-product-manipulation">
+          <div class="col-md-1"></div>
+
+          <div class="col-md-3">
             <button class="btn btn-default btn-sm " (click)="onSubtractAmountProduct(product)">-</button>
           </div>
-          <div class="col-md-2 amount">
+          <div class="col-md-1 amount  ">
             {{product.totalAmount}}
           </div>
           <div class="col-md-2">
@@ -50,7 +51,7 @@ glyphicon glyphicon-remove"></span></button>
 
         </td>
       </tr>
-      <tr  *ngIf="!isCoupon">
+      <tr *ngIf="!isCoupon">
 
         <td></td>
         <td></td>
@@ -60,10 +61,10 @@ glyphicon glyphicon-remove"></span></button>
       </tr>
       <tr>
 
-       <td><p>RABAT</p></td>
-       <td><p>10%</p></td>
-       <td><p>Total:</p></td>
-       <td><p>{{totalValueProducts-(totalValueProducts*0.1)}} </p></td>
+        <td><p>RABAT</p></td>
+        <td><p>10%</p></td>
+        <td><p>Total:</p></td>
+        <td><p>{{totalValueProducts-(totalValueProducts*0.1)}} </p></td>
         <td></td>
       </tr>
       </tbody>
@@ -71,7 +72,7 @@ glyphicon glyphicon-remove"></span></button>
   </div>
 
   <div class="row">
-    <div class="col-md-9 col-xs-9"></div>
+    <div class="col-md-9 col-xs-8"></div>
     <div class="col-md-1 col-xs-1">
       <button
         class="btn btn-success submit-next"
@@ -80,9 +81,16 @@ glyphicon glyphicon-remove"></span></button>
         class="glyphicon glyphicon-arrow-right"></span></button>
       <br>
       <br>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="text-center">
       <p class="text-warning" *ngIf="!isFullFiled">Your bucket is empty add something </p>
       <p class="text-warning" *ngIf="!isAuthenticated">Login is requred to continue</p>
     </div>
+    <br>
+    <br>
   </div>
 
   <div class="row center-block">

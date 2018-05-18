@@ -127,14 +127,16 @@ export class BucketUserComponent implements OnInit, DoCheck {
     } else {
       const bucket = JSON.parse(localStorage.getItem('bucket123'));
       if (!isNull(bucket)) {
+        console.log('bucket bucket');
+        console.log(bucket);
         for (let i = 0; i < bucket.length; i++) {
           const bucketProduct: ProductDataAmount = new ProductDataAmount(
-            bucket[i]._id,
-            bucket[i]._price,
-            bucket[i]._title,
-            bucket[i]._description,
-            bucket[i]._imageLink,
-            bucket[i]._totalAmount,
+            bucket[i].id,
+            bucket[i].price,
+            bucket[i].title,
+            bucket[i].description,
+            bucket[i].imageLink,
+            bucket[i].totalAmount,
             null,
             null);
           this._products.push(bucketProduct);

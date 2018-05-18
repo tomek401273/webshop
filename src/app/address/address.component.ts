@@ -19,7 +19,6 @@ export class AddressComponent implements OnInit {
     'geoCountryRestriction': this._restrictedCity,
     'showCurrentLocation': false
   };
-
   private _addressInput = false;
   private _insertAddress = '';
   private _validatedAddress: Address = new Address(null, null, null, null, null, null, null, null, null);

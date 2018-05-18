@@ -63,14 +63,15 @@ export class ProductComponent implements OnInit, DoCheck {
       () => this._error.show()
     );
     this._userLogin = localStorage.getItem('login');
+    this.getTemp();
   }
 
   ngDoCheck() {
     this._isAuthenticated = this._logingServiece.isAuthenticated();
   }
 
-  onAddToCard(product: ProductData) {
-    this._showPublicData.checkAvailable(product.getId).subscribe(
+  onAddToCard(product) {
+    this._showPublicData.checkAvailable(product.id).subscribe(
       (resposne) => {
         if (resposne > 0) {
 
@@ -78,7 +79,7 @@ export class ProductComponent implements OnInit, DoCheck {
           this.saveTemp();
           this.acutalNumberProductInBucket();
           if (this._isAuthenticated === true) {
-            this._bucketServerService.addProductToCard(product.getId).subscribe(
+            this._bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
                   this._success.text = 'Successfully added product to bucket';
@@ -104,22 +105,24 @@ export class ProductComponent implements OnInit, DoCheck {
     for (const prod of this._bucketProducts) {
       totalNumber += prod.getTotalAmount;
     }
+    console.log('totalNumberProducts: ' + totalNumber);
     this._bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
-  addProductToBucket(product: ProductData) {
-    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.getId);
+  addProductToBucket(product) {
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
 
     if (isUndefined(founded)) {
       this._bucketProducts.push(new ProductDataAmount(
-        product.getId,
-        product.getPrice,
-        product.getTitle,
-        product.getDescription,
-        product.getImageLink,
+        product.id,
+        product.price,
+        product.title,
+        product.description,
+        product.imageLink,
         1,
         null,
         null));
+      console.log(this._bucketProducts);
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);
@@ -130,6 +133,23 @@ export class ProductComponent implements OnInit, DoCheck {
     }
   }
 
+  getTemp() {
+    const bucket = JSON.parse(localStorage.getItem('bucket123'));
+    if (!isNull(bucket)) {
+      for (let i = 0; i < bucket.length; i++) {
+        const bucketProduct: ProductDataAmount = new ProductDataAmount(
+          bucket[i].id,
+          bucket[i].price,
+          bucket[i].title,
+          bucket[i].description,
+          bucket[i].imageLink,
+          bucket[i].totalAmount,
+          null,
+          null);
+        this._bucketProducts.push(bucketProduct);
+      }
+    }
+  }
   saveTemp() {
     localStorage.setItem('bucket123', null);
     const bucketToSave = JSON.stringify(this._bucketProducts);
@@ -179,10 +199,8 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   onRemoveComment(commentId, commentPosition) {
-    console.log(commentId);
     this._serverService.removeComment(commentId).subscribe(
       (response) => {
-        console.log(response);
         if (response) {
           this._product.setCommentDtos.splice(commentPosition, 1);
           this._success.text = 'You successfully deleted comment';

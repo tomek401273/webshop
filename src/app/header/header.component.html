@@ -2,102 +2,121 @@
   <div class="container">
 
 
-    <div class="row">
-      <div class="col-md-9 col-xs-5" (click)="onBackToBegin()">
-        <a class="title" (click)="onBackToBegin()"><h1>Computer WebShop</h1></a>
-      </div>
+    <table class="table col-md-6 col-sm-12 col-xs-12">
+      <tbody>
+      <tr>
+        <td>
+          <div class="col-md-6 col-sm-6 col-xs-6" (click)="onBackToBegin()">
+            <a class="title" (click)="onBackToBegin()"><h1>Computer WebShop</h1></a>
+          </div>
+        </td>
+        <td>
+          <div class="col-md-1 col-sm-1 col-xs-1 get-access">
+            <app-authentication></app-authentication>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="col-md-5 col-xs-12 col-sm-12 options">
+            <nav class="navbar navbar-default ">
+              <ul class="nav navbar-nav">
+                <li routerLinkActive="active" class="dropdown-backdrop col-md-6 col-xs-6 col-sm-6" dropdown
+                    dropdownToggle
+                    (click)="false" (click)="onCategoryClicked(category)" #category>
+                  <a class="dropdown-toggle">Categories</a>
+                  <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li *ngFor="let category of categoryNames" role="menuitem" class="product-category">
+                      <a class="dropdown-item" (click)="onCategory(category)">{{category}}</a>
+                    </li>
+                  </ul>
+                </li>
 
-      <div class="col-md-3 col-xs-7">
 
-        <div class="text-right ">
-          <app-authentication></app-authentication>
-        </div>
+                <li routerLinkActive="active" class="dropdown-backdrop col-md-6 col-xs-6 col-sm-6" dropdown
+                    dropdownToggle
+                    (click)="false">
+                  <a class="dropdown-toggle">Admin</a>
+                  <ul *dropdownMenu class="dropdown-menu" role="menu">
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/bucket">Bucket</a>
+                    </li>
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/orders">Orders</a>
+                    </li>
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/admin-orders">Admin Orders</a>
+                    </li>
 
-      </div>
-    </div>
-    <!--<br>-->
-    <!--<br>-->
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/addProduct">Add Product</a>
+                    </li>
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/productEdit">Edit Product</a>
+                    </li>
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/user-data">User Data</a>
+                    </li>
+                    <li role="menuitem" class="product-category">
+                      <a class="dropdown-item" routerLink="/change-password">Change Password</a>
+                    </li>
+                  </ul>
+                </li>
 
+                <li *ngIf="isAuthenticated == true && adminPanel== false" routerLinkActive="active"><a
+                  routerLink="/orders">Orders</a>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+          <div class="col-md-4 col-xs-12 col-sm-10">
+            <div class="col-md-12 col-xs-12 col-sm-12">
+              <input
+                class="form-control search-product"
+                placeholder="Search product"
+                [(ngModel)]="chosenTitle"
+                [typeahead]="productsTitle"
+                [ngModelOptions]="{standalone: true}"
+                required
+                (keyup)="onSearchProductWithTitle()"
+              >
+            </div>
+          </div>
+        </td>
+        <td class="col-md-2 col-xs-2 col-sm-2">
+          <div class="col-md-1 col-xs-1 col-sm-1"></div>
+
+          <div class="col-md-1 col-xs-1 col-sm-1 bucket">
+            <div class="col-md-1 col-xs-1 col-sm-1">
+              <div class=" "><p class="amonut-product">{{actualNumberProducts}}</p></div>
+            </div>
+            <div class="col-md-1 col-xs-1 col-sm-1"><span class=" fa fa-shopping-cart" (click)="toBucket()"></span>
+            </div>
+          </div>
+        </td>
+
+      </tr>
+      <tr>
+        <!--<td></td>-->
+        <!--<td class="col-md-2 col-xs-2 col-sm-2">-->
+        <!--<div class="col-md-1 col-xs-1 col-sm-1"></div>-->
+        <!--<div class="col-md-11 col-xs-11 col-sm-11 bucket">-->
+        <!--<div class="col-md-12 col-xs-12 col-sm-12">-->
+        <!--<div class="col-md-1 col-xs-1 col-sm-1"></div>-->
+        <!--<div class=" col-md-7 col-xs-7 col-sm-7"><p class="amonut-product">{{actualNumberProducts}}</p></div>-->
+        <!--</div>-->
+        <!--<div class="col-md-12 col-xs-12 col-sm-12"><span class=" fa fa-shopping-cart" (click)="toBucket()"></span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</td>-->
+      </tr>
+      </tbody>
+    </table>
 
     <div class="row ">
-      <div class="col-md-5 col-xs-12 options">
-        <nav class="navbar navbar-default ">
-          <ul class="nav navbar-nav">
-            <li routerLinkActive="active" class="dropdown-backdrop col-md-6 col-xs-6 " dropdown dropdownToggle
-                (click)="false" (click)="onCategoryClicked(category)" #category>
-              <a class="dropdown-toggle">Categories</a>
-              <ul *dropdownMenu class="dropdown-menu" role="menu">
-                <li *ngFor="let category of categoryNames" role="menuitem" class="product-category">
-                  <a class="dropdown-item" (click)="onCategory(category)">{{category}}</a>
-                </li>
-              </ul>
-            </li>
 
 
-            <li routerLinkActive="active" class="dropdown-backdrop col-md-6 col-xs-6 " dropdown dropdownToggle
-                (click)="false">
-              <a class="dropdown-toggle">Admin Portal</a>
-              <ul *dropdownMenu class="dropdown-menu" role="menu">
-                <li role="menuitem" class="product-category">
-                  <a class="dropdown-item" routerLink="/bucket">Bucket</a>
-                </li>
-                <li role="menuitem" class="product-category">
-                  <a class="dropdown-item" routerLink="/orders">Orders</a>
-                </li>
-                <li role="menuitem" class="product-category">
-                  <a class="dropdown-item" routerLink="/admin-orders">Admin Orders</a>
-                </li>
-
-                <li role="menuitem" class="product-category">
-                  <a class="dropdown-item" routerLink="/addProduct">Add Product</a>
-                </li>
-                <li role="menuitem" class="product-category">
-                  <a class="dropdown-item" routerLink="/productEdit">Edit Product</a>
-                </li>
-              </ul>
-            </li>
-
-            <li *ngIf="isAuthenticated == true && adminPanel== false" routerLinkActive="active"><a routerLink="/orders">Orders</a>
-            </li>
-
-          </ul>
-        </nav>
-      </div>
-      <div class="col-md-4 col-xs-10">
-        <div class="col-md-12 col-xs-12 ">
-          <input
-            class="form-control search-product"
-            placeholder="Search product"
-            [(ngModel)]="chosenTitle"
-            [typeahead]="productsTitle"
-            [ngModelOptions]="{standalone: true}"
-            required
-            (keyup)="onSearchProductWithTitle()"
-          >
-        </div>
-      </div>
-      <div class="col-md-3 col-xs-2">
-        <div class="col-md-6 col-xs-1"></div>
-        <div class="col-md-1 col-xs-11 text-left bucket">
-          <p class="amonut-product">3</p>
-          <span class=" fa fa-shopping-cart" (click)="toBucket()"></span>
-        </div>
-      </div>
-
-      <!--<div class="col-xs-1">-->
-      <!--<div class="text-center ">-->
-      <!--<p class="amonut-product">3</p><span>-->
-      <!--<i class="bucket fa fa-shopping-cart" (click)="toBucket()"></i></span>-->
-      <!--</div>-->
-      <!--</div>-->
-
-      <!--<div class="col-md-3 col-xs-12">-->
-      <!--<div class="text-right ">-->
-      <!--<app-authentication></app-authentication>-->
-
-      <!--</div>-->
-
-      <!--</div>-->
     </div>
   </div>
 </div>

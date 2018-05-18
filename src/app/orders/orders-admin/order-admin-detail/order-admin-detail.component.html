@@ -40,30 +40,42 @@
 
   <div class="row">
     <div class="text-center ">
-      <h3 class="order-status"><span class="label label-success ">{{order.status}}</span></h3>
+      <h3 class=""><span class="label label-success order-status centerDiv ">{{order.statusCode |titlecase}}</span></h3>
       <!--<h3 class="order-status"><span class="label label-success " *ngIf="paid">{{order.status}}</span></h3>-->
-      <button class="btn btn-primary" type="button" *ngIf="paid && !prepared && !delivered" (click)="onPrepared()"
-              [disabled]="!allProductPacked">Prepared
-        Order
-      </button>
-
-      <div *ngIf="prepared && !send">
-        <button class="btn btn-primary" type="submit" (click)="onSend()" [disabled]="!link.valid"> Send Delivery
+      <div *ngIf="paid && !prepared && !delivered" >
+        <button class="btn btn-primary" type="button"  (click)="onPrepared()"
+                [disabled]="!allProductPacked">Prepared
+          Order
         </button>
-        <input
-          class="form-control"
-          type="text"
-          [(ngModel)]="linkDelivery"
-          required
-          pattern=".{8,}"
-          #link="ngModel"
-        >
+        <br>
+      </div>
+
+      <!--<br>-->
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <div *ngIf="prepared && !send" class="input-group">
+          <input
+            class="form-control"
+            type="text"
+            [(ngModel)]="linkDelivery"
+            required
+            pattern=".{8,}"
+            #link="ngModel"
+            placeholder="Insert link to delivery"
+          >
+          <div class="input-group-btn">
+            <button class="btn btn-primary" type="submit" (click)="onSend()" [disabled]="!link.valid"> Send Delivery
+            </button>
+          </div>
+          <!--<br>-->
+        </div>
+
       </div>
     </div>
 
-    <br>
-    <br>
-    <br>
+    <!--<br>-->
+    <!--<br>-->
+    <!--<br>-->
   </div>
 
 
@@ -97,3 +109,4 @@
 
 </div>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
+

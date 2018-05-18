@@ -11,110 +11,106 @@
   <!--</div>-->
 
 
-
   <div class="row">
-      <div class="col-md-2 col-xs-12">
-        <div class="col-md-10">
-          <!--<br>-->
-          <!--<br>-->
-          <!--<br>-->
-          <!--<br>-->
-          <h4 class="text-center">Filter product</h4>
-          <hr>
-          <br>
-          <ion-range-slider #advancedSliderElement
-                            type="double"
-                            min="0"
-                            [max]="maxValueProductInShop"
-                            grid="true"
-                            [from]=minValueCover
-                            [grid_num]="5"
-                            [to]=maxValueCover
-                            (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
-          <br>
-          <input type="number"
-                 class="form-control text-center"
-                 [(ngModel)]="above"
-                 (keyup)="setAdvancedSliderTo()"
-                 (click)="setAdvancedSliderTo()"
-                 min="0"
-                 [max]="maxValueProductInShop"
+    <div class="col-md-2 col-xs-12">
+      <div class="col-md-10">
+        <!--<br>-->
+        <!--<br>-->
+        <!--<br>-->
+        <!--<br>-->
+        <h4 class="text-center">Filter product</h4>
+        <hr>
+        <br>
+        <ion-range-slider #advancedSliderElement
+                          type="double"
+                          min="0"
+                          [max]="maxValueProductInShop"
+                          grid="true"
+                          [from]=minValueCover
+                          [grid_num]="5"
+                          [to]=maxValueCover
+                          (onFinish)="finish(advancedSlider, $event)"></ion-range-slider>
+        <br>
+        <input type="number"
+               class="form-control text-center"
+               [(ngModel)]="above"
+               (keyup)="setAdvancedSliderTo()"
+               (click)="setAdvancedSliderTo()"
+               min="0"
+               [max]="maxValueProductInShop"
 
-          >
-          <input type="number"
-                 class="form-control text-center"
-                 [(ngModel)]="below"
-                 (keyup)="setAdvancedSliderTo()"
-                 (click)="setAdvancedSliderTo()"
-                 min="0"
-                 [max]="maxValueProductInShop"
-          >
-          <br>
-          <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">
-            Search
-            database
-          </button>
+        >
+        <input type="number"
+               class="form-control text-center"
+               [(ngModel)]="below"
+               (keyup)="setAdvancedSliderTo()"
+               (click)="setAdvancedSliderTo()"
+               min="0"
+               [max]="maxValueProductInShop"
+        >
+        <br>
+        <button class="btn btn-primary center-block" type="button" (click)="onFilterDatabaseWithPriceBetween()">
+          Search
+          database
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-8 col-xs-12">
+      <br>
+      <br>
+      <div class="row " *ngFor="let product of pagedProduct; let i = index">
+        <div class=" list-group-item">
+          <a (click)="onShowProduct(product.id)"><h3 class="text-center">{{product.title}}</h3></a>
+          <hr>
+          <table class="table table-borderless">
+            <tbody>
+            <tr>
+              <td class="col-sm-4 col-xs-4">
+
+                <img
+                  src="{{product.imageLink}}"
+                  alt="{{product.imageLink}}"
+                  class="img-responsive"
+                >
+              </td>
+              <td class="col-md-6 col-xs-5 text-left bottom-left">
+                {{product.description}}
+              </td>
+              <td>
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            $ {{product.price}}
+            </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <div class="col-md-8 col-xs-12">
-        <br>
-        <br>
-        <div class="row " *ngFor="let product of pagedProduct; let i = index">
-          <div class=" list-group-item">
-            <a (click)="onShowProduct(product.id)"><h3 class="text-center">{{product.title}}</h3></a>
-            <hr>
-            <table class="table table-borderless">
-              <tbody>
-              <tr>
-                <td class="col-sm-4 col-xs-4">
-
-                  <img
-                    src="{{product.imageLink}}"
-                    alt="{{product.imageLink}}"
-                    class="img-responsive"
-                  >
-
-                </td>
-                <td class="col-md-6 col-xs-5 text-left bottom-left">
-                  {{product.description}}
-                </td>
-                <td>
-              <tr></tr>
-              <tr></tr>
-              <tr></tr>
-              $ {{product.price}}
-              </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
     </div>
   </div>
   <div class="row">
-    <div class="">
-      <div class="col-xs-12 text-center ">
-        <div class="" *ngIf="products.length>0">
-          <ul *ngIf="pager.pages && pager.pages.length" class="pagination ">
-            <li [ngClass]="{disabled:pager.currentPage === 1}">
-              <a (click)="setPage(1)">First</a>
-            </li>
-            <li [ngClass]="{disabled:pager.currentPage === 1}">
-              <a (click)="setPage(pager.currentPage - 1)">Prev</a>
-            </li>
-            <li class="extra-buttons" *ngFor="let page of pager.pages"
-                [ngClass]="{active:pager.currentPage === page}">
-              <a (click)="setPage(page)">{{page}}</a>
-            </li>
-            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-              <a (click)="setPage(pager.currentPage + 1)">Next</a>
-            </li>
-            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-              <a (click)="setPage(pager.totalPages)">Last</a>
-            </li>
-          </ul>
-        </div>
+    <div class="col-xs-12 text-center ">
+      <div class="" *ngIf="products.length>0">
+        <ul *ngIf="pager.pages && pager.pages.length" class="pagination ">
+          <li [ngClass]="{disabled:pager.currentPage === 1}">
+            <a (click)="setPage(1)">First</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === 1}">
+            <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+          </li>
+          <li class="extra-buttons" *ngFor="let page of pager.pages"
+              [ngClass]="{active:pager.currentPage === page}">
+            <a (click)="setPage(page)">{{page}}</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a (click)="setPage(pager.currentPage + 1)">Next</a>
+          </li>
+          <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a (click)="setPage(pager.totalPages)">Last</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

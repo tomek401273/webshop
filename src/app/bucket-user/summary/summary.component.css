@@ -6,3 +6,9 @@ table {
   border-collapse: separate;
   border-spacing: 10px 0;
 }
+
+.change-address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

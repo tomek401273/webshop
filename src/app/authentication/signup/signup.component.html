@@ -81,7 +81,7 @@
                    #conf="ngModel">
           </div>
           <span class="help-block alert-danger" *ngIf="password.value != conf.value && conf.touched">Password are not equals</span>
-          <span class="help-block center-block">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:</span>
+          <span class="help-block center-block">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character.</span>
         </div>
       </form>
       <br>
@@ -152,7 +152,7 @@
           name="statute"
           required
           (click)="onCheckBoxClicked()"
-        > <label>*- I read and accepted Computer
+        > <label>*- I read and accepted statute
         <a
           (click)="lgModal.show()">WebShop statute.</a></label>
       </div>

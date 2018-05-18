@@ -34,8 +34,9 @@ input.amonut-a {
   }
 }
 
-.center-element {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+@media only screen and (max-width: 400px) {
+  .extra-buttons {
+    display: none;
+  }
 }

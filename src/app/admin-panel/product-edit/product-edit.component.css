@@ -1,9 +1,3 @@
-button.remove {
-  width: 100px;
-}
-button.edit {
-  width: 100px;
-}
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -12,3 +6,69 @@ button.edit {
 .table-borderless > thead > tr > th {
   border: none;
 }
+
+.btn-category {
+  width: 200px;
+  height: 40px;
+}
+
+.btn-all-category {
+  width: 1000px;
+  height: 40px;
+}
+
+@media only screen and (max-width: 991px) {
+  .img-responsive{
+    width: 100px;
+    height: auto;
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+  .pagination {
+    /*position: relative;*/
+    /*left: 80px;*/
+    /*width: 10px;*/
+    /*display: none;*/
+  }
+  .extra-buttons {
+    display: none;
+  }
+
+
+}
+
+@media only screen and (min-width: 991px) {
+  .img-responsive{
+    width: 250px;
+    height: auto;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .desc {
+    display: none;
+  }
+}
+
+
+.controll-button {
+  width: 100px;
+}
+/*@media (max-width: 10px) {*/
+/*.img-responsive {*/
+/*width: 10px;*/
+/*height: 10px;*/
+/*}*/
+/*}*/
+
+/*@media (max-width: 40px) {*/
+/*.div-image-image {*/
+/*position: relative;*/
+/*}*/
+/*.img {*/
+/*position: absolute;*/
+/*top: 0;*/
+/*bottom: 0;*/
+/*margin: auto;*/
+/*width: 10%;*/
+/*}*/
+/*}*/

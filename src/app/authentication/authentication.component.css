@@ -7,73 +7,80 @@
   border: none;
 }
 
-
- /*For width 400px and larger: */
-@media only screen and (max-width: 400px) {
-  /*div.tableLog {*/
-    /*position: relative;*/
-    /*top: 30px;*/
-    /*left: 80px;*/
-  /*}*/
-
-
-
-  /*button.logAcces {*/
-    /*width: 50px;*/
-  /*}*/
-
+@media only screen and (max-width: 540px) {
   h1 { font-size: 10px; }
   button.logOut {
-    width: 160px;
+    width: 80px;
     position: relative;
-    right: 10px;
+    /*right: 10px;*/
+  }
+  div.exit {
+    position: relative;
+    right: 100px;
   }
 
-  button.signUp {
-    /*font-size: 13px;*/
-    width: 70px;
-    /*height: 38px;*/
+  .small-auth {
+    position: relative;
+    bottom: 20px;
   }
-
-}
-@media only screen and (min-width: 400px) {
-
-  button.logOut {
-  width: 200px;
+  .normal-auth {
+    display: none;
   }
 
   h5.welcome {
-    position: relative;
-    left: 25px;
-    line-height: 1.6;
+    display: none;
   }
+  button.get-in {
+    width: 70px;
+  }
+}
 
-  button.signUp {
+@media only screen and (min-width: 541px) and (max-width: 1199px){
+  h1 { font-size: 10px; }
+  button.logOut {
     width: 80px;
     position: relative;
-    bottom: 40px;
-    /*height: 38px;*/
+    /*right: 10px;*/
   }
 
-}
-/*@media only screen and (min-width: 400px) {*/
-  /*div.tableLog {*/
+  .small-auth {
+    display: none;
+  }
+
+  .normal-auth {
+    display: block;
+  }
+
+  h5.welcome {
+    display: none;
+  }
+
+  button.get-in {
+    width: 100px;
     /*position: relative;*/
-    /*top: 30px;*/
-    /*left: 350px;*/
-  /*}*/
+    /*bottom: 30px;*/
+  }
+}
 
-  /*button.logOut {*/
-    /*width: 200px;*/
-  /*}*/
+/*@media only screen and (min-width: 992px) {*/
 
-  /*button.logAcces {*/
-    /*width: 100px;*/
-  /*}*/
 /*}*/
 
+@media only screen and (min-width: 1200px) {
+  button.get-in {
+    width: 90px;
+    /*bottom: 30px;*/
+    /*left: 80px;*/
+  }
+
+  h5.welcome {
+  display: none;
+  }
+  button.logOut {
+    width: 90px;
+    position: relative;
+    /*right: 10px;*/
+  }
 
 
-
-
-
+}

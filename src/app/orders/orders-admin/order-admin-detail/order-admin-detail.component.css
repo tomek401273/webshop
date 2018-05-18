@@ -2,10 +2,62 @@ table.line-height-200 {
   line-height: 200%;
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (min-width: 400px) {
   .order-status {
-    /*position: relative;*/
-    /*width: 1px;*/
-    font-size: 19px;
+    /*font-size: 27px;*/
+    /*float: right;*/
+    /*width: 300px;*/
+    /*height: 30px;*/
   }
+
+  /*.float_center {*/
+  /*float: right;*/
+  /*position: relative;*/
+  /*left: -50%; !* or right 50% *!*/
+  /*!*text-align: left;*!*/
+  /*}*/
+  /*.float_center > .child {*/
+  /*position: relative;*/
+  /*left: 50%;*/
+  /*}*/
+  /*.centerDiv {*/
+    /*width: 60%;*/
+    /*height: 200px;*/
+    /*margin: 0 auto;*/
+    /*background-color: #FFA500;*/
+  /*}*/
+
+
+  /*.centerDiv {*/
+    /*background: #ffe577;*/
+    /*color: #79a8ff;*/
+    /*display:block;*/
+    /*float:left;*/
+    /*margin:10px 10px 0 0;*/
+    /*padding:5px 10px*/
+  /*}*/
+
+
+  /*.div-div {*/
+    /*background: red;*/
+    /*overflow: hidden;*/
+    /*text-align: center;*/
+  /*}*/
+
+  /*.span-span {*/
+    /*background: #222;*/
+    /*color: #fff;*/
+    /*display: inline-block;*/
+    /*margin: 10px 10px 0 0;*/
+    /*padding: 5px 10px*/
+  /*}*/
+
+
+}
+
+@media only screen and (max-width: 400px) {
+
+}
+.order-status {
+  font-size: 20px;
 }

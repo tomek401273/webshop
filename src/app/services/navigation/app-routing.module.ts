@@ -19,6 +19,8 @@ import {DeliveryStatusComponent} from '../../delivery-status/delivery-status.com
 import {ProductComponent} from '../../product-list/product/product.component';
 import {ConfirmNewsletterComponent} from '../../authentication/confirm-newsletter/confirm-newsletter.component';
 import {ConfirmAccountComponent} from '../../authentication/confirm-account/confirm-account.component';
+import {UserDataComponent} from '../../user-data/user-data.component';
+import {ChangePasswordComponent} from '../../user-data/change-password/change-password.component';
 
 const appRoutes: Routes = [
   {path: '', component: ProductListComponent},
@@ -34,6 +36,8 @@ const appRoutes: Routes = [
   {path: 'newsletter/confirm', component: ConfirmNewsletterComponent},
   {path: 'admin-orders/:id', component: OrderAdminDetailComponent},
   {path: 'confirm-account', component: ConfirmAccountComponent},
+  {path: 'user-data', component: UserDataComponent},
+  {path: 'change-password', component: ChangePasswordComponent},
   {
     path: 'addProduct', canActivate: [AuthGuard],
     component: AddNewProductComponent,

@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {ProductData} from '../model/product-data';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {ProductDataAmount} from '../model/product-data-amount';
 import {ProductMapper} from '../model/dto/product-mapper';
 import {ProductDto} from '../model/dto/product-dto';
@@ -9,6 +9,7 @@ import {ProductMarkDto} from '../model/dto/product-mark-dto';
 import {Comment} from '../model/comment';
 import {CommentMapper} from '../model/dto/comment-mapper';
 import {Server} from '../model/server';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ServerService {
@@ -70,4 +71,18 @@ export class ServerService {
     const commentDto = this.commentMapper.mapToCommentDto(comment);
     return this.http.put(Server.address + 'comment/update', commentDto);
   }
+
+  pushFileToStorage(file: File): Observable<HttpEvent<{}>> {
+    let formdata: FormData = new FormData();
+
+    formdata.append('file', file);
+
+    const req = new HttpRequest('POST', 'http://localhost:8080/upload/post', formdata, {
+      reportProgress: true,
+      responseType: 'text'
+    });
+
+    return this.http.request(req);
+  }
+
 }

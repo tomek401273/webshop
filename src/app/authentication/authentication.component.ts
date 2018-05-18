@@ -8,7 +8,7 @@ import {BsModalService} from 'ngx-bootstrap/modal';
 import {ServerService} from '../services/server.service';
 import {BucketServerService} from '../services/bucket-server.service';
 import {HttpResponse} from '@angular/common/http';
-import {isNull} from "util";
+import {isNull} from 'util';
 import {Log} from '../model/Log';
 
 @Component({
@@ -30,6 +30,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
   private message = '';
   @ViewChild('success') private success: SwalComponent;
   @ViewChild('error') private error: SwalComponent;
+  private _role = '';
 
   constructor(private _logginService: LogingService,
               private _loggingService: LogingService,
@@ -80,6 +81,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
   onLogOut() {
     this._logginService.logOut();
   }
+
   get server(): ServerService {
     return this._server;
   }
@@ -120,6 +122,14 @@ export class AuthenticationComponent implements OnInit, DoCheck {
     this._modalService = value;
   }
 
+  get role(): string {
+    return this._role;
+  }
+
+  set role(value: string) {
+    this._role = value;
+  }
+
   onSubmit(submittedForm) {
     const log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
 
@@ -127,10 +137,10 @@ export class AuthenticationComponent implements OnInit, DoCheck {
       .subscribe(
         (response: HttpResponse<String>) => {
           const token = response.headers.get('Authorization');
-          const role = response.headers.get('Credentials');
+          this.role = response.headers.get('Credentials');
           localStorage.setItem('login', submittedForm.value.loginLog);
           localStorage.setItem('token', token);
-          localStorage.setItem('role', role);
+          localStorage.setItem('role', this.role);
 
           const expiredToken = new Date().getTime() + (30 * 60 * 1000);
           localStorage.setItem('expiredToken', expiredToken.toString());
@@ -146,9 +156,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
-          this._loggingService.loginSuccessful.emit(role);
           this.modalRef.hide();
-          // this.router.navigate(['/']);
         },
         () => {
           this.somethingGoWrong();
@@ -159,7 +167,10 @@ export class AuthenticationComponent implements OnInit, DoCheck {
 
   getDataFromLocalStorage() {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
+    this.products = [];
     if (!isNull(bucket)) {
+      console.log('login');
+      console.log(bucket);
       for (let i = 0; i < bucket.length; i++) {
         for (let j = 0; j < bucket[i]._totalAmount; j++) {
           this.productIdArray.push(bucket[i]._id);
@@ -178,6 +189,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
         );
         this.products.push(bucketProduct);
       }
+      localStorage.setItem('bucket123', null);
 
     }
   }
@@ -210,6 +222,8 @@ export class AuthenticationComponent implements OnInit, DoCheck {
         }
         const datatoLocalStorage = JSON.stringify(this.products);
         localStorage.setItem('bucket123', datatoLocalStorage);
+        this._loggingService.loginSuccessful.emit(this.role);
+
       },
       () => this.error.show()
     );

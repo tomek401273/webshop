@@ -7,7 +7,7 @@ export class ShippingAddressMapper {
       shippingAddress.login,
       shippingAddress.country,
       shippingAddress.city,
-      shippingAddress.postalCode,
+      shippingAddress.postCode,
       shippingAddress.street,
       shippingAddress.name,
       shippingAddress.surname,

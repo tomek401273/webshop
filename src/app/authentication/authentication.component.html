@@ -1,28 +1,28 @@
-<div *ngIf="isAuthenticated==true">
+<div class="" *ngIf="isAuthenticated==true">
   <h5 *ngIf="isAuthenticated" class="welcome"> {{loginUser}}</h5>
   <button class="btn btn-primary logOut" (click)="onLogOut()">Log out</button>
 </div>
 <div *ngIf="isAuthenticated==false">
   <br>
-  <div class="btn btn-group">
-    <button type="button" class="btn btn-primary signUp" (click)="onRedirect('/signup')">Sign up</button>
-    <button type="button" class="btn btn-primary signUp" (click)="openModal(template)">Log in</button>
+  <!--<div class="btn btn-group normal-auth">-->
+    <!--<button type="button" class="btn btn-primary signUp" (click)="onRedirect('/signup')">Sign up</button>-->
+    <!--<button type="button" class="btn btn-primary signUp" (click)="openModal(template)">Log in</button>-->
+  <!--</div>-->
+<div class="">
+  <div class="btn-group " dropdown placement="bottom right">
+    <button id="button-alignment" dropdownToggle type="button"
+            class="btn btn-primary dropdown-toggle get-in " aria-controls="dropdown-alignment">
+      Get in <span class="caret"></span>
+    </button>
+    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+        role="menu" aria-labelledby="button-alignment">
+      <li role="menuitem"><a class="dropdown-item text-center" (click)="openModal(template)" >Log in</a></li>
+      <li class="divider dropdown-divider"></li>
+      <li role="menuitem"><a class="dropdown-item text-center" (click)="onRedirect('/signup')" >Sign up</a></li>
+    </ul>
   </div>
 </div>
-
-
-<!--<div class="table-section tableLog">-->
-<!--<table class=" table table-borderless">-->
-<!--<tr>-->
-<!---->
-<!--<td>-->
-<!---->
-<!--</td>-->
-<!--</tr>-->
-
-<!--</table>-->
-
-<!--</div>-->
+</div>
 
 <ng-template #template>
   <div class="modal-header">
@@ -63,7 +63,7 @@
 
       <br>
 
-      <button class="btn btn-primary center-block" type="submit">LOGGIN</button>
+      <button class="btn btn-primary center-block" type="submit">LOGGIN33</button>
 
     </form>
   </div>

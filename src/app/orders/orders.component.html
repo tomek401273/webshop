@@ -74,8 +74,7 @@
               <td>{{order.totalValue}}</td>
               <td>{{order.totalAmount}}</td>
               <td>{{order.boughtDate}}</td>
-              <!--<td>{{order.status}}</td>-->
-              <td>delivered</td>
+              <td>{{order.statusCode |titlecase}}</td>
               <td>
                 <a (click)="showOrderDetail(order)">Details</a>
               </td>
@@ -86,27 +85,27 @@
       </div>
     </div>
 
-  <!--<div class="row">-->
-    <!--<div class="text-center">-->
-      <!--<ul *ngIf="pager.pages && pager.pages.length" class="pagination">-->
-        <!--<li [ngClass]="{disabled:pager.currentPage === 1}">-->
-          <!--<a (click)="setPage(1)">First</a>-->
-        <!--</li>-->
-        <!--<li [ngClass]="{disabled:pager.currentPage === 1}">-->
-          <!--<a (click)="setPage(pager.currentPage - 1)">Prev</a>-->
-        <!--</li>-->
-        <!--<li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">-->
-          <!--<a (click)="setPage(page)">{{page}}</a>-->
-        <!--</li>-->
-        <!--<li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">-->
-          <!--<a (click)="setPage(pager.currentPage + 1)">Next</a>-->
-        <!--</li>-->
-        <!--<li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">-->
-          <!--<a (click)="setPage(pager.totalPages)">Last</a>-->
-        <!--</li>-->
-      <!--</ul>-->
-    <!--</div>-->
-  <!--</div>-->
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(1)">First</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === 1}">
+          <a (click)="setPage(pager.currentPage - 1)">Prev</a>
+        </li>
+        <li class="extra-buttons" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+          <a (click)="setPage(page)">{{page}}</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.currentPage + 1)">Next</a>
+        </li>
+        <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+          <a (click)="setPage(pager.totalPages)">Last</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
 

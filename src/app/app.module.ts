@@ -49,6 +49,10 @@ import {SweetAlert2Module} from '@toverux/ngx-sweetalert2';
 import {CronJobsModule} from 'ngx-cron-jobs';
 import {CronSelectionModule} from 'angular2-cron-jobs';
 import { AddressComponent } from './address/address.component';
+import { UserDataComponent } from './user-data/user-data.component';
+import { ChangePasswordComponent } from './user-data/change-password/change-password.component';
+import { FormUploadComponent } from './admin-panel/add-new-product/form-upload/form-upload.component';
+import {Ng2FileInputModule} from 'ng2-file-input';
 
 @NgModule({
   declarations: [
@@ -73,7 +77,10 @@ import { AddressComponent } from './address/address.component';
     ProductComponent,
     ConfirmNewsletterComponent,
     ConfirmAccountComponent,
-    AddressComponent
+    AddressComponent,
+    UserDataComponent,
+    ChangePasswordComponent,
+    FormUploadComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -96,7 +103,8 @@ import { AddressComponent } from './address/address.component';
       cancelButtonClass: 'btn'
     }),
     CronJobsModule,
-    CronSelectionModule
+    CronSelectionModule,
+    Ng2FileInputModule.forRoot()
   ],
   providers: [
     ServerService,

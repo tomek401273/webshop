@@ -1,45 +1,37 @@
-<div class="container">
-  <div class="row " *ngFor="let product of pagedProducts; let i = index">
-    <div class=" list-group-item">
-      <h3 class="text-center">{{product.title}}</h3>
-      <hr>
-      <table class="table table-borderless">
-        <thead>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="col-sm-4"><img
-            src="{{product.imageLink}}"
-            alt="{{product.imageLink}}"
-            class="img-responsive"
-            style="max-height: 200px; max-width: 250px"></td>
-          <td class="col-sm-6 text-left bottom-left">
-            {{product.description}}
-          </td>
-          <td class="col-sm-2 text-center">
-            <br>
-            <br>
-        <tr>
-          <button class="btn remove btn-danger" (click)="onRemove(product, i)">REMOVE</button>
-        </tr>
-        <tr>
-          <button class="btn edit btn-warning" (click)="onEditDetail(product.id)">EDIT</button>
-        </tr>
-        </td>
-        </tr>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 col-xs-12 col-sm-12">
+      <div class="row" *ngFor="let product of pagedProducts; let i = index">
+        <div class=" list-group-item">
+          <h3 class="text-center">{{product.title}}</h3>
+          <hr>
+          <table class="table table-borderless">
+           <tbody>
+              <td class="col-sm-4 col-xs-3 col-sm-3"><img
+                src="{{product.imageLink}}"
+                alt="{{product.imageLink}}"
+                class="img-responsive"
+                style="max-height: 200px; max-width: 250px">
+              </td>
+              <td class="col-sm-6 col-xs-4 col-sm-4 text-left bottom-left desc">
+                {{product.description}}
+              </td>
+              <td class="col-sm-2 col-xs-2 col-sm-2">
 
-        </tbody>
-      </table>
+              <button class="btn btn-danger controll-button " (click)="onRemove(product, i)">REMOVE</button>
+              <button class="btn  btn-warning controll-button" (click)="onEditDetail(product.id)">EDIT</button>
+            </td>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
 
-  <div class="text-center">
+<div class="row">
+  <div class="col-xs-12 text-center">
     <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
       <li [ngClass]="{disabled:pager.currentPage === 1}">
         <a (click)="setPage(1)">First</a>
@@ -47,7 +39,7 @@
       <li [ngClass]="{disabled:pager.currentPage === 1}">
         <a (click)="setPage(pager.currentPage - 1)">Prev</a>
       </li>
-      <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+      <li class="extra-buttons" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
         <a (click)="setPage(page)">{{page}}</a>
       </li>
       <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
@@ -58,5 +50,6 @@
       </li>
     </ul>
   </div>
+</div>
 </div>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>

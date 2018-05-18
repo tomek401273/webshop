@@ -75,6 +75,7 @@ export class SigninComponent {
   }
 
   onSubmit(submittedForm) {
+    console.log('onSubmitLogin');
     const log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
 
     this._loggingService.getToken(log)
@@ -113,6 +114,9 @@ export class SigninComponent {
 
   getDataFromLocalStorage() {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
+    console.log('signin');
+    console.log(bucket);
+    console.log('--------');
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
         for (let j = 0; j < bucket[i]._totalAmount; j++) {
@@ -132,7 +136,7 @@ export class SigninComponent {
         );
         this.products.push(bucketProduct);
       }
-
+      localStorage.setItem('bucket123', null);
     }
   }
 

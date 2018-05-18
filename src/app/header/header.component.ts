@@ -52,6 +52,7 @@ export class HeaderComponent implements OnInit, DoCheck {
     this.logingService.loginSuccessful.subscribe(
       (role: string) => {
         this.isAdmin(role);
+        this.calculateNumberProducts();
       }
     );
 
@@ -66,11 +67,11 @@ export class HeaderComponent implements OnInit, DoCheck {
         this._actualNumberProducts = 0;
       }
     );
+    // this.calculateNumberProducts();
 
   }
 
   onSearchProductWithTitle() {
-    console.log(this.chosenTitle);
     this.showPublicData.searchedProduct.emit(this.chosenTitle);
   }
 
@@ -94,17 +95,16 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   onCategoryClicked(category) {
-    console.log(category);
     this.isCategory = !this.isCategory;
-    console.log(this.isCategory);
   }
 
   calculateNumberProducts() {
-    let bucket = JSON.parse(localStorage.getItem('bucket123'));
+    // this._actualNumberProducts = 0;
+    const bucket = JSON.parse(localStorage.getItem('bucket123'));
     let total = 0;
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        total += bucket[i]._totalAmount;
+        total += bucket[i].totalAmount;
       }
       this._actualNumberProducts = total;
     } else {
@@ -120,11 +120,11 @@ export class HeaderComponent implements OnInit, DoCheck {
       (logout: boolean) => {
         if (logout) {
           this._adminPanel = false;
+          this.actualNumberProducts = 0;
           this.router.navigate(['/']);
         }
       }
     );
-    this.calculateNumberProducts();
   }
 
   get actualNumberProducts(): number {

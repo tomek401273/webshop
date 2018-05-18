@@ -1,0 +1,167 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+
+      <form #form="ngForm">
+
+        <div class="form-group text-center">
+          <label for="login">*- Address email (at least 6 characters)</label>
+          <input class="form-control"
+                 type="text"
+                 id="login"
+                 (input)="onSearchChange($event.target.value)"
+
+                 [ngModel]="userLogin"
+                 name="login"
+                 required
+                 email
+                 pattern=".{6,}"
+                 #login="ngModel"
+          >
+          <div *ngIf="login.valid && userLogin != login.value">
+            <span class="help-block alert-danger" *ngIf=" loginAvailable== false">This login is not available try with another one</span>
+            <span class="help-block alert-success" *ngIf="loginAvailable == true">This login is available</span>
+          </div>
+          <span class="help-block alert-danger" *ngIf="!login.valid && login.touched">Check your input</span>
+        </div>
+
+        <div class="form-group text-center">
+          <label for="name">*- Name</label>
+          <input class="form-control"
+                 type="text"
+                 id="name"
+                 [ngModel]="userAddress.name"
+                 name="name"
+                 required
+                 #name="ngModel"
+          >
+          <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
+        </div>
+
+        <div class="form-group text-center">
+          <label for="surname">*- Surname</label>
+          <input class="form-control"
+                 type="text"
+                 id="surname"
+                 [ngModel]="userAddress.surname"
+                 name="surname"
+                 required
+                 #surname="ngModel">
+          <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
+        </div>
+      </form>
+      <div class="form-group ">
+        <div class="text-center" *ngIf="changeAddress==false">
+        <hr>
+          <h4><b>Address</b></h4>
+          <div *ngIf="!useAnotherAddress">
+            <p>Country: {{userAddress.country}}</p>
+            <p>PostCode: {{userAddress.postCode}} - {{userAddress.city}}</p>
+            <div>
+              <p *ngIf="userAddress.street == null">Locality: {{userAddress.district}}</p>
+              <p *ngIf="userAddress.street != null">Locality: {{userAddress.city}}</p>
+            </div>
+            <p *ngIf="userAddress.street != null">Street: {{userAddress.street}}</p>
+          </div>
+          <div class="center-element">
+            <button class="btn btn-default" (click)="changeAddress=true">Change Address</button>
+          </div>
+          <hr>
+        </div>
+
+
+
+        <div *ngIf="changeAddress== true">
+          <app-address
+            (userAddress)="onAddressInput($event)"
+            (permissionToSubmit)="correctAddress($event)"
+          ></app-address>
+         <div class="center-element">
+           <button class="btn btn-default" (click)="onDefaultPassword()" (click)="userAddressLog()">Default Address
+           </button>
+         </div>
+        </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="col-md-3 col-sm-3 col-xs-3"></div>
+            <div class="col-md-9 col-sm-9">
+            <form #house="ngForm">
+              <table>
+                <thead>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </thead>
+                <tbody class="table table-responsive">
+                <tr>
+                  <td>
+                    *- House Number:
+                  </td>
+                  <td></td>
+
+                  <td>
+                    <input class="form-control input-xs"
+                           type="number"
+                           [ngModel]="userAddress.house"
+                           name="houseNumber"
+                           required
+                           min="1"
+                           max="999"
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    Apartment Number:
+                  </td>
+                  <td></td>
+                  <td>
+                    <input class="form-control input-xs"
+                           type="number"
+                           [ngModel]="userAddress.apartment"
+                           name="apartmentNumber"
+                           min="0"
+                           max="999"
+                    >
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <br>
+
+
+      <br>
+      <br>
+      <p class="text-left">[*] - required fields, can not be empty</p>
+      <br>
+      <br>
+      <button class="btn btn-primary center-block"
+              [disabled]="(
+     ((form.value.login == userLogin) || !(loginAvailable)) &&
+     ((form.value.name == userAddress.name)) &&
+      ((form.value.surname == userAddress.surname )) &&
+      ((house.value.houseNumber == userAddress.house)) &&
+      ((house.value.apartmentNumber == userAddress.apartment)) &&
+      ((!changeAddress || !validAddress))
+      )"
+              (click)="onSubmit()"
+      >
+        Update Account
+      </button>
+    </div>
+  </div>
+</div>
+<swal #error title="Error" text="Somethig go wrong. Please contact with our service" type="error"></swal>
+<swal #success title="Success" text="You successfully updated profile" type="success"></swal>

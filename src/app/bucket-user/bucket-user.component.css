@@ -6,14 +6,34 @@ input.amonut-a {
 @media only screen and (min-width: 992px) {
   .amount {
     position: relative;
-    left: 10px;
-    top: 5px
+    left: 0px;
+    top: 5px;
+    /*display: flex;*/
+    /*!*align-items: center;*!*/
+    /*!*justify-content: center;*!*/
   }
 
+  .amount-product-manipulation {
+    position: relative;
+    right: 20px;
+  }
   button.submit-next {
-    width: 125px;
+    width: 100px;
   }
 }
+@media only screen and (min-width: 1200px) {
+
+  .amount-product-manipulation {
+    position: relative;
+    left: -10px;
+  }
+
+  button.removeProduct {
+    width: 100px;
+  }
+}
+
+
 
 @media only screen and (max-width: 992px) {
   table > tbody > tr > td {

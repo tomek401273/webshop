@@ -4,6 +4,7 @@ import 'rxjs/add/operator/do';
 import {finalize, tap} from 'rxjs/operators';
 
 export class LoggingInterceptor implements HttpInterceptor {
+// export class LoggingInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.responseType === 'json') {
       req = req.clone({responseType: 'text'});
