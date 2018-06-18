@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {ProductEditComponent} from '../../admin-panel/product-edit/product-edit.component';
 import {ProductListComponent} from '../../product-list/product-list.component';
 import {Routes, RouterModule, CanDeactivate} from '@angular/router';
-import {SigninComponent} from '../../authentication/signin/signin.component';
 import {AddNewProductComponent} from '../../admin-panel/add-new-product/add-new-product.component';
 import {EditDetailComponent} from '../../admin-panel/product-edit/edit-detail/edit-detail.component';
 import {SignupComponent} from '../../authentication/signup/signup.component';
@@ -27,17 +26,17 @@ const appRoutes: Routes = [
   {path: 'product/:id', component: ProductComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'bucket', component: BucketUserComponent},
-  {path: 'summary', component: SummaryComponent},
-  {path: 'success/:id', component: OrderSuccessfullyComponent},
-  {path: 'orders', component: OrdersComponent},
-  {path: 'orders/:id', component: OrderDetailComponent},
-  {path: 'admin-orders', component: OrdersAdminComponent},
-  {path: 'delivery/:id', component: DeliveryStatusComponent},
+  {path: 'summary', canActivate: [AuthGuard], component: SummaryComponent},
+  {path: 'success/:id', canActivate: [AuthGuard], component: OrderSuccessfullyComponent},
+  {path: 'orders', canActivate: [AuthGuard], component: OrdersComponent},
+  {path: 'orders/:id', canActivate: [AuthGuard], component: OrderDetailComponent},
+  {path: 'admin-orders', canActivate: [AuthGuard], component: OrdersAdminComponent},
+  {path: 'delivery/:id', canActivate: [AuthGuard], component: DeliveryStatusComponent},
   {path: 'newsletter/confirm', component: ConfirmNewsletterComponent},
-  {path: 'admin-orders/:id', component: OrderAdminDetailComponent},
+  {path: 'admin-orders/:id', canActivate: [AuthGuard], component: OrderAdminDetailComponent},
   {path: 'confirm-account', component: ConfirmAccountComponent},
-  {path: 'user-data', component: UserDataComponent},
-  {path: 'change-password', component: ChangePasswordComponent},
+  {path: 'user-data', canActivate: [AuthGuard], component: UserDataComponent},
+  {path: 'change-password', canActivate: [AuthGuard], component: ChangePasswordComponent},
   {
     path: 'addProduct', canActivate: [AuthGuard],
     component: AddNewProductComponent,

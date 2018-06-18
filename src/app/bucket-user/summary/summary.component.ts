@@ -9,6 +9,7 @@ import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {Address} from '../../model/address';
 import {NgForm} from '@angular/forms';
 import {SweetAlert2Module, SwalComponent} from '@toverux/ngx-sweetalert2';
+import {Order} from '../../model/order';
 
 @Component({
   selector: 'app-summary',
@@ -26,6 +27,10 @@ export class SummaryComponent implements OnInit {
   private _insertAddress = '';
   private _useAnotherAddress = false;
   private _enableSubmit = false;
+  private _surenameUser = '';
+  private _nameUser= '';
+  private _houseNumer = 0;
+  private _appartmentNumber = 0;
   @ViewChild('f') private _signupForm: NgForm;
   @ViewChild('confirmBuy') private _confirmBuy: SwalComponent;
   @ViewChild('buySuccess') private _buySuccess: SwalComponent;
@@ -103,9 +108,9 @@ export class SummaryComponent implements OnInit {
     console.log('Confirm && Submit Address');
     console.log(shippingAddress);
     this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
-      (response: number) => {
+      (response: Order) => {
         if (!isNull(response)) {
-          this._id = response;
+          this._id = response.id;
           this.bucketService.buyAllProduct.emit(true);
           this.router.navigate(['/success/' + this._id]);
           this._buySuccess.show();
@@ -241,5 +246,39 @@ export class SummaryComponent implements OnInit {
 
   set userSettings(value: { inputPlaceholderText: string; geoCountryRestriction: string[]; showCurrentLocation: boolean; geoTypes: string[] }) {
     this._userSettings = value;
+  }
+
+
+  get surenameUser(): string {
+    return this._surenameUser;
+  }
+
+  set surenameUser(value: string) {
+    this._surenameUser = value;
+  }
+
+
+  get nameUser(): string {
+    return this._nameUser;
+  }
+
+  set nameUser(value: string) {
+    this._nameUser = value;
+  }
+
+  get houseNumer(): number {
+    return this._houseNumer;
+  }
+
+  set houseNumer(value: number) {
+    this._houseNumer = value;
+  }
+
+  get appartmentNumber(): number {
+    return this._appartmentNumber;
+  }
+
+  set appartmentNumber(value: number) {
+    this._appartmentNumber = value;
   }
 }

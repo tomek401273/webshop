@@ -1,10 +1,9 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ShippingAddress} from '../model/shipping-address';
-import {BucketService} from '../services/bucket.service';
 import {BucketServerService} from '../services/bucket-server.service';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
 import {NgForm} from '@angular/forms';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalService} from 'ngx-bootstrap';
 import {LogingService} from '../services/loging.service';
 import {Router} from '@angular/router';
 import {HttpResponse} from '@angular/common/http';
@@ -37,10 +36,8 @@ export class UserDataComponent implements OnInit {
 
   ngOnInit() {
     this.userLogin = localStorage.getItem('login');
-    console.log(this._userLogin);
     this.bucketServerService.getAddressShippment().subscribe(
       (response: ShippingAddress) => {
-        console.log(response);
         this._userAddress = response;
       },
       () => {
@@ -51,20 +48,17 @@ export class UserDataComponent implements OnInit {
 
 
   correctAddress(isCorrect: boolean) {
-    console.log('isCorrect Address? ' + isCorrect);
     this.validAddress = isCorrect;
   }
 
 
-  onDefaultPassword() {
+  onDefaultAddress() {
     this.changeAddress = false;
     this.validAddress = false;
     this.validatedAddress = '';
   }
 
   onAddressInput(userAddress: string) {
-    console.log('usser addres correct inject in signUP component');
-    console.log(userAddress);
     this._validatedAddress = userAddress;
 
   }
@@ -92,13 +86,9 @@ export class UserDataComponent implements OnInit {
         + this.userAddress.city + ', '
         + this.userAddress.country;
     }
-    // register.house = 22;
     register.house = this._house.value.houseNumber;
-    // register.apartment = 22;
     register.apartment = this._house.value.apartmentNumber;
 
-    console.log('Register');
-    console.log(register);
     if (this.changeAddress) {
       register.address = this._validatedAddress;
     }
@@ -113,10 +103,6 @@ export class UserDataComponent implements OnInit {
           this._error.show();
         }
       );
-  }
-
-  userAddressLog() {
-    console.log(this.userAddress);
   }
 
   onCheckLoginAvaiable(login) {

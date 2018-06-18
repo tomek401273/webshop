@@ -28,7 +28,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
   constructor(private bucketService: BucketService,
               private router: Router,
               private bucketServerService: BucketServerService,
-              private logingServiece: LogingService) {
+              private logingServiece: LogingService,
+              private logingService: LogingService) {
   }
 
   get products(): ProductDataAmount[] {
@@ -127,8 +128,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
     } else {
       const bucket = JSON.parse(localStorage.getItem('bucket123'));
       if (!isNull(bucket)) {
-        console.log('bucket bucket');
-        console.log(bucket);
         for (let i = 0; i < bucket.length; i++) {
           const bucketProduct: ProductDataAmount = new ProductDataAmount(
             bucket[i].id,
@@ -143,6 +142,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
         }
         this._isFullFiled = true;
       }
+      this.calculateTotalAmountProduct();
+      this.calcuateTotalValueProducts();
     }
 
     this.bucketService.buyAllProduct.subscribe(
@@ -151,7 +152,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
         localStorage.setItem('bucket123', null);
       }
     );
-
 
   }
 
@@ -162,7 +162,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
       const value = prod.getPrice * prod.getTotalAmount;
       this._products[i].setValue = value;
       this.calcuateTotalValueProducts();
-      this.calculateTotalAmountProduct();
     }
     this.saveTempDataToLocalStorage();
   }
@@ -199,6 +198,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
         this.adding(bucketProduct);
       }
     }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
   }
 
   adding(bucketProduct: ProductDataAmount) {
@@ -228,6 +229,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
         this.subtracting(bucketProduct);
       }
     }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
   }
 
   onRemove(product: ProductDataAmount) {
@@ -270,6 +273,8 @@ export class BucketUserComponent implements OnInit, DoCheck {
       this._isFullFiled = false;
       this._isCoupon = false;
     }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
   }
 
   onNext() {

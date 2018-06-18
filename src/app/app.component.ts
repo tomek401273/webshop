@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
 
   constructor(private logingService: LogingService,
               private showPublicDataService: ShowPublicDataSevice) {
+    this.controlActiveSession();
     this.showPublicDataService.getAllProductsTitleFromDatabase();
     this.showPublicDataService.getMaxProductPrice();
     this.showPublicDataService.downloadApprovedCountry();
@@ -21,7 +22,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.controlActiveSession();
     this.logingService.loginSuccessful
       .subscribe(
         () => {
@@ -32,7 +32,6 @@ export class AppComponent implements OnInit {
     this.logingService.logoutEmitter.subscribe(
       (logout: boolean) => {
         if (logout) {
-          console.log('Clear clear Timeout');
           clearTimeout(this.loggingTimeout);
         }
       }
@@ -59,6 +58,8 @@ export class AppComponent implements OnInit {
           this.logingService.logOut();
         }
       }, remainToken);
+    } else {
+      this.logingService.logOut();
     }
   }
 }

@@ -73,7 +73,7 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   onPrepared() {
-    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, null, '_prepared');
+    const prepared: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._order.id, null, 'prepared');
     this.ordersService.orderPrepared(prepared).subscribe(
       (response: boolean) => {
 
@@ -105,6 +105,7 @@ export class OrderAdminDetailComponent implements OnInit {
         if (response) {
           this._send = true;
           this._order.status = 'Order was send check status delivery in link';
+          this._order.statusCode = 'Send';
         }
       },
       () => {

@@ -51,8 +51,6 @@ export class ProductListComponent implements OnInit, DoCheck {
   private _minValueCover = 23;
   private _modalRef: BsModalRef;
   private _categoryNames: string[] = [];
-  @ViewChild('success') private _success: SwalComponent;
-  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private serverService: ServerService,
               private showPublicData: ShowPublicDataSevice,
@@ -87,7 +85,10 @@ export class ProductListComponent implements OnInit, DoCheck {
           this.setPage(1);
         }
       },
-      () => this._error.show()
+      (error) => {
+        console.log(error);
+        alert('Something go wrong. Please contact with our service');
+      }
     );
   }
 
@@ -115,7 +116,10 @@ export class ProductListComponent implements OnInit, DoCheck {
           this._products = products;
           this.setPage(2);
         },
-        (error) => this._error.show()
+        (error) => {
+          console.log(error);
+          alert('Something go wrong. Please contact with our service');
+        }
       );
   }
 
@@ -127,36 +131,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this._pagedProduct = this._products.slice(this._pager.startIndex, this._pager.endIndex + 1);
   }
 
-  onAddToCard(product) {
-    console.log(product);
-    this.showPublicData.checkAvailable(product.id).subscribe(
-      (resposne) => {
-        if (resposne > 0) {
-
-          this.addProductToBucket(product);
-          this.saveTemp();
-          this.acutalNumberProductInBucket();
-          if (this._isAuthenticated === true) {
-            this.bucketServerService.addProductToCard(product.id).subscribe(
-              (resposne2) => {
-                if (resposne2 === true) {
-                  this._success.show();
-                } else {
-                  this._error.show();
-                }
-
-              }
-            );
-          }
-        } else {
-          this._error.show();
-        }
-
-      },
-      (error) => this._error.show()
-    );
-  }
-
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (const prod of this._bucketProducts) {
@@ -165,34 +139,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
-  addProductToBucket(product) {
-    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
-
-    if (isUndefined(founded)) {
-      this._bucketProducts.push(new ProductDataAmount(
-        product.id,
-        product.price,
-        product.title,
-        product.description,
-        product.imageLink,
-        1,
-        null,
-        null));
-      return;
-    } else {
-      const index = this._bucketProducts.indexOf(founded);
-      let amount = founded.getTotalAmount;
-      amount++;
-      founded.setTotalAmount = amount;
-      this._bucketProducts[index] = founded;
-    }
-  }
-
-  saveTemp() {
-    localStorage.setItem('bucket123', null);
-    const bucketToSave = JSON.stringify(this._bucketProducts);
-    localStorage.setItem('bucket123', bucketToSave);
-  }
 
   getTemp() {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
@@ -225,7 +171,6 @@ export class ProductListComponent implements OnInit, DoCheck {
   onSearchProductWithTitle() {
     this.showPublicData.searchedProduct.subscribe(
       (title: string) => {
-        console.log(title);
         if (title.length === 1 && this._typedTitleLengthTemp === 3) {
           this.getDataFromDatabase();
           this._typedTitleLengthTemp = 0;
@@ -243,7 +188,10 @@ export class ProductListComponent implements OnInit, DoCheck {
                 this.setPage(1);
               }
             },
-            (error) => this._error.show()
+            (error) => {
+              console.log(error);
+              alert('Something go wrong. Please contact with our service');
+            }
           );
         }
       }
@@ -257,9 +205,11 @@ export class ProductListComponent implements OnInit, DoCheck {
     const reminderDto: ReminderDto = new ReminderDto(productId, email.value);
     this.showPublicData.setReminder(reminderDto).subscribe(
       (response) => {
-        console.log(response);
       },
-      (error) => this._error.show()
+      (error) => {
+        console.log(error);
+        alert('Something go wrong. Please contact with our service');
+      }
     );
   }
 
@@ -290,11 +240,19 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   submitNewsLetter(newsLetter) {
     this.showPublicData.subscribeNewsletter(newsLetter.value.name, newsLetter.value.email).subscribe(
-      (response) => {
-        console.log(response);
+      (response: boolean) => {
+        if (response) {
+          alert('We send email to you. Please confirm your subscription');
+        } else {
+          alert('This email is already in subscriber');
+        }
       },
-      (error) => this._error.show()
+      (error) => {
+        console.log(error);
+        alert('Something go wrong. Please contact with our service');
+      }
     );
+
   }
 
   onShowProduct(productId) {
@@ -306,7 +264,10 @@ export class ProductListComponent implements OnInit, DoCheck {
       (response: string[]) => {
         this._categoryNames = response;
       },
-      () => this._error.show()
+      (error) => {
+        console.log(error);
+        alert('Something go wrong. Please contact with our service');
+      }
     );
   }
 
@@ -315,11 +276,13 @@ export class ProductListComponent implements OnInit, DoCheck {
       (chosenCategory) => {
         this.showPublicData.getProductWithCategory(chosenCategory).subscribe(
           (response: Category) => {
-            console.log(response);
             this._products = response.productDtoList;
             this.setPage(1);
           },
-          () => this._error.show()
+          (error) => {
+            console.log(error);
+            alert('Something go wrong. Please contact with our service');
+          }
         );
       }
     );
@@ -475,21 +438,5 @@ export class ProductListComponent implements OnInit, DoCheck {
 
   set categoryNames(value: string[]) {
     this._categoryNames = value;
-  }
-
-  get success(): SwalComponent {
-    return this._success;
-  }
-
-  set success(value: SwalComponent) {
-    this._success = value;
-  }
-
-  get error(): SwalComponent {
-    return this._error;
-  }
-
-  set error(value: SwalComponent) {
-    this._error = value;
   }
 }

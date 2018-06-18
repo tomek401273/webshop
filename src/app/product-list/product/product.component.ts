@@ -105,7 +105,6 @@ export class ProductComponent implements OnInit, DoCheck {
     for (const prod of this._bucketProducts) {
       totalNumber += prod.getTotalAmount;
     }
-    console.log('totalNumberProducts: ' + totalNumber);
     this._bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
@@ -122,7 +121,6 @@ export class ProductComponent implements OnInit, DoCheck {
         1,
         null,
         null));
-      console.log(this._bucketProducts);
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);

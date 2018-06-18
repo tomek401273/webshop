@@ -84,7 +84,7 @@
     <table class="table text-center table-striped">
       <thead>
       <tr>
-        <td *ngIf="paid">Confirm</td>
+        <td *ngIf="paid && !prepared && !send">Confirm</td>
         <td>name</td>
         <td>price</td>
         <td>amount</td>
@@ -93,7 +93,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let productBoughts of order.productBoughts; let i = index">
-        <td *ngIf="paid"><input type="checkbox"
+        <td *ngIf="paid && !prepared && !send"><input type="checkbox"
                                 (click)="onProductPrepared(i)"
         ></td>
         <td>{{productBoughts.product.title}}</td>

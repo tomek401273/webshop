@@ -30,7 +30,8 @@
   h5.welcome {
     display: none;
   }
-  button.get-in {
+  button.authentication
+  {
     width: 70px;
   }
 }
@@ -55,10 +56,9 @@
     display: none;
   }
 
-  button.get-in {
-    width: 100px;
-    /*position: relative;*/
-    /*bottom: 30px;*/
+  button.authentication
+  {
+    width: 90px;
   }
 }
 
@@ -67,7 +67,8 @@
 /*}*/
 
 @media only screen and (min-width: 1200px) {
-  button.get-in {
+  button.authentication
+  {
     width: 90px;
     /*bottom: 30px;*/
     /*left: 80px;*/

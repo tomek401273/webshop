@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="row">
-    <div *ngIf="useAnotherAddress" class="form-group">
+    <div *ngIf="useAnotherAddress" class="form-group text-center">
       <app-address
         (userAddress)="onAddressInput($event)"
         (permissionToSubmit)="correctAddress($event)"
@@ -35,7 +35,7 @@
           <input class="form-control"
                  type="text"
                  id="name"
-                 ngModel
+                 [(ngModel)]="nameUser"
                  name="name"
                  required
                  #name="ngModel"
@@ -48,13 +48,12 @@
           <input class="form-control"
                  type="text"
                  id="surname"
-                 ngModel
+                 [(ngModel)]="surenameUser"
                  name="surname"
                  required
                  #surname="ngModel">
           <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
         </div>
-
 
         <table>
           <thead>
@@ -74,7 +73,7 @@
             <td>
               <input class="form-control input-xs"
                      type="number"
-                     ngModel
+                     [(ngModel)]="houseNumer"
                      name="houseNumber"
                      required
                      min="1"
@@ -91,7 +90,7 @@
             <td>
               <input class="form-control input-xs"
                      type="number"
-                     ngModel
+                     [(ngModel)]="appartmentNumber"
                      name="apartmentNumber"
                      min="0"
                      max="999"
@@ -146,7 +145,13 @@
               <button
                 class="btn btn-primary"
                 type="submit"
-                [disabled]="!validAddress && useAnotherAddress || !f.valid">Buy
+                [disabled]="!validAddress
+                 && useAnotherAddress
+                 || surenameUser.length<5
+                 || nameUser.length<5
+                 || houseNumer<1
+                 || appartmentNumber<1
+                 || !f.valid">Buy
               </button>
             </div>
           </div>

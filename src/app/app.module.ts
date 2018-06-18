@@ -12,7 +12,6 @@ import {AuthInterceptor} from './services/interceptoprs/auth.interceptor';
 import {LoggingInterceptor} from './services/interceptoprs/logging.interceptor';
 import {LogingService} from './services/loging.service';
 import {HeaderComponent} from './header/header.component';
-import {SigninComponent} from './authentication/signin/signin.component';
 import {ShowPublicDataSevice} from './services/show-public-data.sevice';
 import {PagerService} from './services/navigation/pager.service';
 import {AppRoutingModule} from './services/navigation/app-routing.module';
@@ -51,7 +50,6 @@ import {CronSelectionModule} from 'angular2-cron-jobs';
 import { AddressComponent } from './address/address.component';
 import { UserDataComponent } from './user-data/user-data.component';
 import { ChangePasswordComponent } from './user-data/change-password/change-password.component';
-import { FormUploadComponent } from './admin-panel/add-new-product/form-upload/form-upload.component';
 import {Ng2FileInputModule} from 'ng2-file-input';
 
 @NgModule({
@@ -62,7 +60,6 @@ import {Ng2FileInputModule} from 'ng2-file-input';
     ProductEditComponent,
     EditDetailComponent,
     HeaderComponent,
-    SigninComponent,
     AuthenticationComponent,
     SignupComponent,
     BucketUserComponent,
@@ -80,7 +77,6 @@ import {Ng2FileInputModule} from 'ng2-file-input';
     AddressComponent,
     UserDataComponent,
     ChangePasswordComponent,
-    FormUploadComponent
   ],
   imports: [
     NgbModule.forRoot(),

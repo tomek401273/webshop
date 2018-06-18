@@ -28,8 +28,7 @@ export class AuthenticationComponent implements OnInit, DoCheck {
   private name = 'tomek371240@gmail.com';
   private password = 'thomas';
   private message = '';
-  @ViewChild('success') private success: SwalComponent;
-  @ViewChild('error') private error: SwalComponent;
+
   private _role = '';
 
   constructor(private _logginService: LogingService,
@@ -144,23 +143,22 @@ export class AuthenticationComponent implements OnInit, DoCheck {
 
           const expiredToken = new Date().getTime() + (30 * 60 * 1000);
           localStorage.setItem('expiredToken', expiredToken.toString());
-
           this.getDataFromLocalStorage();
-
           this._bucketServerService.addProductListToCard(this.productIdArray).subscribe(
             (response2) => {
-              this.success.text = 'Your product has succesfully restored';
-              this.success.show();
             },
-            () => this.error.show()
+            (error) => {
+              console.log(error);
+              alert('Something go wrong. Please contact with our service');
+            }
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
           this.modalRef.hide();
+
         },
         () => {
           this.somethingGoWrong();
-          this.error.show();
         }
       );
   }
@@ -169,21 +167,20 @@ export class AuthenticationComponent implements OnInit, DoCheck {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     this.products = [];
     if (!isNull(bucket)) {
-      console.log('login');
-      console.log(bucket);
       for (let i = 0; i < bucket.length; i++) {
-        for (let j = 0; j < bucket[i]._totalAmount; j++) {
-          this.productIdArray.push(bucket[i]._id);
+        for (let j = 0; j < bucket[i].totalAmount; j++) {
+          this.productIdArray.push(bucket[i].id);
         }
       }
+
       for (let i = 0; i < bucket.length; i++) {
         const bucketProduct: ProductDataAmount = new ProductDataAmount(
-          bucket[i]._id,
-          bucket[i]._price,
-          bucket[i]._title,
-          bucket[i]._description,
-          bucket[i]._imageLink,
-          bucket[i]._totalAmount,
+          bucket[i].id,
+          bucket[i].price,
+          bucket[i].title,
+          bucket[i].description,
+          bucket[i].imageLink,
+          bucket[i].totalAmount,
           null,
           null
         );
@@ -223,9 +220,11 @@ export class AuthenticationComponent implements OnInit, DoCheck {
         const datatoLocalStorage = JSON.stringify(this.products);
         localStorage.setItem('bucket123', datatoLocalStorage);
         this._loggingService.loginSuccessful.emit(this.role);
-
       },
-      () => this.error.show()
+      (error) => {
+        console.log(error);
+        alert('Something go wrong. Please contact with our service');
+      }
     );
   }
 

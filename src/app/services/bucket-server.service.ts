@@ -68,7 +68,7 @@ export class BucketServerService {
     const params = {login: localStorage.getItem('login')};
 
     return this.httpClient.get(Server.address + 'bucket/getAllProductFromBucket', {
-      // headers: headers,
+      headers: headers,
       params: params
     });
   }

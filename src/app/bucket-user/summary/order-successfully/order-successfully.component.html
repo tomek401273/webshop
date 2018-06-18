@@ -27,7 +27,6 @@
       <div class="text-center">
         <div *ngIf="redirectToBank">
           <h3><span class="label label-info">Verification payment</span></h3>
-
         </div>
 
         <div *ngIf="isPaid">
@@ -38,6 +37,7 @@
       </div>
     </div>
   </div>
+
+  <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
 </div>
-<swal #success title="Success" text="Your payment was verified" type="success"></swal>
-<swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
+

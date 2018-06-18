@@ -13,7 +13,6 @@ export class OrderSuccessfullyComponent implements OnInit {
   private _isPaid = false;
   private _redirectToBank = false;
   private _id: number;
-  @ViewChild('success') private _success: SwalComponent;
   @ViewChild('error') private _error: SwalComponent;
 
   constructor(private ordersService: OrdersService,
@@ -44,14 +43,6 @@ export class OrderSuccessfullyComponent implements OnInit {
     this._id = value;
   }
 
-  get success(): SwalComponent {
-    return this._success;
-  }
-
-  set success(value: SwalComponent) {
-    this._success = value;
-  }
-
   get error(): SwalComponent {
     return this._error;
   }
@@ -73,7 +64,6 @@ export class OrderSuccessfullyComponent implements OnInit {
       this.ordersService.paymentVerification(payment).subscribe(
         (response: boolean) => {
           if (response) {
-            this._success.show()
             this._isPaid = true;
           }
         },

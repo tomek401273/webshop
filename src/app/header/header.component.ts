@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
+    this.calculateNumberProducts();
     this.getAllProductsTitle();
     this.getCategoryNames();
     this.isAdmin(localStorage.getItem('role'));
@@ -55,6 +56,7 @@ export class HeaderComponent implements OnInit, DoCheck {
         this.calculateNumberProducts();
       }
     );
+
 
     this.bucketService.bucketStatus.subscribe(
       (result) => {
@@ -99,7 +101,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   calculateNumberProducts() {
-    // this._actualNumberProducts = 0;
+    this._actualNumberProducts = 0;
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     let total = 0;
     if (!isNull(bucket)) {
