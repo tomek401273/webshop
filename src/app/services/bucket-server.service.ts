@@ -13,7 +13,7 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    const userBucketDto: UserBucketDto = new UserBucketDto(productId, localStorage.getItem('login'), null);
+    const userBucketDto: UserBucketDto = new UserBucketDto(productId, null);
 
     return this.httpClient.post(Server.address + 'bucket/add', userBucketDto, {
       headers: headers
@@ -26,7 +26,7 @@ export class BucketServerService {
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
     const idSting = String(productId);
-    const params = {login: localStorage.getItem('login'), productId: idSting};
+    const params = {productId: idSting};
 
     return this.httpClient.delete(Server.address + 'bucket/removeSingeItemFromBucket', {
       headers: headers,
@@ -39,7 +39,7 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    const userBucketDto: UserBucketDto = new UserBucketDto(null, localStorage.getItem('login'), data);
+    const userBucketDto: UserBucketDto = new UserBucketDto(null, data);
 
     return this.httpClient.put(Server.address + 'bucket/addList', userBucketDto, {
       headers: headers
@@ -52,7 +52,7 @@ export class BucketServerService {
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
     const idSting = String(productId);
-    const params = {login: localStorage.getItem('login'), productId: idSting};
+    const params = {productId: idSting};
 
     return this.httpClient.delete(Server.address + 'bucket/removeSingleProduct', {
       headers: headers,
@@ -65,11 +65,9 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    const params = {login: localStorage.getItem('login')};
 
     return this.httpClient.get(Server.address + 'bucket/getAllProductFromBucket', {
-      headers: headers,
-      params: params
+      headers: headers
     });
   }
 
@@ -78,11 +76,9 @@ export class BucketServerService {
       .set('Content-Type', 'application/json')
       .append('Accept', 'application/json')
       .append('Authorization', localStorage.getItem('token'));
-    const params = {login: localStorage.getItem('login')};
 
     return this.httpClient.get(Server.address + 'bucket/addressShipping', {
-      headers: headers,
-      params: params
+      headers: headers
     });
   }
 

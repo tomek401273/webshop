@@ -16,6 +16,7 @@ export class Order {
   private _statusCode: String;
 
   constructor() {
+    this.shippingAddressDto = new ShippingAddress();
   }
 
   get id(): number {

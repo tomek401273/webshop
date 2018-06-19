@@ -15,9 +15,8 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 })
 export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') private _addProductForm: NgForm;
-  @ViewChild('_success') private _success: SwalComponent;
-  @ViewChild('_error') private _error: SwalComponent;
-  @ViewChild('_discard') private _discard: SwalComponent;
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('error') private _error: SwalComponent;
   private _productData: ProductDataAmount;
   private _savedChanges: boolean;
   private _categoryNames: string[] = [];
@@ -33,15 +32,6 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
   }
 
   onSubmit() {
-    // this._productData = new ProductDataAmount(
-    //   null,
-    //   this._addProductForm.value.price,
-    //   this._addProductForm.value.title,
-    //   this._addProductForm.value.desc,
-    //   this._addProductForm.value.image,
-    //   this._addProductForm.value.amount,
-    //   this._addProductForm.value.statusCode,
-    //   null);
     this._productData = new ProductDataAmount(null,
       this._addProductForm.value.price,
       this._addProductForm.value.title,
@@ -103,14 +93,6 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
 
   set error(value: SwalComponent) {
     this._error = value;
-  }
-
-  get discard(): SwalComponent {
-    return this._discard;
-  }
-
-  set discard(value: SwalComponent) {
-    this._discard = value;
   }
 
   get productData(): ProductDataAmount {

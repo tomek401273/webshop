@@ -76,16 +76,5 @@
   </div>
   <swal #success title="Success" text="Successfully added new product to Computer WebShop" type="success"></swal>
   <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
-
 </div>
-
-<swal
-  #discard
-  title="Discard"
-  text="Do you want to discard the changes ???"
-  type="question"
-  [showCancelButton]="true"
-  [focusCancel]="true"
-  (confirm)="this.discardChanges = true"
-></swal>
 

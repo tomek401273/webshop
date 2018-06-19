@@ -70,7 +70,7 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
       this._editProductForm.value.image
     );
     this._productUpdated.setTotalAmount = this._editProductForm.value.amount;
-    this._productUpdated.setTotalAmount = this._editProductForm.value.statusCode;
+    this._productUpdated.setStatusCode = this._editProductForm.value.statusCode;
     this.serverServie.updateProduct(this._productUpdated)
       .subscribe(
         () => {

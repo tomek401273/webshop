@@ -49,7 +49,6 @@ export class OrderAdminDetailComponent implements OnInit {
           this._paid = true;
           this._prepared = true;
           this._send = true;
-          this.checkDeliver();
         }
         if ('delivered' === this._order.statusCode) {
           this._paid = true;
@@ -63,10 +62,6 @@ export class OrderAdminDetailComponent implements OnInit {
       },
       () => this._error.show()
     );
-  }
-
-  checkDeliver() {
-
   }
 
   onPrepared() {
@@ -113,10 +108,6 @@ export class OrderAdminDetailComponent implements OnInit {
 
   onDeliveryDetail() {
     this.router.navigate(['/delivery/' + this._order.id]);
-  }
-
-  onCrone() {
-    console.log('Crone Crone');
   }
 
   get id(): number {

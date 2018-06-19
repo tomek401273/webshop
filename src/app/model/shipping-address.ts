@@ -16,20 +16,23 @@ export class ShippingAddress {
   private _state: string;
   private _subdistrict: string;
 
-
-  // constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
-  //   this._login = login;
-  //   this._country = country;
-  //   this._city = city;
-  //   this._postCode = postCode;
-  //   this._street = street;
-  //   this._name = name;
-  //   this._surname = surname;
-  //   this._supplier = supplier;
-  // }
-
-
   constructor() {
+    this._login = '';
+    this._country = '';
+    this._city = '';
+    this._postCode = '';
+    this._street = '';
+    this._name = '';
+    this._surname = '';
+    this._supplier = '';
+    this._code = '';
+    this._search = '';
+    this._house = 0;
+    this._apartment = 0;
+    this._county = '';
+    this._district = '';
+    this._state = '';
+    this._subdistrict = '';
   }
 
   get login(): string {

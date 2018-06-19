@@ -37,6 +37,7 @@ export class ProductComponent implements OnInit, DoCheck {
   private _commentMessage = '';
   @ViewChild('success') private _success: SwalComponent;
   @ViewChild('error') private _error: SwalComponent;
+  @ViewChild('notavailable') private _notAvailable: SwalComponent;
 
   constructor(private _activatedRounte: ActivatedRoute,
               private _router: Router,
@@ -70,7 +71,6 @@ export class ProductComponent implements OnInit, DoCheck {
     this._showPublicData.checkAvailable(product.id).subscribe(
       (resposne) => {
         if (resposne > 0) {
-
           this.addProductToBucket(product);
           this.saveTemp();
           this.acutalNumberProductInBucket();
@@ -78,7 +78,6 @@ export class ProductComponent implements OnInit, DoCheck {
             this._bucketServerService.addProductToCard(product.id).subscribe(
               (resposne2) => {
                 if (resposne2 === true) {
-                  this._success.text = 'Successfully added product to bucket';
                   this._success.show();
                 } else {
                   this._error.show();
@@ -87,8 +86,7 @@ export class ProductComponent implements OnInit, DoCheck {
             );
           }
         } else {
-          this._success.text = 'This product is not available';
-          this._success.show();
+          this.notAvailable.show();
         }
 
       },
@@ -382,6 +380,14 @@ export class ProductComponent implements OnInit, DoCheck {
 
   set error(value: SwalComponent) {
     this._error = value;
+  }
+
+  get notAvailable(): SwalComponent {
+    return this._notAvailable;
+  }
+
+  set notAvailable(value: SwalComponent) {
+    this._notAvailable = value;
   }
 }
 

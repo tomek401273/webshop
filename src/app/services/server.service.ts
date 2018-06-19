@@ -40,6 +40,7 @@ export class ServerService {
 
   updateProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
+    console.log(product);
     return this.http.put(Server.address + 'product/updateProduct', product);
   }
 
