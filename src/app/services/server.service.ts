@@ -3,7 +3,6 @@ import {ProductData} from '../model/product-data';
 import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {ProductDataAmount} from '../model/product-data-amount';
 import {ProductMapper} from '../model/dto/product-mapper';
-import {ProductDto} from '../model/dto/product-dto';
 import {ProductAmountDto} from '../model/dto/product-amount-dto';
 import {ProductMarkDto} from '../model/dto/product-mark-dto';
 import {Comment} from '../model/comment';
@@ -13,7 +12,6 @@ import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ServerService {
-  private productDto: ProductDto;
   private productAmountDto: ProductAmountDto;
   private commentMapper: CommentMapper = new CommentMapper();
 
@@ -21,14 +19,15 @@ export class ServerService {
               private mapper: ProductMapper) {
   }
 
+  onTaskRemoved = new EventEmitter<ProductDataAmount>();
+  onTaskUpdated = new EventEmitter<ProductData>();
+
   addNewProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
     return this.http.post(Server.address + 'product/save',
       this.productAmountDto);
   }
 
-  onTaskRemoved = new EventEmitter<ProductDataAmount>();
-  onTaskUpdated = new EventEmitter<ProductData>();
 
   removeProduct(id: number) {
     const idSting = String(id);
@@ -40,11 +39,7 @@ export class ServerService {
   }
 
   updateProduct(product: ProductDataAmount) {
-    console.log(product);
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-    console.log(this.productAmountDto);
-    console.log('--------------------');
-    console.log(product);
     return this.http.put(Server.address + 'product/updateProduct', product);
   }
 
@@ -73,7 +68,7 @@ export class ServerService {
   }
 
   pushFileToStorage(file: File): Observable<HttpEvent<{}>> {
-    let formdata: FormData = new FormData();
+    const formdata: FormData = new FormData();
 
     formdata.append('file', file);
 

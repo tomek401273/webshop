@@ -9,16 +9,7 @@ export class Address {
   private _street: string;
   private _postalCode: string;
 
-  constructor(label: string, country: string, state: string, county: string, city: string, district: string, subdistrict: string, street: string, postalCode: string) {
-    this._label = label;
-    this._country = country;
-    this._state = state;
-    this._county = county;
-    this._city = city;
-    this._district = district;
-    this._subdistrict = subdistrict;
-    this._street = street;
-    this._postalCode = postalCode;
+  constructor() {
   }
 
   get label(): string {

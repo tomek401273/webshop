@@ -1,10 +1,8 @@
 export class DirectoryTitles {
   private _titles: String[];
 
-  constructor(titles: String[]) {
-    this._titles = titles;
+  constructor() {
   }
-
 
   get titles(): String[] {
     return this._titles;

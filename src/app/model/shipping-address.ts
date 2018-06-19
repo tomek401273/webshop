@@ -17,15 +17,19 @@ export class ShippingAddress {
   private _subdistrict: string;
 
 
-  constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
-    this._login = login;
-    this._country = country;
-    this._city = city;
-    this._postCode = postCode;
-    this._street = street;
-    this._name = name;
-    this._surname = surname;
-    this._supplier = supplier;
+  // constructor(login: string, country: string, city: string, postCode: string, street: string, name: string, surname: string, supplier: string) {
+  //   this._login = login;
+  //   this._country = country;
+  //   this._city = city;
+  //   this._postCode = postCode;
+  //   this._street = street;
+  //   this._name = name;
+  //   this._surname = surname;
+  //   this._supplier = supplier;
+  // }
+
+
+  constructor() {
   }
 
   get login(): string {

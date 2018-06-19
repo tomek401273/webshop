@@ -37,6 +37,85 @@ export class OrdersComponent implements OnInit {
               private showPublicData: ShowPublicDataSevice) {
   }
 
+  ngOnInit() {
+    this.getUsersLoginSub();
+    this.getUsersLogin();
+    this.getAllProductsTitle();
+    this.getProductTitlesFromService();
+
+    this.ordersService.getUserOrders()
+      .subscribe(
+        (orders: any) => {
+          this._orders = orders;
+          this.setPage(1);
+        },
+        () => this._error.show()
+      );
+  }
+
+  showOrderDetail(order: Order) {
+    this.router.navigate(['/orders/' + order.id]);
+  }
+
+  onSubmit() {
+    const dates = this._search.value.dates;
+    let from: string;
+    let to: string;
+    if (dates === null || dates[0] === undefined) {
+      from = '';
+      to = '';
+    } else {
+      from = dates[0].toLocaleDateString();
+      to = dates[1].toLocaleDateString();
+    }
+
+    const orderSearch: OrderSearch = new OrderSearch(this._defaultProductTitle, from, to, this._search.value.state, localStorage.getItem('login'));
+    this.ordersService.searchOrders(orderSearch).subscribe(
+      (orders: any[]) => {
+        this._orders = orders;
+        this._pagedProduct = [];
+        this.setPage(1);
+
+      },
+      () => this._error.show()
+    );
+  }
+
+  onReset() {
+    this._defaultProductTitle = '';
+    this._defaultDates = '';
+    this._defaultState = 'all';
+    this._selected = '';
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > this._orders.length) {
+      return;
+    }
+    this._pager = this.pagerService.getPager(this._orders.length, page);
+    this._pagedProduct = this._orders.slice(this._pager.startIndex, this._pager.endIndex + 1);
+  }
+
+  getAllProductsTitle() {
+    this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
+      this._productsTitle = directoryTitles.titles;
+    });
+  }
+
+  getProductTitlesFromService() {
+    this._productsTitle = this.showPublicData.getProductTitles();
+  }
+
+  getUsersLoginSub() {
+    this.ordersService.usersLoginEmitter.subscribe((usersLogin: UsersLogin) => {
+      this._usersLogin = usersLogin.logins;
+    });
+  }
+
+  getUsersLogin() {
+    this._usersLogin = this.ordersService.getUsersLogin();
+  }
+
   get orders(): Order[] {
     return this._orders;
   }
@@ -131,85 +210,6 @@ export class OrdersComponent implements OnInit {
 
   set error(value: SwalComponent) {
     this._error = value;
-  }
-
-  ngOnInit() {
-    this.getUsersLoginSub();
-    this.getUsersLogin();
-    this.getAllProductsTitle();
-    this.getProductTitlesFromService();
-
-    this.ordersService.getUserOrders()
-      .subscribe(
-        (orders: any) => {
-          this._orders = orders;
-          this.setPage(1);
-        },
-        () => this._error.show()
-      );
-  }
-
-  showOrderDetail(order: Order) {
-    this.router.navigate(['/orders/' + order.id]);
-  }
-
-  onSubmit() {
-    const dates = this._search.value.dates;
-    let from: string;
-    let to: string;
-    if (dates === null || dates[0] === undefined) {
-      from = '';
-      to = '';
-    } else {
-      from = dates[0].toLocaleDateString();
-      to = dates[1].toLocaleDateString();
-    }
-
-    const orderSearch: OrderSearch = new OrderSearch(this._defaultProductTitle, from, to, this._search.value.state, localStorage.getItem('login'));
-    this.ordersService.searchOrders(orderSearch).subscribe(
-      (orders: any[]) => {
-        this._orders = orders;
-        this._pagedProduct = [];
-        this.setPage(1);
-
-      },
-      () => this._error.show()
-    );
-  }
-
-  onReset() {
-    this._defaultProductTitle = '';
-    this._defaultDates = '';
-    this._defaultState = 'all';
-    this._selected = '';
-  }
-
-  setPage(page: number) {
-    if (page < 1 || page > this._orders.length) {
-      return;
-    }
-    this._pager = this.pagerService.getPager(this._orders.length, page);
-    this._pagedProduct = this._orders.slice(this._pager.startIndex, this._pager.endIndex + 1);
-  }
-
-  getAllProductsTitle() {
-    this.showPublicData.productTitleEmitter.subscribe((directoryTitles: DirectoryTitles) => {
-      this._productsTitle = directoryTitles.titles;
-    });
-  }
-
-  getProductTitlesFromService() {
-    this._productsTitle = this.showPublicData.getProductTitles();
-  }
-
-  getUsersLoginSub() {
-    this.ordersService.usersLoginEmitter.subscribe((usersLogin: UsersLogin) => {
-      this._usersLogin = usersLogin.logins;
-    });
-  }
-
-  getUsersLogin() {
-    this._usersLogin = this.ordersService.getUsersLogin();
   }
 
 }

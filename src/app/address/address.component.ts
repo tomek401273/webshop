@@ -21,7 +21,7 @@ export class AddressComponent implements OnInit {
   };
   private _addressInput = false;
   private _insertAddress = '';
-  private _validatedAddress: Address = new Address(null, null, null, null, null, null, null, null, null);
+  private _validatedAddress: Address = new Address();
   @ViewChild('error') private _buyError: SwalComponent;
   private _attemptInput = false;
 
@@ -33,7 +33,7 @@ export class AddressComponent implements OnInit {
     } else {
       this._addressInput = false;
       this._insertAddress = '';
-      this._validatedAddress = new Address(null, null, null, null, null, null, null, null, null);
+      this._validatedAddress = new Address();
       this.permissionToSubmit.emit(this._addressInput);
     }
   }

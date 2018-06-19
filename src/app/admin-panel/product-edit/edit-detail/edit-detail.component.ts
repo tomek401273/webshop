@@ -7,7 +7,6 @@ import {CanDeactivateGuard} from '../../../services/protect/can-deactivate-guard
 import {Observable} from 'rxjs/Observable';
 import {ProductDataAmount} from '../../../model/product-data-amount';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
-import {ProductData} from '../../../model/product-data';
 
 @Component({
   selector: 'app-edit-detail',
@@ -16,8 +15,7 @@ import {ProductData} from '../../../model/product-data';
 })
 export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   @ViewChild('f') private _editProductForm: NgForm;
-  private _product: ProductDataAmount = new ProductDataAmount(
-    null, null, null, null, null, null, '', null);
+  private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null);
   private _productUpdated: ProductDataAmount;
   private _positonProductOnPage = 1;
   private _saveChanges = false;
@@ -55,15 +53,24 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   }
 
   onSubmit() {
+    // this._productUpdated = new ProductDataAmount(
+    //   this._product.getId,
+    //   this._editProductForm.value.price,
+    //   this._editProductForm.value.title,
+    //   this._editProductForm.value.desc,
+    //   this._editProductForm.value.image,
+    //   this._editProductForm.value.amount,
+    //   this._editProductForm.value.statusCode,
+    //   null);
     this._productUpdated = new ProductDataAmount(
       this._product.getId,
       this._editProductForm.value.price,
       this._editProductForm.value.title,
       this._editProductForm.value.desc,
-      this._editProductForm.value.image,
-      this._editProductForm.value.amount,
-      this._editProductForm.value.statusCode,
-      null);
+      this._editProductForm.value.image
+    );
+    this._productUpdated.setTotalAmount = this._editProductForm.value.amount;
+    this._productUpdated.setTotalAmount = this._editProductForm.value.statusCode;
     this.serverServie.updateProduct(this._productUpdated)
       .subscribe(
         () => {

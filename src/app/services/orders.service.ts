@@ -1,4 +1,4 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Order} from '../model/order';
 import {ShippingAddress} from '../model/shipping-address';
@@ -11,7 +11,7 @@ import {Server} from '../model/server';
 
 @Injectable()
 export class OrdersService {
-  usersLogin: UsersLogin = new UsersLogin(null);
+  usersLogin: UsersLogin = new UsersLogin();
   usersLoginEmitter = new EventEmitter<UsersLogin>();
   private shippingMapper: ShippingAddressMapper = new ShippingAddressMapper();
   private shippingDto: ShippingAddressDto;

@@ -1,22 +1,21 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
-import {Log} from '../model/Log';
-import {ServerService} from './server.service';
-import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {Log} from '../model/log';
 import {Register} from '../model/register';
 import {Server} from '../model/server';
 import {ChangePassword} from '../model/change-password';
+import {RegisterMapper} from '../model/dto/register-mapper';
+import {RegisterDto} from '../model/dto/register-dto';
 
 @Injectable()
 export class LogingService {
 
-  constructor(private httpClient: HttpClient,
-              private serverService: ServerService,
-              private router: Router) {
+  constructor(private httpClient: HttpClient) {
   }
 
   loginSuccessful = new EventEmitter<String>();
   logoutEmitter = new EventEmitter<boolean>();
+  private registerMapper: RegisterMapper = new RegisterMapper();
 
   getToken(log: Log) {
     return this.httpClient.post(Server.address + 'login', log,
@@ -52,14 +51,16 @@ export class LogingService {
   }
 
   registration(register: Register) {
-    return this.httpClient.post(Server.address + 'auth/signup', register, {
+    const registerDto: RegisterDto = this.registerMapper.mapToRegisterDto(register);
+    return this.httpClient.post(Server.address + 'auth/signup', registerDto, {
       observe: 'response',
       responseType: 'text',
     });
   }
 
   updateAccount(register: Register) {
-    return this.httpClient.put(Server.address + 'auth/update/account', register, {
+    const registerDto: RegisterDto = this.registerMapper.mapToRegisterDto(register);
+    return this.httpClient.put(Server.address + 'auth/update/account', registerDto, {
       observe: 'response',
       responseType: 'text',
     });

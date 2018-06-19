@@ -13,11 +13,8 @@ export class ProductDataAmount extends ProductData {
   private commentDtos: Comment [];
   private category: string;
 
-  constructor(id: number, price: number, title: string, description: string, imageLink: string, totalAmount: number, statusCode: string, statusMessage: string) {
+  constructor(id: number, price: number, title: string, description: string, imageLink: string) {
     super(id, price, title, description, imageLink);
-    this.totalAmount = totalAmount;
-    this.statusCode = statusCode;
-    this.statusMessage = statusMessage;
   }
 
   toString(): string {
@@ -39,7 +36,6 @@ export class ProductDataAmount extends ProductData {
   set setValue(value) {
     this.value = value;
   }
-
 
   get getStatusCode(): string {
     return this.statusCode;

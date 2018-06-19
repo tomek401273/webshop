@@ -13,8 +13,9 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 })
 export class OrderDetailComponent implements OnInit {
   private _id: number;
-  private _shippingAddress: ShippingAddress = new ShippingAddress('', '', '', '', '', '', '', '');
-  private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, '', null, null, null, null);
+  private _shippingAddress: ShippingAddress = new ShippingAddress();
+  // private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, '', null, null, null, null);
+  private _order: Order = new Order();
   private _isPaid = false;
   @ViewChild('error') private _error: SwalComponent;
 

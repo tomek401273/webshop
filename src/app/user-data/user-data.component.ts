@@ -17,7 +17,7 @@ import {Register} from '../model/register';
 export class UserDataComponent implements OnInit {
   @ViewChild('error') private _error: SwalComponent;
   @ViewChild('success') private _success: SwalComponent;
-  private _userAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
+  private _userAddress: ShippingAddress = new ShippingAddress();
   @ViewChild('form') private _signUp: NgForm;
   private _loginAvailable = true;
   private _submitEnabled = false;

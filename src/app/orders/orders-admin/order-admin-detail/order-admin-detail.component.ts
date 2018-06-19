@@ -2,11 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {OrderStatus} from '../../../model/order-status';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Order} from '../../../model/order';
-import {isNull} from 'util';
 import {OrdersService} from '../../../services/orders.service';
 import {ShippingAddress} from '../../../model/shipping-address';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
-import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'app-order-admin-detail',
@@ -14,9 +12,10 @@ import {Observable} from 'rxjs/Observable';
   styleUrls: ['./order-admin-detail.component.css']
 })
 export class OrderAdminDetailComponent implements OnInit {
+
   private _id: number;
-  private _shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, null, null, null, null, null);
+  private _shippingAddress: ShippingAddress = new ShippingAddress();
+  private _order: Order = new Order();
   private _paid = false;
   private _prepared = false;
   private _send = false;
@@ -31,8 +30,6 @@ export class OrderAdminDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Observable.interval(20000).subscribe(x => {
-    // });
     this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
     this.getData();
   }

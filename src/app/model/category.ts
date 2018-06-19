@@ -5,10 +5,7 @@ export class Category {
   private _name: string;
   private _productDtoList: ProductDataAmount[];
 
-  constructor(id: number, name: string, productDtoList: ProductDataAmount[]) {
-    this._id = id;
-    this._name = name;
-    this._productDtoList = productDtoList;
+  constructor() {
   }
 
   get id(): number {

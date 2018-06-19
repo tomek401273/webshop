@@ -4,7 +4,6 @@ import {ProductData} from '../../model/product-data';
 import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {PagerService} from '../../services/navigation/pager.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {ProductDataAmount} from '../../model/product-data-amount';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
@@ -16,7 +15,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   private _products: ProductData[] = [];
   private _productDataEdit: ProductData[] = [];
   private _pager: any = {};
-  private _pagedProducts: any[];
+  private _pagedProducts: ProductData[] = [];
   private _currentPage = 1;
   private _redirectedPage = 1;
   private _lastPage = false;
@@ -53,11 +52,11 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this._pager = value;
   }
 
-  get pagedProducts(): any[] {
+  get pagedProducts(): ProductData[] {
     return this._pagedProducts;
   }
 
-  set pagedProducts(value: any[]) {
+  set pagedProducts(value: ProductData[]) {
     this._pagedProducts = value;
   }
 
@@ -120,22 +119,6 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
       .subscribe(
         (procucts: any[]) => {
           this._products = procucts;
-
-          // const product2: ProductData = new ProductData(2, 3, 'title', 'desc', 'imagelink');
-          // console.log(product2.getTitle);
-          // console.log(this._products);
-          // for (let i = 0; i < this._products.length; i++) {
-          //   const product: ProductData = this._products[i];
-          //   console.log(this.products[i].toString());
-          //   this._productDataEdit.push(new ProductData(
-          //     product.getId,
-          //     product.getPrice,
-          //     product.getTitle,
-          //     product.getDescription,
-          //     product.getImageLink));
-          // }
-          // console.log(this._productDataEdit);
-
           this._redirectedPage = (typeof this._redirectedPage === 'undefined') ? 1 : this._redirectedPage;
 
           if (this._lastPage) {

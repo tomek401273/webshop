@@ -6,9 +6,8 @@ import {BucketService} from '../../services/bucket.service';
 import {BucketServerService} from '../../services/bucket-server.service';
 import {isNull} from 'util';
 import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
-import {Address} from '../../model/address';
 import {NgForm} from '@angular/forms';
-import {SweetAlert2Module, SwalComponent} from '@toverux/ngx-sweetalert2';
+import {SwalComponent} from '@toverux/ngx-sweetalert2';
 import {Order} from '../../model/order';
 
 @Component({
@@ -19,8 +18,8 @@ import {Order} from '../../model/order';
 export class SummaryComponent implements OnInit {
   private _suppliers = [{'name': 'InPost', 'price': 10}, {'name': 'DHL', 'price': '23'}];
   private _id: number;
-  private _userAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private _userAddressBackUp: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
+  private _userAddress: ShippingAddress = new ShippingAddress();
+  private _userAddressBackUp: ShippingAddress = new ShippingAddress();
   private _restrictedCity: string[] = this.publicServer.getApproveCountry();
   private _validAddress = false;
   private _addressInput = false;
@@ -79,16 +78,21 @@ export class SummaryComponent implements OnInit {
   }
 
   onConfirm() {
-    const shippingAddress: ShippingAddress = new ShippingAddress(
-      localStorage.getItem('login'),
-      null,
-      null,
-      null,
-      null,
-      this._userAddress.name,
-      this._userAddress.surname,
-      this._signupForm.value.supplierS
-    );
+    // const shippingAddress: ShippingAddress = new ShippingAddress(
+    //   localStorage.getItem('login'),
+    //   null,
+    //   null,
+    //   null,
+    //   null,
+    //   this._userAddress.name,
+    //   this._userAddress.surname,
+    //   this._signupForm.value.supplierS
+    // );
+    const shippingAddress: ShippingAddress = new ShippingAddress();
+    shippingAddress.login = localStorage.getItem('login');
+    shippingAddress.name = this._userAddress.name;
+    shippingAddress.surname = this._userAddress.surname;
+    shippingAddress.supplier = this._signupForm.value.supplierS;
     shippingAddress.code = localStorage.getItem('coupon');
 
     if (this._useAnotherAddress) {

@@ -11,13 +11,24 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./delivery-status.component.css']
 })
 export class DeliveryStatusComponent implements OnInit {
-  private _shippingAddress: ShippingAddress = new ShippingAddress(null, null, null, null, null, null, null, null);
-  private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, null, null, null, null, null);
+  private _shippingAddress: ShippingAddress = new ShippingAddress();
+  // private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, null, null, null, null, null);
+  private _order: Order = new Order();
   private _id: number;
   @ViewChild('error') private _error: SwalComponent;
 
   constructor(private activatedRoute: ActivatedRoute,
               private ordersService: OrdersService) {
+  }
+
+  ngOnInit() {
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this.ordersService.getOneOrder(this._id).subscribe(
+      (order: any) => {
+        this._order = order;
+      },
+      () => this._error.show()
+    );
   }
 
   get shippingAddress(): ShippingAddress {
@@ -51,15 +62,4 @@ export class DeliveryStatusComponent implements OnInit {
   set error(value: SwalComponent) {
     this._error = value;
   }
-
-  ngOnInit() {
-    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    this.ordersService.getOneOrder(this._id).subscribe(
-      (order: any) => {
-        this._order = order;
-      },
-      () => this._error.show()
-    );
-  }
-
 }

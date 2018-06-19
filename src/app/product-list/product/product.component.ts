@@ -1,9 +1,8 @@
-import {Component, DoCheck, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, DoCheck, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductDataAmount} from '../../model/product-data-amount';
 import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
-import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {NgForm} from '@angular/forms';
 import {ServerService} from '../../services/server.service';
 import {PagerService} from '../../services/navigation/pager.service';
@@ -15,8 +14,6 @@ import {isNull, isUndefined} from 'util';
 import {ReminderDto} from '../../model/dto/reminder-dto';
 import {Comment} from '../../model/comment';
 import {ProductMarkDto} from '../../model/dto/product-mark-dto';
-import {DirectoryTitles} from '../../model/directory-titles';
-import {ProductData} from '../../model/product-data';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
 @Component({
@@ -25,7 +22,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, DoCheck {
-  private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null, null, null, null);
+  private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null);
   private _productsTitle: String[] = [];
   private _bucketProducts: ProductDataAmount[] = [];
   private _pager: any = {};
@@ -54,7 +51,6 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    // const id = Number(this._activatedRounte.snapshot.params['id']) | 0;
     const id = Number(this._activatedRounte.snapshot.params['id']);
     this._showPublicDataService.getProduct(id).subscribe(
       (response: any) => {
@@ -112,15 +108,25 @@ export class ProductComponent implements OnInit, DoCheck {
     const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
 
     if (isUndefined(founded)) {
-      this._bucketProducts.push(new ProductDataAmount(
+      // this._bucketProducts.push(new ProductDataAmount(
+      //   product.id,
+      //   product.price,
+      //   product.title,
+      //   product.description,
+      //   product.imageLink,
+      //   1,
+      //   null,
+      //   null));
+
+      const productDataAmount: ProductDataAmount = new ProductDataAmount(
         product.id,
         product.price,
         product.title,
         product.description,
-        product.imageLink,
-        1,
-        null,
-        null));
+        product.imageLink
+      );
+      productDataAmount.setTotalAmount = 1;
+      this._bucketProducts.push(productDataAmount);
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);
@@ -135,19 +141,29 @@ export class ProductComponent implements OnInit, DoCheck {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
+        // const bucketProduct: ProductDataAmount = new ProductDataAmount(
+        //   bucket[i].id,
+        //   bucket[i].price,
+        //   bucket[i].title,
+        //   bucket[i].description,
+        //   bucket[i].imageLink,
+        //   bucket[i].totalAmount,
+        //   null,
+        //   null);
+
         const bucketProduct: ProductDataAmount = new ProductDataAmount(
           bucket[i].id,
           bucket[i].price,
           bucket[i].title,
           bucket[i].description,
-          bucket[i].imageLink,
-          bucket[i].totalAmount,
-          null,
-          null);
+          bucket[i].imageLink
+        );
+        bucketProduct.setTotalAmount = bucket[i].totalAmount;
         this._bucketProducts.push(bucketProduct);
       }
     }
   }
+
   saveTemp() {
     localStorage.setItem('bucket123', null);
     const bucketToSave = JSON.stringify(this._bucketProducts);
@@ -184,7 +200,11 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   onAddComment(productId) {
-    const comment: Comment = new Comment(localStorage.getItem('login'), this._commentMessage, productId);
+    // const comment: Comment = new Comment(localStorage.getItem('login'), this._commentMessage, productId);
+    const comment: Comment = new Comment();
+    comment.login = localStorage.getItem('login');
+    comment.message = this.commentMessage;
+    comment.productId = productId;
     this._serverService.addComment(comment).subscribe(
       (response: Comment[]) => {
         this._product.setCommentDtos = response;
@@ -210,7 +230,8 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   onEditComment(editMessage, commentId) {
-    const comment: Comment = new Comment(null, editMessage.value, null);
+    const comment: Comment = new Comment();
+    comment.message = editMessage.value;
     comment.id = commentId;
     this._serverService.editComment(comment).subscribe(
       (response: boolean) => {

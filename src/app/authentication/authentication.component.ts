@@ -1,15 +1,14 @@
-import {Component, DoCheck, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, DoCheck, OnInit, TemplateRef} from '@angular/core';
 import {LogingService} from '../services/loging.service';
 import {Router} from '@angular/router';
 import {ProductDataAmount} from '../model/product-data-amount';
-import {SwalComponent} from '@toverux/ngx-sweetalert2';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {ServerService} from '../services/server.service';
 import {BucketServerService} from '../services/bucket-server.service';
 import {HttpResponse} from '@angular/common/http';
 import {isNull} from 'util';
-import {Log} from '../model/Log';
+import {Log} from '../model/log';
 
 @Component({
   selector: 'app-authentication',
@@ -174,16 +173,26 @@ export class AuthenticationComponent implements OnInit, DoCheck {
       }
 
       for (let i = 0; i < bucket.length; i++) {
+
+        // const bucketProduct: ProductDataAmount = new ProductDataAmount(
+        //   bucket[i].id,
+        //   bucket[i].price,
+        //   bucket[i].title,
+        //   bucket[i].description,
+        //   bucket[i].imageLink,
+        //   bucket[i].totalAmount,
+        //   null,
+        //   null
+        // );
+
         const bucketProduct: ProductDataAmount = new ProductDataAmount(
           bucket[i].id,
           bucket[i].price,
           bucket[i].title,
           bucket[i].description,
-          bucket[i].imageLink,
-          bucket[i].totalAmount,
-          null,
-          null
+          bucket[i].imageLink
         );
+        bucketProduct.setTotalAmount = bucket[i].totalAmount;
         this.products.push(bucketProduct);
       }
       localStorage.setItem('bucket123', null);
@@ -204,16 +213,24 @@ export class AuthenticationComponent implements OnInit, DoCheck {
       (products: any[]) => {
         if (!isNull(products)) {
           for (let i = 0; i < products.length; i++) {
+            // const bucketProduct: ProductDataAmount = new ProductDataAmount(
+            //   products[i].productDto.id,
+            //   products[i].productDto.price,
+            //   products[i].productDto.title,
+            //   products[i].productDto.description,
+            //   products[i].productDto.imageLink,
+            //   products[i].amount,
+            //   null,
+            //   null
+            // );
             const bucketProduct: ProductDataAmount = new ProductDataAmount(
               products[i].productDto.id,
               products[i].productDto.price,
               products[i].productDto.title,
               products[i].productDto.description,
               products[i].productDto.imageLink,
-              products[i].amount,
-              null,
-              null
             );
+            bucketProduct.setTotalAmount = products[i].amount;
             this.products.push(bucketProduct);
           }
         }

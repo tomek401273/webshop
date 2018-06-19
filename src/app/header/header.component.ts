@@ -1,11 +1,10 @@
-import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
+import {Component, DoCheck, OnInit} from '@angular/core';
 import {LogingService} from '../services/loging.service';
 import {Router} from '@angular/router';
 import {BucketService} from '../services/bucket.service';
 import {isNull} from 'util';
 import {OrdersService} from '../services/orders.service';
 import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
-import {Category} from '../model/Category';
 import {DirectoryTitles} from '../model/directory-titles';
 
 @Component({

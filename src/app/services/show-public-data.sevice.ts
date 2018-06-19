@@ -10,7 +10,7 @@ export class ShowPublicDataSevice {
   private productsTitle: String[] = [];
   productTitleEmitter = new EventEmitter<DirectoryTitles>();
   mavPriceEmitter = new EventEmitter<number>();
-  private directoryTitles = new DirectoryTitles(null);
+  private directoryTitles = new DirectoryTitles();
   private maxPrice: number;
   private approvedCountry: string[] = [];
 

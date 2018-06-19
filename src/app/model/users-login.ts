@@ -1,10 +1,8 @@
 export class UsersLogin {
   private _logins: String[];
 
-  constructor(logins: String[]) {
-    this._logins = logins;
+  constructor() {
   }
-
 
   get logins(): String[] {
     return this._logins;

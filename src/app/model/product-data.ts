@@ -5,7 +5,6 @@ export class ProductData {
   private description: string;
   private imageLink: string;
 
-
   constructor(id: number, price: number, title: string, description: string, imageLink: string) {
     this.id = id;
     this.price = price;
@@ -43,7 +42,7 @@ export class ProductData {
   }
 
 
-   title2(): string {
+  title2(): string {
     return 'lubie placki';
   }
 

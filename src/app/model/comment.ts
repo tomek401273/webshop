@@ -6,13 +6,9 @@ export class Comment {
   private _productId: number;
   private _editComment: boolean;
   private _changeComment = false;
-  private _changeButton= false;
+  private _changeButton = false;
 
-
-  constructor(login: String, message: String, productId: number) {
-    this._login = login;
-    this._message = message;
-    this._productId = productId;
+  constructor() {
   }
 
   get id(): number {

@@ -1,14 +1,12 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, TemplateRef, ViewChild} from '@angular/core';
 import {Register} from '../../model/register';
 import {LogingService} from '../../services/loging.service';
-import {FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
+import {NgForm} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
-import {Address} from '../../model/address';
 import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
-import {isNull, isUndefined} from 'util';
 
 @Component({
   selector: 'app-signup',

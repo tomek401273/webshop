@@ -1,30 +1,21 @@
-import {Component, DoCheck, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, DoCheck, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ServerService} from '../services/server.service';
-import {ProductData} from '../model/product-data';
 import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
 import {PagerService} from '../services/navigation/pager.service';
 import {BucketService} from '../services/bucket.service';
 import {ProductDataAmount} from '../model/product-data-amount';
-import {isNull, isUndefined} from 'util';
+import {isNull} from 'util';
 import {BucketServerService} from '../services/bucket-server.service';
 import {LogingService} from '../services/loging.service';
-
-import {ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 import {IonRangeSliderComponent} from 'ng2-ion-range-slider';
-import {parseHttpResponse} from 'selenium-webdriver/http';
 import {DirectoryTitles} from '../model/directory-titles';
 import {ReminderDto} from '../model/dto/reminder-dto';
-import {ProductMarkDto} from '../model/dto/product-mark-dto';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {BsModalService} from 'ngx-bootstrap/modal';
-import {Comment} from '../model/comment';
 import {Router} from '@angular/router';
-import {Category} from '../model/Category';
-import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {Category} from '../model/category';
 
 @Component({
   selector: 'app-product-list',
@@ -139,7 +130,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
-
   getTemp() {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
@@ -149,10 +139,8 @@ export class ProductListComponent implements OnInit, DoCheck {
           bucket[i]._price,
           bucket[i]._title,
           bucket[i]._description,
-          bucket[i]._imageLink,
-          bucket[i]._totalAmount,
-          null,
-          null);
+          bucket[i]._imageLink);
+        bucketProduct.setTotalAmount = bucket[i]._totalAmount;
         this._bucketProducts.push(bucketProduct);
       }
     }
@@ -196,8 +184,6 @@ export class ProductListComponent implements OnInit, DoCheck {
         }
       }
     );
-
-
   }
 
   onSetSubscription(email, productId) {

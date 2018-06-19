@@ -5,11 +5,8 @@ export class ProductBought {
   private _amount: number;
   private _packed: boolean;
 
-
-  constructor(product: ProductDataAmount, amount: number, packed: boolean) {
-    this._product = product;
+  constructor(amount: number) {
     this._amount = amount;
-    this._packed = packed;
   }
 
   get product(): ProductDataAmount {

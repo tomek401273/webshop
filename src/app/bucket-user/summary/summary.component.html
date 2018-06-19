@@ -142,7 +142,17 @@
               </div>
               <p class="text-center">[*] - required fields</p>
 
-              <button
+
+              <button *ngIf="!useAnotherAddress"
+                      class="btn btn-primary"
+                      type="submit"
+                      [disabled]="!validAddress
+                 && useAnotherAddress
+                 || !f.valid">Buy
+              </button>
+
+
+              <button *ngIf="useAnotherAddress"
                 class="btn btn-primary"
                 type="submit"
                 [disabled]="!validAddress
@@ -150,7 +160,6 @@
                  || surenameUser.length<5
                  || nameUser.length<5
                  || houseNumer<1
-                 || appartmentNumber<1
                  || !f.valid">Buy
               </button>
             </div>

@@ -32,6 +32,241 @@ export class BucketUserComponent implements OnInit, DoCheck {
               private logingService: LogingService) {
   }
 
+  ngOnInit() {
+    localStorage.setItem('coupon', null);
+    this._isAuthenticated = this.logingServiece.isAuthenticated();
+    if (this._isAuthenticated) {
+      this.getDataFromDatabase();
+    } else {
+      const bucket = JSON.parse(localStorage.getItem('bucket123'));
+      if (!isNull(bucket)) {
+        for (let i = 0; i < bucket.length; i++) {
+
+          // const bucketProduct: ProductDataAmount = new ProductDataAmount(
+          //   bucket[i].id,
+          //   bucket[i].price,
+          //   bucket[i].title,
+          //   bucket[i].description,
+          //   bucket[i].imageLink,
+          //   bucket[i].totalAmount,
+          //   null,
+          //   null);
+
+          const bucketProduct: ProductDataAmount = new ProductDataAmount(
+            bucket[i].id,
+            bucket[i].price,
+            bucket[i].title,
+            bucket[i].description,
+            bucket[i].imageLink,
+          );
+          bucketProduct.setTotalAmount = bucket[i].totalAmount;
+
+          this._products.push(bucketProduct);
+        }
+        this._isFullFiled = true;
+      }
+      this.calculateTotalAmountProduct();
+      this.calcuateTotalValueProducts();
+    }
+
+    this.bucketService.buyAllProduct.subscribe(
+      (respone) => {
+        this._products = [];
+        localStorage.setItem('bucket123', null);
+      }
+    );
+
+  }
+
+  ngDoCheck() {
+    this._isAuthenticated = this.logingServiece.isAuthenticated();
+    for (let i = 0; i < this._products.length; i++) {
+      const prod = this._products[i];
+      const value = prod.getPrice * prod.getTotalAmount;
+      this._products[i].setValue = value;
+      this.calcuateTotalValueProducts();
+      this.calculateTotalAmountProduct();
+    }
+    this.saveTempDataToLocalStorage();
+  }
+
+  saveTempDataToLocalStorage() {
+    const bucketToSave = JSON.stringify(this._products);
+    localStorage.setItem('bucket123', null);
+    localStorage.setItem('bucket123', bucketToSave);
+  }
+
+
+  onAddAmountProcuct(bucketProduct: ProductDataAmount) {
+    if (this._isAuthenticated) {
+      this.bucketServerService.addProductToCard(bucketProduct.getId).subscribe(
+        (resposne) => {
+          if (resposne === true) {
+            this._success.text = 'Successfully increase product items';
+            this._success.show();
+            this.adding(bucketProduct);
+          } else {
+            this._error.show();
+          }
+        }
+      );
+    } else {
+      this.adding(bucketProduct);
+    }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
+  }
+
+  adding(bucketProduct: ProductDataAmount) {
+    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
+    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount + 1;
+    this._products[index] = bucketProduct;
+  }
+
+  calculateTotalAmountProduct() {
+    this._totalAmountProducts = 0;
+    for (const prduct of this._products) {
+      const amountTemp = Number(prduct.getTotalAmount) | 0;
+      this._totalAmountProducts += amountTemp;
+    }
+    this.bucketService.bucketStatus.emit(this._totalAmountProducts.toString());
+  }
+
+  calcuateTotalValueProducts() {
+    this._totalValueProducts = 0;
+    for (const product of this._products) {
+      const valueTemp = Number(product.getValue) | 0;
+      this._totalValueProducts += valueTemp;
+    }
+  }
+
+  onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
+    if (bucketProduct.getTotalAmount === 1) {
+      this.onRemove(bucketProduct);
+    }
+
+    if (bucketProduct.getTotalAmount > 1) {
+      if (this._isAuthenticated) {
+        this.bucketServerService.removeSingleItemToBucket(bucketProduct.getId).subscribe(
+          (resposne) => {
+            if (resposne === true) {
+              this._success.text = 'Successfully decrease product items';
+              this._success.show();
+              this.subtracting(bucketProduct);
+            } else {
+              this._error.show();
+            }
+          });
+      } else {
+        this.subtracting(bucketProduct);
+      }
+    }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
+  }
+
+  onRemove(product: ProductDataAmount) {
+    if (this._isAuthenticated) {
+      this.bucketServerService.removeSingleProductFromBucket(product.getId).subscribe(
+        () => {
+          this._success.text = 'Successfully removed product from bucket';
+          this._success.show();
+          this.removing(product);
+        },
+        () => this._error.show()
+      );
+    } else {
+      this.removing(product);
+    }
+  }
+
+  subtracting(bucketProduct: ProductDataAmount) {
+    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
+    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount - 1;
+    this._products[index] = bucketProduct;
+  }
+
+  removing(product: ProductDataAmount) {
+    const found = this._products.find(x => x.getId === product.getId);
+    const index = this._products.indexOf(found);
+    this._products.splice(index, 1);
+    if (this._products.length === 0) {
+      this._isFullFiled = false;
+      this._isCoupon = false;
+    }
+    this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
+  }
+
+  onNext() {
+    this.router.navigate(['/summary']);
+  }
+
+  getDataFromDatabase() {
+    this.bucketServerService.getProductListFromDatabase().subscribe(
+      (products: any[]) => {
+        if (!isNull(products)) {
+          for (let i = 0; i < products.length; i++) {
+            // const bucketProduct: ProductDataAmount = new ProductDataAmount(
+            //   products[i].productDto.id,
+            //   products[i].productDto.price,
+            //   products[i].productDto.title,
+            //   products[i].productDto.description,
+            //   products[i].productDto.imageLink,
+            //   products[i].amount,
+            //   null,
+            //   null
+            // );
+
+            const bucketProduct: ProductDataAmount = new ProductDataAmount(
+              products[i].productDto.id,
+              products[i].productDto.price,
+              products[i].productDto.title,
+              products[i].productDto.description,
+              products[i].productDto.imageLink,
+            );
+            bucketProduct.setTotalAmount = products[i].amount;
+
+
+            this._products.push(bucketProduct);
+
+          }
+          if (this._products.length > 0) {
+            this._isFullFiled = true;
+
+          }
+
+        }
+      },
+      () => this._error.show()
+    );
+  }
+
+  checkAvailableCode(code) {
+    if (this._isFullFiled) {
+      this.bucketServerService.checkAvailableCoupon(code.value).subscribe(
+        (response: boolean) => {
+          if (response) {
+            this._isCoupon = true;
+            this._correctCode = true;
+            this._wrongCode = false;
+            localStorage.setItem('coupon', code.value);
+          } else {
+            this._isCoupon = false;
+            this._correctCode = false;
+            this._wrongCode = true;
+            this._wrongMessage = 'Code error';
+          }
+        },
+        () => this._error.show()
+      );
+    } else {
+      this._wrongCode = true;
+      this._correctCode = false;
+      this._wrongMessage = 'Fulfill bucket';
+    }
+  }
+
   get products(): ProductDataAmount[] {
     return this._products;
   }
@@ -118,220 +353,5 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
   set error(value: SwalComponent) {
     this._error = value;
-  }
-
-  ngOnInit() {
-    localStorage.setItem('coupon', null);
-    this._isAuthenticated = this.logingServiece.isAuthenticated();
-    if (this._isAuthenticated) {
-      this.getDataFromDatabase();
-    } else {
-      const bucket = JSON.parse(localStorage.getItem('bucket123'));
-      if (!isNull(bucket)) {
-        for (let i = 0; i < bucket.length; i++) {
-          const bucketProduct: ProductDataAmount = new ProductDataAmount(
-            bucket[i].id,
-            bucket[i].price,
-            bucket[i].title,
-            bucket[i].description,
-            bucket[i].imageLink,
-            bucket[i].totalAmount,
-            null,
-            null);
-          this._products.push(bucketProduct);
-        }
-        this._isFullFiled = true;
-      }
-      this.calculateTotalAmountProduct();
-      this.calcuateTotalValueProducts();
-    }
-
-    this.bucketService.buyAllProduct.subscribe(
-      (respone) => {
-        this._products = [];
-        localStorage.setItem('bucket123', null);
-      }
-    );
-
-  }
-
-  ngDoCheck() {
-    this._isAuthenticated = this.logingServiece.isAuthenticated();
-    for (let i = 0; i < this._products.length; i++) {
-      const prod = this._products[i];
-      const value = prod.getPrice * prod.getTotalAmount;
-      this._products[i].setValue = value;
-      this.calcuateTotalValueProducts();
-    }
-    this.saveTempDataToLocalStorage();
-  }
-
-  saveTempDataToLocalStorage() {
-    const bucketToSave = JSON.stringify(this._products);
-    localStorage.setItem('bucket123', null);
-    localStorage.setItem('bucket123', bucketToSave);
-  }
-
-  calcuateTotalValueProducts() {
-    this._totalValueProducts = 0;
-    for (const product of this._products) {
-      const valueTemp = Number(product.getValue) | 0;
-      this._totalValueProducts += valueTemp;
-    }
-  }
-
-  onAddAmountProcuct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.getTotalAmount < 3) {
-      if (this._isAuthenticated) {
-        this.bucketServerService.addProductToCard(bucketProduct.getId).subscribe(
-          (resposne) => {
-            if (resposne === true) {
-              this._success.text = 'Successfully increase product items';
-              this._success.show();
-              this.adding(bucketProduct);
-            } else {
-              this._error.show();
-            }
-          }
-        );
-      } else {
-        this.adding(bucketProduct);
-      }
-    }
-    this.calculateTotalAmountProduct();
-    this.calcuateTotalValueProducts();
-  }
-
-  adding(bucketProduct: ProductDataAmount) {
-    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
-    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount + 1;
-    this._products[index] = bucketProduct;
-  }
-
-  onSubtractAmountProduct(bucketProduct: ProductDataAmount) {
-    if (bucketProduct.getTotalAmount === 1) {
-      this.onRemove(bucketProduct);
-    }
-
-    if (bucketProduct.getTotalAmount > 1) {
-      if (this._isAuthenticated) {
-        this.bucketServerService.removeSingleItemToBucket(bucketProduct.getId).subscribe(
-          (resposne) => {
-            if (resposne === true) {
-              this._success.text = 'Successfully decrease product items';
-              this._success.show();
-              this.subtracting(bucketProduct);
-            } else {
-              this._error.show();
-            }
-          });
-      } else {
-        this.subtracting(bucketProduct);
-      }
-    }
-    this.calculateTotalAmountProduct();
-    this.calcuateTotalValueProducts();
-  }
-
-  onRemove(product: ProductDataAmount) {
-    if (this._isAuthenticated) {
-      this.bucketServerService.removeSingleProductFromBucket(product.getId).subscribe(
-        () => {
-          this._success.text = 'Successfully removed product from bucket';
-          this._success.show();
-          this.removing(product);
-        },
-        () => this._error.show()
-      );
-    } else {
-      this.removing(product);
-    }
-  }
-
-  subtracting(bucketProduct: ProductDataAmount) {
-    const index = this._products.indexOf(this._products.find(x => x.getId === bucketProduct.getId));
-    bucketProduct.setTotalAmount = bucketProduct.getTotalAmount - 1;
-    this._products[index] = bucketProduct;
-  }
-
-
-  calculateTotalAmountProduct() {
-    this._totalAmountProducts = 0;
-    for (const prduct of this._products) {
-      const amountTemp = Number(prduct.getTotalAmount) | 0;
-      this._totalAmountProducts += amountTemp;
-    }
-    this.bucketService.bucketStatus.emit(this._totalAmountProducts.toString());
-  }
-
-
-  removing(product: ProductDataAmount) {
-    const found = this._products.find(x => x.getId === product.getId);
-    const index = this._products.indexOf(found);
-    this._products.splice(index, 1);
-    if (this._products.length === 0) {
-      this._isFullFiled = false;
-      this._isCoupon = false;
-    }
-    this.calculateTotalAmountProduct();
-    this.calcuateTotalValueProducts();
-  }
-
-  onNext() {
-    this.router.navigate(['/summary']);
-  }
-
-  getDataFromDatabase() {
-    this.bucketServerService.getProductListFromDatabase().subscribe(
-      (products: any[]) => {
-        if (!isNull(products)) {
-          for (let i = 0; i < products.length; i++) {
-            const bucketProduct: ProductDataAmount = new ProductDataAmount(
-              products[i].productDto.id,
-              products[i].productDto.price,
-              products[i].productDto.title,
-              products[i].productDto.description,
-              products[i].productDto.imageLink,
-              products[i].amount,
-              null,
-              null
-            );
-            this._products.push(bucketProduct);
-
-          }
-          if (this._products.length > 0) {
-            this._isFullFiled = true;
-
-          }
-
-        }
-      },
-      () => this._error.show()
-    );
-  }
-
-  checkAvailableCode(code) {
-    if (this._isFullFiled) {
-      this.bucketServerService.checkAvailableCoupon(code.value).subscribe(
-        (response: boolean) => {
-          if (response) {
-            this._isCoupon = true;
-            this._correctCode = true;
-            this._wrongCode = false;
-            localStorage.setItem('coupon', code.value);
-          } else {
-            this._isCoupon = false;
-            this._correctCode = false;
-            this._wrongCode = true;
-            this._wrongMessage = 'Code error';
-          }
-        },
-        () => this._error.show()
-      );
-    } else {
-      this._wrongCode = true;
-      this._correctCode = false;
-      this._wrongMessage = 'Fulfill bucket';
-    }
   }
 }
