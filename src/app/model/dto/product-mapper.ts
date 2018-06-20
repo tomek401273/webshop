@@ -8,9 +8,9 @@ export class ProductMapper {
     const productDto: ProductDto = new ProductDto(
       product.getId,
       product.getPrice,
-      product.getTitle,
-      product.getDescription,
-      product.getImageLink);
+      product.title,
+      product.description,
+      product.imageLink);
     return productDto;
   }
 
@@ -18,11 +18,12 @@ export class ProductMapper {
     const productAmountDto: ProductAmountDto = new ProductAmountDto(
       product.getId,
       product.getPrice,
-      product.getTitle,
-      product.getDescription,
-      product.getImageLink,
+      product.title,
+      product.description,
+      product.imageLink,
       product.getTotalAmount,
-      product.getStatusCode
+      product.statusCode,
+      product.shortDescription
     );
     productAmountDto.category = product.getCategory;
     return productAmountDto;

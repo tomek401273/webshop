@@ -89,7 +89,7 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.getAllProductsTitle();
     this.getProductTitlesFromService();
     this.getTemp();
-    this.serverService.onTaskRemoved.subscribe(
+    this.serverService.onProductRemoved.subscribe(
       (product: ProductDataAmount) => this._products.splice(this._products.indexOf(product), 1)
     );
     this.getDataFromDatabase();
@@ -105,7 +105,7 @@ export class ProductListComponent implements OnInit, DoCheck {
       .subscribe(
         (products: any[]) => {
           this._products = products;
-          this.setPage(2);
+          this.setPage(1);
         },
         (error) => {
           console.log(error);

@@ -27,3 +27,6 @@ button.photo {
   cursor: inherit;
   display: block;
 }
+textarea {
+  height: 220px;
+}

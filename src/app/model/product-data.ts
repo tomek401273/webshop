@@ -1,24 +1,24 @@
 export class ProductData {
   private id: number;
   private price: number;
-  private title: string;
-  private description: string;
-  private imageLink: string;
+  private _title: String;
+  private _description: String;
+  private _imageLink: String;
 
-  constructor(id: number, price: number, title: string, description: string, imageLink: string) {
+  constructor(id: number, price: number, title: String, description: String, imageLink: String) {
     this.id = id;
     this.price = price;
-    this.title = title;
-    this.description = description;
-    this.imageLink = imageLink;
+    this._title = title;
+    this._description = description;
+    this._imageLink = imageLink;
   }
 
   toString(): string {
     return 'id: ' + this.id + ' '
       + 'price: ' + this.price + ' '
-      + 'title: ' + this.title + ' '
-      + 'description: ' + this.description + ' '
-      + 'imageLink: ' + this.imageLink + ' ';
+      + 'title: ' + this._title + ' '
+      + 'description: ' + this._description + ' '
+      + 'imageLink: ' + this._imageLink + ' ';
   }
 
   get getId(): number {
@@ -37,32 +37,39 @@ export class ProductData {
     this.price = value;
   }
 
-  get getTitle(): string {
-    return this.title;
+  get title(): String {
+    return this._title;
   }
 
-
-  title2(): string {
-    return 'lubie placki';
+  set title(value: String) {
+    this._title = value;
   }
 
-  set setTitle(value: string) {
-    this.title = value;
+  set setTitle(value: String) {
+    this._title = value;
   }
 
-  get getDescription(): string {
-    return this.description;
+  get description(): String {
+    return this._description;
   }
 
-  set setDescription(value: string) {
-    this.description = value;
+  set description(value: String) {
+    this._description = value;
   }
 
-  get getImageLink(): string {
-    return this.imageLink;
+  set setDescription(value: String) {
+    this._description = value;
   }
 
-  set setImageLink(value: string) {
-    this.imageLink = value;
+  get imageLink(): String {
+    return this._imageLink;
+  }
+
+  set imageLink(value: String) {
+    this._imageLink = value;
+  }
+
+  set setImageLink(value: String) {
+    this._imageLink = value;
   }
 }

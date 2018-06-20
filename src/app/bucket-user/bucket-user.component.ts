@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {BucketServerService} from '../services/bucket-server.service';
 import {LogingService} from '../services/loging.service';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {ServerService} from '../services/server.service';
 
 @Component({
   selector: 'app-bucket-user',
@@ -29,7 +30,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
               private router: Router,
               private bucketServerService: BucketServerService,
               private logingServiece: LogingService,
-              private logingService: LogingService) {
+              private serverService: ServerService) {
   }
 
   ngOnInit() {
@@ -41,16 +42,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
       const bucket = JSON.parse(localStorage.getItem('bucket123'));
       if (!isNull(bucket)) {
         for (let i = 0; i < bucket.length; i++) {
-
-          // const bucketProduct: ProductDataAmount = new ProductDataAmount(
-          //   bucket[i].id,
-          //   bucket[i].price,
-          //   bucket[i].title,
-          //   bucket[i].description,
-          //   bucket[i].imageLink,
-          //   bucket[i].totalAmount,
-          //   null,
-          //   null);
 
           const bucketProduct: ProductDataAmount = new ProductDataAmount(
             bucket[i].id,
@@ -67,6 +58,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
       }
       this.calculateTotalAmountProduct();
       this.calcuateTotalValueProducts();
+
     }
 
     this.bucketService.buyAllProduct.subscribe(
@@ -75,7 +67,16 @@ export class BucketUserComponent implements OnInit, DoCheck {
         localStorage.setItem('bucket123', null);
       }
     );
+  }
 
+  productWithDrawnFromSale() {
+    this.serverService.onProductRemoved.subscribe(
+      (response) => {
+
+        this.calculateTotalAmountProduct();
+        console.log(this.totalAmountProducts);
+      }
+    );
   }
 
   ngDoCheck() {
@@ -88,6 +89,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
       this.calculateTotalAmountProduct();
     }
     this.saveTempDataToLocalStorage();
+    this.productWithDrawnFromSale();
   }
 
   saveTempDataToLocalStorage() {
@@ -207,17 +209,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
       (products: any[]) => {
         if (!isNull(products)) {
           for (let i = 0; i < products.length; i++) {
-            // const bucketProduct: ProductDataAmount = new ProductDataAmount(
-            //   products[i].productDto.id,
-            //   products[i].productDto.price,
-            //   products[i].productDto.title,
-            //   products[i].productDto.description,
-            //   products[i].productDto.imageLink,
-            //   products[i].amount,
-            //   null,
-            //   null
-            // );
-
             const bucketProduct: ProductDataAmount = new ProductDataAmount(
               products[i].productDto.id,
               products[i].productDto.price,

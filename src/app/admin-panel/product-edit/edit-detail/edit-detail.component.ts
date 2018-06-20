@@ -7,6 +7,7 @@ import {CanDeactivateGuard} from '../../../services/protect/can-deactivate-guard
 import {Observable} from 'rxjs/Observable';
 import {ProductDataAmount} from '../../../model/product-data-amount';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {ProductAmountDto} from '../../../model/dto/product-amount-dto';
 
 @Component({
   selector: 'app-edit-detail',
@@ -21,6 +22,8 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   private _saveChanges = false;
   @ViewChild('success') private _success: SwalComponent;
   @ViewChild('error') private _error: SwalComponent;
+  @ViewChild('confirmDelete') private _confirmDelete: SwalComponent;
+  @ViewChild('successDelete') private _successDelete: SwalComponent;
 
   constructor(private publicServer: ShowPublicDataSevice,
               private serverServie: ServerService,
@@ -34,15 +37,23 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
 
     this.publicServer.getProduct(id)
       .subscribe(
-        (product: any) => {
+        (product: ProductAmountDto) => {
+          console.log(product);
           this.product.setId = product.id;
           this.product.setTitle = product.title;
           this.product.setDescription = product.description;
           this.product.setPrice = product.price;
           this.product.setImageLink = product.imageLink;
           this.product.setStatusCode = product.statusCode;
+          this.product.setTotalAmount = product.totalAmount;
+
+          const descList: String[] = [];
+          for (let i = 0; i < product.shortDescription.length; i++) {
+            const desc: String = product.shortDescription[i];
+            descList.push(desc);
+          }
+          this.product.shortDescription = descList;
           console.log(this.product);
-          console.log(this.product.getId);
         },
         () => this._error.show());
 
@@ -53,15 +64,6 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   }
 
   onSubmit() {
-    // this._productUpdated = new ProductDataAmount(
-    //   this._product.getId,
-    //   this._editProductForm.value.price,
-    //   this._editProductForm.value.title,
-    //   this._editProductForm.value.desc,
-    //   this._editProductForm.value.image,
-    //   this._editProductForm.value.amount,
-    //   this._editProductForm.value.statusCode,
-    //   null);
     this._productUpdated = new ProductDataAmount(
       this._product.getId,
       this._editProductForm.value.price,
@@ -71,28 +73,59 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
     );
     this._productUpdated.setTotalAmount = this._editProductForm.value.amount;
     this._productUpdated.setStatusCode = this._editProductForm.value.statusCode;
+
+    const shortDes: String[] = [];
+    shortDes.push(this._editProductForm.value.desc1);
+    shortDes.push(this._editProductForm.value.desc2);
+    shortDes.push(this._editProductForm.value.desc3);
+    shortDes.push(this._editProductForm.value.desc4);
+    shortDes.push(this._editProductForm.value.desc5);
+    this._productUpdated.shortDescription = shortDes;
+
     this.serverServie.updateProduct(this._productUpdated)
       .subscribe(
         () => {
           this._success.show();
-          this.serverServie.onTaskUpdated.emit(this._productUpdated);
+          this.serverServie.onProductUpdated.emit(this._productUpdated);
           this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'});
         },
         () => this._error.show());
     this._saveChanges = true;
   }
 
+  cancelEdit() {
+    this.router.navigate(['/productEdit'], {queryParamsHandling: 'preserve'});
+  }
+
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if ((this._editProductForm.value.price !== this._product.getPrice
-        || this._editProductForm.value.title !== this._product.getTitle
-        || this._editProductForm.value.desc !== this._product.getDescription
-        || this._editProductForm.value.image !== this._product.getImageLink)
+        || this._editProductForm.value.title !== this._product.title
+        || this._editProductForm.value.desc !== this._product.description
+        || this._editProductForm.value.image !== this._product.imageLink)
       && !this._saveChanges) {
       return confirm('Do you want to discard the changes ???');
     } else {
       return true;
     }
   }
+
+
+  onDelete() {
+    this._confirmDelete.show();
+  }
+
+  onConfirm() {
+    this.serverServie.removeProduct(this.product.getId)
+      .subscribe(
+        (response) => {
+          this.serverServie.onProductRemoved.emit(this.product);
+
+          this.successDelete.show();
+        },
+        () => this._error.show()
+      );
+  }
+
 
   get editProductForm(): NgForm {
     return this._editProductForm;
@@ -148,5 +181,21 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
 
   set error(value: SwalComponent) {
     this._error = value;
+  }
+
+  get confirmDelete(): SwalComponent {
+    return this._confirmDelete;
+  }
+
+  set confirmDelete(value: SwalComponent) {
+    this._confirmDelete = value;
+  }
+
+  get successDelete(): SwalComponent {
+    return this._successDelete;
+  }
+
+  set successDelete(value: SwalComponent) {
+    this._successDelete = value;
   }
 }

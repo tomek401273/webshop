@@ -5,6 +5,7 @@ import {ShowPublicDataSevice} from '../../services/show-public-data.sevice';
 import {PagerService} from '../../services/navigation/pager.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
+import {ProductDataAmount} from '../../model/product-data-amount';
 
 @Component({
   selector: 'app-product-edit',
@@ -12,10 +13,10 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product-edit.component.css']
 })
 export class ProductEditComponent implements OnInit, AfterContentChecked {
-  private _products: ProductData[] = [];
-  private _productDataEdit: ProductData[] = [];
+  private _products: ProductDataAmount[] = [];
+  private _productDataEdit: ProductDataAmount[] = [];
   private _pager: any = {};
-  private _pagedProducts: ProductData[] = [];
+  private _pagedProducts: ProductDataAmount[] = [];
   private _currentPage = 1;
   private _redirectedPage = 1;
   private _lastPage = false;
@@ -28,19 +29,19 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
               private activatedRoute: ActivatedRoute) {
   }
 
-  get products(): ProductData[] {
+  get products(): ProductDataAmount[] {
     return this._products;
   }
 
-  set products(value: ProductData[]) {
+  set products(value: ProductDataAmount[]) {
     this._products = value;
   }
 
-  get productDataEdit(): ProductData[] {
+  get productDataEdit(): ProductDataAmount[] {
     return this._productDataEdit;
   }
 
-  set productDataEdit(value: ProductData[]) {
+  set productDataEdit(value: ProductDataAmount[]) {
     this._productDataEdit = value;
   }
 
@@ -52,11 +53,11 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this._pager = value;
   }
 
-  get pagedProducts(): ProductData[] {
+  get pagedProducts(): ProductDataAmount[] {
     return this._pagedProducts;
   }
 
-  set pagedProducts(value: ProductData[]) {
+  set pagedProducts(value: ProductDataAmount[]) {
     this._pagedProducts = value;
   }
 
@@ -93,15 +94,15 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
-    this.serverService.onTaskUpdated.subscribe(
-      (productUpdated: ProductData) =>
+    this.serverService.onProductUpdated.subscribe(
+      (productUpdated: ProductDataAmount) =>
         this._productDataEdit[productUpdated.getId - 1] =
-          new ProductData(
+          new ProductDataAmount(
             productUpdated.getId,
             productUpdated.getPrice,
-            productUpdated.getTitle,
-            productUpdated.getDescription,
-            productUpdated.getImageLink)
+            productUpdated.title,
+            productUpdated.description,
+            productUpdated.imageLink)
     );
   }
 
@@ -139,7 +140,7 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this.serverService.removeProduct(poroductDeteted.id)
       .subscribe(
         (response) => {
-          this.serverService.onTaskRemoved.emit(poroductDeteted);
+          this.serverService.onProductRemoved.emit(poroductDeteted);
           this._pagedProducts.splice(id, 1);
         },
         () => this._error.show()

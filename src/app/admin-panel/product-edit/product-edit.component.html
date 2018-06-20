@@ -4,24 +4,61 @@
     <div class="col-md-8 col-xs-12 col-sm-12">
       <div class="row" *ngFor="let product of pagedProducts; let i = index">
         <div class=" list-group-item">
-          <h3 class="text-center">{{product.title}}</h3>
+          <a (click)="onEditDetail(product.id)"><h3 class="text-center">Edit: {{product.title}}</h3></a>
           <hr>
           <table class="table table-borderless">
-           <tbody>
-              <td class="col-sm-4 col-xs-3 col-sm-3"><img
-                src="{{product.imageLink}}"
-                alt="{{product.imageLink}}"
-                class="img-responsive"
-                style="max-height: 200px; max-width: 250px">
-              </td>
-              <td class="col-sm-6 col-xs-4 col-sm-4 text-left bottom-left desc">
-                {{product.description}}
-              </td>
-              <td class="col-sm-2 col-xs-2 col-sm-2">
+            <tbody>
+            <tr>
+              <td class="col-sm-3 col-xs-4">
 
-              <button class="btn btn-danger controll-button " (click)="onRemove(product, i)">REMOVE</button>
-              <button class="btn  btn-warning controll-button" (click)="onEditDetail(product.id)">EDIT</button>
+                <img
+                  src="{{product.imageLink}}"
+                  alt="{{product.imageLink}}"
+                  class="img-responsive"
+                >
+              </td>
+              <td class="col-md-6 col-xs-7 text-left bottom-left">
+                <!--{{product.description}}-->
+                <div class="text-justify">
+                  <!--<div *ngFor="let des of product.shortDescription">-->
+                    <!--<p *ngIf="des.length > 5">{{des}}</p>-->
+                  <!--</div>-->
+                  <ul *ngFor="let des of product.shortDescription">
+                    <li>{{des}}</li>
+                  </ul>
+                </div>
+              </td>
+              <td class="text-right ">
+            <tr></tr>
+            <tr></tr>
+            <tr></tr>
+            <div class="">
+              <!--<p>Price: {{product.price}} $</p>-->
+            </div>
+
+            <!--<div class="detail text-center">-->
+            <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
+            <!--</div>-->
             </td>
+
+
+            <td>
+              <tr></tr>
+              <tr></tr>
+              <tr></tr>
+              <div class="text-right price">
+                <p>Price: {{product.price}} $</p>
+              </div>
+
+              <!--<div class="detail text-center">-->
+              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
+              <!--</div>-->
+            </td>
+
+            </tr>
+
+
+
             </tbody>
           </table>
         </div>

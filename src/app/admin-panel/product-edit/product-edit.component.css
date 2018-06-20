@@ -1,3 +1,65 @@
+/*.table-borderless > tbody > tr > td,*/
+/*.table-borderless > tbody > tr > th,*/
+/*.table-borderless > tfoot > tr > td,*/
+/*.table-borderless > tfoot > tr > th,*/
+/*.table-borderless > thead > tr > td,*/
+/*.table-borderless > thead > tr > th {*/
+  /*border: none;*/
+/*}*/
+
+/*.btn-category {*/
+  /*width: 200px;*/
+  /*height: 40px;*/
+/*}*/
+
+/*.btn-all-category {*/
+  /*width: 1000px;*/
+  /*height: 40px;*/
+/*}*/
+
+/*@media only screen and (max-width: 991px) {*/
+  /*.img-responsive{*/
+    /*width: 100px;*/
+    /*height: auto;*/
+    /*margin-right: 0px;*/
+    /*margin-left: 0px;*/
+  /*}*/
+  /*.pagination {*/
+    /*!*position: relative;*!*/
+    /*!*left: 80px;*!*/
+    /*!*width: 10px;*!*/
+    /*!*display: none;*!*/
+  /*}*/
+  /*.extra-buttons {*/
+    /*display: none;*/
+  /*}*/
+
+
+/*}*/
+
+/*@media only screen and (min-width: 991px) {*/
+  /*.img-responsive{*/
+    /*width: 250px;*/
+    /*height: auto;*/
+  /*}*/
+
+  /*.price {*/
+    /*position: relative;*/
+    /*left: 40px;*/
+  /*}*/
+/*}*/
+/*@media only screen and (max-width: 400px) {*/
+  /*.desc {*/
+    /*display: none;*/
+  /*}*/
+/*}*/
+
+
+/*.controll-button {*/
+  /*width: 100px;*/
+/*}*/
+
+
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -17,58 +79,58 @@
   height: 40px;
 }
 
-@media only screen and (max-width: 991px) {
+button.show-detail {
+  width: 110px;
+}
+.detail {
+  width: 150px;
+}
+@media only screen and (max-width: 400px) {
   .img-responsive{
-    width: 100px;
+    width: 150px;
     height: auto;
     margin-right: 0px;
     margin-left: 0px;
   }
-  .pagination {
-    /*position: relative;*/
-    /*left: 80px;*/
-    /*width: 10px;*/
-    /*display: none;*/
-  }
   .extra-buttons {
     display: none;
   }
-
-
 }
 
-@media only screen and (min-width: 991px) {
+@media only screen and (min-width: 400px) {
   .img-responsive{
     width: 250px;
     height: auto;
   }
 }
-@media only screen and (max-width: 400px) {
-  .desc {
-    display: none;
+
+@media only screen and (min-width: 992px) {
+  .filter-price {
+    width: 70px;
+  }
+  .price {
+    position: relative;
+    left: 40px;
   }
 }
 
+@media only screen and (max-width: 991px){
+  .detail {
+    position: relative;
+    left: 50px;
+  }
 
-.controll-button {
-  width: 100px;
+  @media only screen and (max-width: 768px){
+    .detail {
+      position: relative;
+      right: 100px;
+    }
+    .show-detail{
+      width: 10px;
+      position: relative;
+      right: 10px;
+    }
+  }
+
+
 }
-/*@media (max-width: 10px) {*/
-/*.img-responsive {*/
-/*width: 10px;*/
-/*height: 10px;*/
-/*}*/
-/*}*/
-
-/*@media (max-width: 40px) {*/
-/*.div-image-image {*/
-/*position: relative;*/
-/*}*/
-/*.img {*/
-/*position: absolute;*/
-/*top: 0;*/
-/*bottom: 0;*/
-/*margin: auto;*/
-/*width: 10%;*/
-/*}*/
-/*}*/

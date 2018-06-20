@@ -3,3 +3,11 @@
   align-items: center;
   justify-content: center;
 }
+
+button.menage-product {
+  width: 150px;
+}
+
+textarea {
+  height: 150px;
+}

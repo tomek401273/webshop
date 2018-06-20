@@ -78,16 +78,6 @@ export class SummaryComponent implements OnInit {
   }
 
   onConfirm() {
-    // const shippingAddress: ShippingAddress = new ShippingAddress(
-    //   localStorage.getItem('login'),
-    //   null,
-    //   null,
-    //   null,
-    //   null,
-    //   this._userAddress.name,
-    //   this._userAddress.surname,
-    //   this._signupForm.value.supplierS
-    // );
     const shippingAddress: ShippingAddress = new ShippingAddress();
     shippingAddress.login = localStorage.getItem('login');
     shippingAddress.name = this._userAddress.name;

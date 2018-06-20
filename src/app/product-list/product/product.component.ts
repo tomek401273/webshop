@@ -22,6 +22,7 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, DoCheck {
+  private _productId = 0;
   private _product: ProductDataAmount = new ProductDataAmount(null, null, null, null, null);
   private _productsTitle: String[] = [];
   private _bucketProducts: ProductDataAmount[] = [];
@@ -47,24 +48,27 @@ export class ProductComponent implements OnInit, DoCheck {
               private _pagerService: PagerService,
               private _bucketService: BucketService,
               private _bucketServerService: BucketServerService,
-              private _logingServiece: LogingService,
-              private _modalService: BsModalService) {
+              private _logingServiece: LogingService) {
   }
 
   ngOnInit() {
-    const id = Number(this._activatedRounte.snapshot.params['id']);
-    this._showPublicDataService.getProduct(id).subscribe(
-      (response: any) => {
-        this._product = response;
-      },
-      () => this._error.show()
-    );
+    this.productId = Number(this._activatedRounte.snapshot.params['id']);
+    this.getProductFromDatabase();
     this._userLogin = localStorage.getItem('login');
     this.getTemp();
   }
 
   ngDoCheck() {
     this._isAuthenticated = this._logingServiece.isAuthenticated();
+  }
+
+  getProductFromDatabase() {
+    this._showPublicDataService.getProduct(this.productId).subscribe(
+      (response: ProductDataAmount) => {
+        this._product = response;
+      },
+      () => this._error.show()
+    );
   }
 
   onAddToCard(product) {
@@ -106,16 +110,6 @@ export class ProductComponent implements OnInit, DoCheck {
     const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
 
     if (isUndefined(founded)) {
-      // this._bucketProducts.push(new ProductDataAmount(
-      //   product.id,
-      //   product.price,
-      //   product.title,
-      //   product.description,
-      //   product.imageLink,
-      //   1,
-      //   null,
-      //   null));
-
       const productDataAmount: ProductDataAmount = new ProductDataAmount(
         product.id,
         product.price,
@@ -185,8 +179,9 @@ export class ProductComponent implements OnInit, DoCheck {
       const productMarkDto: ProductMarkDto = new ProductMarkDto(localStorage.getItem('login'), productId, rate.rate);
       this._serverService.markProduct(productMarkDto).subscribe(
         (response: ProductMarkDto) => {
-          this._product.setMarksAverage = response.averageMarks;
-          this._product.setCountMarks = response.countMarks;
+          this._product.marksAverage = response.averageMarks;
+          this._product.countMarks = response.countMarks;
+          console.log(this._product.countMarks);
           this._product.setRated = true;
           this._success.text = 'Thank you for rated our product';
           this._success.show();
@@ -209,6 +204,7 @@ export class ProductComponent implements OnInit, DoCheck {
         this._commentMessage = '';
         this._success.text = 'Thank you for comment our product';
         this._success.show();
+        this.getProductFromDatabase();
       },
       () => this._error.show()
     );
@@ -218,7 +214,8 @@ export class ProductComponent implements OnInit, DoCheck {
     this._serverService.removeComment(commentId).subscribe(
       (response) => {
         if (response) {
-          this._product.setCommentDtos.splice(commentPosition, 1);
+
+          this._product.commentDtos.splice(commentPosition, 1);
           this._success.text = 'You successfully deleted comment';
           this._success.show();
         }
@@ -234,10 +231,11 @@ export class ProductComponent implements OnInit, DoCheck {
     this._serverService.editComment(comment).subscribe(
       (response: boolean) => {
         if (response) {
-          this._product.setCommentDtos.find(x => x.id === commentId).message = editMessage.value;
-          this._product.setCommentDtos.find(x => x.id === commentId).editComment = false;
+          this._product.commentDtos.find(x => x.id === commentId).message = editMessage.value;
+          this._product.commentDtos.find(x => x.id === commentId).editComment = false;
           this._success.text = 'You successfully edited comment';
           this._success.show();
+          this.getProductFromDatabase();
         } else {
           this._error.show();
         }
@@ -388,6 +386,14 @@ export class ProductComponent implements OnInit, DoCheck {
 
   set notAvailable(value: SwalComponent) {
     this._notAvailable = value;
+  }
+
+  get productId(): number {
+    return this._productId;
+  }
+
+  set productId(value: number) {
+    this._productId = value;
   }
 }
 

@@ -19,8 +19,8 @@ export class ServerService {
               private mapper: ProductMapper) {
   }
 
-  onTaskRemoved = new EventEmitter<ProductDataAmount>();
-  onTaskUpdated = new EventEmitter<ProductData>();
+  onProductRemoved = new EventEmitter<ProductDataAmount>();
+  onProductUpdated = new EventEmitter<ProductDataAmount>();
 
   addNewProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
@@ -40,8 +40,7 @@ export class ServerService {
 
   updateProduct(product: ProductDataAmount) {
     this.productAmountDto = this.mapper.mapToProductAmountDto(product);
-    console.log(product);
-    return this.http.put(Server.address + 'product/updateProduct', product);
+    return this.http.put(Server.address + 'product/updateProduct', this.productAmountDto);
   }
 
   markProduct(productMarkDto: ProductMarkDto) {

@@ -51,7 +51,7 @@
           <table class="table table-borderless">
             <tbody>
             <tr>
-              <td class="col-sm-4 col-xs-4">
+              <td class="col-sm-3 col-xs-4">
 
                 <img
                   src="{{product.imageLink}}"
@@ -59,16 +59,45 @@
                   class="img-responsive"
                 >
               </td>
-              <td class="col-md-6 col-xs-5 text-left bottom-left">
-                {{product.description}}
+              <td class="col-md-6 col-xs-7 text-left bottom-left">
+                <!--{{product.description}}-->
+               <div class="text-justify">
+                 <ul *ngFor="let des of product.shortDescription">
+                   <li>{{des}}</li>
+                 </ul>
+               </div>
               </td>
-              <td>
+              <td class="text-right ">
             <tr></tr>
             <tr></tr>
             <tr></tr>
-            $ {{product.price}}
+            <div class="">
+              <!--<p>Price: {{product.price}} $</p>-->
+            </div>
+
+            <!--<div class="detail text-center">-->
+              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
+            <!--</div>-->
             </td>
+
+
+            <td class="center-block ">
+              <tr></tr>
+              <tr></tr>
+              <tr></tr>
+              <div class="text-right price">
+                <p>Price: {{product.price}} $</p>
+              </div>
+
+              <!--<div class="detail text-center">-->
+              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
+              <!--</div>-->
+            </td>
+
             </tr>
+
+
+
             </tbody>
           </table>
         </div>
