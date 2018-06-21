@@ -21,50 +21,61 @@
 button.show-detail {
   width: 110px;
 }
+
 .detail {
   width: 150px;
 }
+
+.center-element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media only screen and (max-width: 400px) {
- .img-responsive{
-   width: 150px;
-   height: auto;
-   margin-right: 0px;
-   margin-left: 0px;
- }
+  .img-responsive {
+    width: 150px;
+    height: auto;
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
   .extra-buttons {
     display: none;
   }
 }
 
 @media only screen and (min-width: 400px) {
- .img-responsive{
-   width: 250px;
-   height: auto;
- }
+  .img-responsive {
+    width: 250px;
+    height: auto;
+  }
 }
 
 @media only screen and (min-width: 992px) {
   .filter-price {
     width: 70px;
   }
+
   .price {
     position: relative;
     left: 40px;
   }
 }
 
-@media only screen and (max-width: 991px){
+@media only screen and (max-width: 991px) {
   .detail {
     position: relative;
     left: 50px;
   }
 
-  @media only screen and (max-width: 768px){
+  @media only screen and (max-width: 768px) {
     .detail {
       position: relative;
       right: 100px;
     }
-    .show-detail{
+
+    .show-detail {
       width: 10px;
       position: relative;
       right: 10px;

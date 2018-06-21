@@ -12,7 +12,6 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
   styleUrls: ['./order-admin-detail.component.css']
 })
 export class OrderAdminDetailComponent implements OnInit {
-
   private _id: number;
   private _shippingAddress: ShippingAddress = new ShippingAddress();
   private _order: Order = new Order();
@@ -38,6 +37,7 @@ export class OrderAdminDetailComponent implements OnInit {
     this.ordersService.getOneOrder(this._id).subscribe(
       (order: any) => {
         this._order = order;
+        this.order.shippingAddressDto.postCode = order.shippingAddressDto.postalCode;
         if ('paid' === this._order.statusCode) {
           this._paid = true;
         }
@@ -58,7 +58,6 @@ export class OrderAdminDetailComponent implements OnInit {
         for (let i = 0; i < this._order.productBoughts.length; i++) {
           this._order.productBoughts[i].packed = false;
         }
-
       },
       () => this._error.show()
     );

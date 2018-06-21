@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ShippingAddress} from '../../model/shipping-address';
 import {SwalComponent} from '@toverux/ngx-sweetalert2';
 
-
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -14,7 +13,6 @@ import {SwalComponent} from '@toverux/ngx-sweetalert2';
 export class OrderDetailComponent implements OnInit {
   private _id: number;
   private _shippingAddress: ShippingAddress = new ShippingAddress();
-  // private _order: Order = new Order(null, null, null, null, null, null, this._shippingAddress, '', null, null, null, null);
   private _order: Order = new Order();
   private _isPaid = false;
   @ViewChild('error') private _error: SwalComponent;
@@ -22,6 +20,24 @@ export class OrderDetailComponent implements OnInit {
   constructor(private ordersService: OrdersService,
               private activatedRoute: ActivatedRoute,
               private router: Router) {
+  }
+
+  ngOnInit() {
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+    this.ordersService.getOneOrder(this._id).subscribe(
+      (order: any) => {
+        this._order = order;
+        this.order.shippingAddressDto.postCode = order.shippingAddressDto.postalCode;
+        if ('Order was booked' === this._order.status) {
+          this._isPaid = true;
+        }
+      },
+      () => this._error.show()
+    );
+  }
+
+  onPay() {
+    this.router.navigate(['/success/' + this._order.id]);
   }
 
   get id(): number {
@@ -63,23 +79,4 @@ export class OrderDetailComponent implements OnInit {
   set error(value: SwalComponent) {
     this._error = value;
   }
-
-  ngOnInit() {
-    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    this.ordersService.getOneOrder(this._id).subscribe(
-      (order: any) => {
-        this._order = order;
-        if ('Order was booked' === this._order.status) {
-          this._isPaid = true;
-        }
-
-      },
-      () => this._error.show()
-    );
-  }
-
-  onPay() {
-    this.router.navigate(['/success/' + this._order.id]);
-  }
-
 }

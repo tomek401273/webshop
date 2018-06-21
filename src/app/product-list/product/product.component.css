@@ -1,41 +1,33 @@
 @media only screen and (max-width: 1200px) {
   .img-responsive {
-    /*width: 100px;*/
-    /*text-align: center;*/
-    /*border: 3px solid green;*/
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 300px;
   }
-
-  .description {
-    /*text-align: center;*/
-
+}
+@media only screen and (max-width: 991px) {
+  .stars{
+    position: relative;
+    top: 20px;
   }
 }
 
 @media only screen and (min-width: 991px) {
   .img-responsive {
-    /*width: 100px;*/
-    /*text-align: center;*/
-    /*border: 3px solid green;*/
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 280px;
   }
+
   .description {
-    /*text-align: center;*/
     position: relative;
     left: 30px;
   }
-
-
 }
 
-
-  a.change {
+a.change {
   color: #bc3721;
 }
 

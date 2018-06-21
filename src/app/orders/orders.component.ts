@@ -20,14 +20,14 @@ export class OrdersComponent implements OnInit {
   private _orders: Order[] = [];
   private _usersLogin: String[] = [];
   private _defaultState = 'all';
-  @ViewChild('form') private _searchForm: NgForm;
   private _selected: string;
   private _pagedProduct: Order[] = [];
   private _pager: any = {};
-  @ViewChild('f') private _search: NgForm;
   private _defaultProductTitle = '';
   private _defaultDates = '';
   private _productsTitle: String[] = [];
+  @ViewChild('f') private _search: NgForm;
+  @ViewChild('form') private _searchForm: NgForm;
   @ViewChild('error') private _error: SwalComponent;
 
   constructor(private serverService: ServerService,
@@ -42,7 +42,6 @@ export class OrdersComponent implements OnInit {
     this.getUsersLogin();
     this.getAllProductsTitle();
     this.getProductTitlesFromService();
-
     this.ordersService.getUserOrders()
       .subscribe(
         (orders: any) => {
@@ -211,5 +210,4 @@ export class OrdersComponent implements OnInit {
   set error(value: SwalComponent) {
     this._error = value;
   }
-
 }

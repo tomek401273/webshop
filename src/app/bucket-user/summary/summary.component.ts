@@ -27,13 +27,15 @@ export class SummaryComponent implements OnInit {
   private _useAnotherAddress = false;
   private _enableSubmit = false;
   private _surenameUser = '';
-  private _nameUser= '';
+  private _nameUser = '';
   private _houseNumer = 0;
   private _appartmentNumber = 0;
+  private _validatedAddress: string;
   @ViewChild('f') private _signupForm: NgForm;
   @ViewChild('confirmBuy') private _confirmBuy: SwalComponent;
   @ViewChild('buySuccess') private _buySuccess: SwalComponent;
   @ViewChild('buyError') private _buyError: SwalComponent;
+  @ViewChild('user') private _userNewData: NgForm;
 
   private _userSettings = {
     inputPlaceholderText: 'Search your delivery location',
@@ -41,9 +43,6 @@ export class SummaryComponent implements OnInit {
     'showCurrentLocation': false,
     'geoTypes': ['(regions)', 'establishment', 'geocode']
   };
-  private _validatedAddress: string;
-  @ViewChild('user') private _userNewData: NgForm;
-
 
   constructor(private router: Router,
               private orderService: OrdersService,
@@ -53,21 +52,16 @@ export class SummaryComponent implements OnInit {
   }
 
   correctAddress(isCorrect: boolean) {
-    console.log('isCorrect Address? ' + isCorrect);
     this.validAddress = isCorrect;
   }
 
   onAddressInput(userAddress: string) {
-    console.log('usser addres correct inject in signUP component');
-    console.log(userAddress);
     this._validatedAddress = userAddress;
-
   }
 
   ngOnInit() {
     this.bucketServerService.getAddressShippment().subscribe(
       (response: ShippingAddress) => {
-        console.log(response);
         this._userAddress = response;
         this._userAddressBackUp = response;
       },
@@ -99,8 +93,7 @@ export class SummaryComponent implements OnInit {
         shippingAddress.search = shippingAddress.search + this._userAddress.street;
       }
     }
-    console.log('Confirm && Submit Address');
-    console.log(shippingAddress);
+
     this.orderService.buyAllProductFromBucket(shippingAddress).subscribe(
       (response: Order) => {
         if (!isNull(response)) {

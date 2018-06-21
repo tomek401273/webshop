@@ -38,8 +38,6 @@ export class OrdersService {
 
   buyAllProductFromBucket(shippingAddress: ShippingAddress) {
     this.shippingDto = this.shippingMapper.mapToShippingAddressDto(shippingAddress);
-    console.log('oders.service');
-    console.log(this.shippingDto);
     return this.http.post(Server.address + 'buy/buy', this.shippingDto);
   }
 

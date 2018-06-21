@@ -1,7 +1,7 @@
 export class Comment {
   private _id: number;
   private _login: String;
-  private _created: String;
+  private _createdDate: String;
   private _message: String;
   private _productId: number;
   private _editComment: boolean;
@@ -43,12 +43,12 @@ export class Comment {
     this._productId = value;
   }
 
-  get created(): String {
-    return this._created;
+  get createdDate(): String {
+    return this._createdDate;
   }
 
-  set created(value: String) {
-    this._created = value;
+  set createdDate(value: String) {
+    this._createdDate = value;
   }
 
   get editComment(): boolean {

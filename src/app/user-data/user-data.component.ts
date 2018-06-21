@@ -15,18 +15,18 @@ import {Register} from '../model/register';
   styleUrls: ['./user-data.component.css']
 })
 export class UserDataComponent implements OnInit {
-  @ViewChild('error') private _error: SwalComponent;
-  @ViewChild('success') private _success: SwalComponent;
   private _userAddress: ShippingAddress = new ShippingAddress();
-  @ViewChild('form') private _signUp: NgForm;
   private _loginAvailable = true;
   private _submitEnabled = false;
   private _country = '';
   private _validAddress = false;
   private _validatedAddress: string;
-  @ViewChild('house') private _house: NgForm;
   private _changeAddress = false;
   private _userLogin = '';
+  @ViewChild('form') private _signUp: NgForm;
+  @ViewChild('success') private _success: SwalComponent;
+  @ViewChild('house') private _house: NgForm;
+  @ViewChild('error') private _error: SwalComponent;
 
   constructor(private bucketServerService: BucketServerService,
               private logingService: LogingService,
@@ -46,11 +46,9 @@ export class UserDataComponent implements OnInit {
     );
   }
 
-
   correctAddress(isCorrect: boolean) {
     this.validAddress = isCorrect;
   }
-
 
   onDefaultAddress() {
     this.changeAddress = false;
@@ -74,7 +72,6 @@ export class UserDataComponent implements OnInit {
     register.login = this.signUp.value.login;
     register.name = this.signUp.value.name;
     register.surname = this.signUp.value.surname;
-    // register.password = 'kemot555';
     if (this.userAddress.street === null) {
       register.address = this.userAddress.district + ', '
         + this.userAddress.postCode + ' '
@@ -208,7 +205,6 @@ export class UserDataComponent implements OnInit {
   set changeAddress(value: boolean) {
     this._changeAddress = value;
   }
-
 
   get userLogin(): string {
     return this._userLogin;

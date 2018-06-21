@@ -4,7 +4,6 @@ export class OrderStatus {
   private linkDelivery: String;
   private status: String;
 
-
   constructor(login: String, orderId: number, linkDelivery: String, status: String) {
     this.login = login;
     this.orderId = orderId;

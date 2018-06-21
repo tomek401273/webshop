@@ -1,6 +1,5 @@
 <div class="container">
   <h2>{{product.title}}</h2>
-
   <form (ngSubmit)="onSubmit()" #f="ngForm">
     <div class="form-group">
       <label for="title">Product Name: </label>
@@ -52,7 +51,6 @@
              minlength="5"
              maxlength="255"
       >
-
       <input type="text"
              class="form-control"
              [ngModel]="product.shortDescription[3]"
@@ -67,9 +65,7 @@
              minlength="5"
              maxlength="255"
       >
-
     </div>
-
 
     <div class="form-group">
       <label for="desc">Description</label>
@@ -78,7 +74,7 @@
                 [ngModel]="product.description"
                 name="desc"
                 required
-                minlength="200"
+                minlength="3"
                 maxlength="1000"></textarea>
     </div>
     <div class="form-group">
@@ -97,7 +93,7 @@
       <input id="amount"
              type="number"
              class="form-control"
-             [ngModel]="product.getTotalAmount"
+             [ngModel]="product.totalAmount"
              name="amount"
              required
              min="1"

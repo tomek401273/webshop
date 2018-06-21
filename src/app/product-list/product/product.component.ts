@@ -9,7 +9,6 @@ import {PagerService} from '../../services/navigation/pager.service';
 import {BucketService} from '../../services/bucket.service';
 import {BucketServerService} from '../../services/bucket-server.service';
 import {LogingService} from '../../services/loging.service';
-import {BsModalService} from 'ngx-bootstrap/modal';
 import {isNull, isUndefined} from 'util';
 import {ReminderDto} from '../../model/dto/reminder-dto';
 import {Comment} from '../../model/comment';
@@ -30,11 +29,11 @@ export class ProductComponent implements OnInit, DoCheck {
   private _pagedProduct: any[];
   private _isAuthenticated = false;
   private _typedTitleLengthTemp = 0;
-  private _sale = 'sale';
+  private _sale: String = 'sale';
   @ViewChild('form') private _searchForm: NgForm;
   @ViewChild('_advancedSliderElement') private _advancedSliderElement: IonRangeSliderComponent;
   private _hovered = 0;
-  private _userLogin = '';
+  private _userLogin: String = '';
   private _commentMessage = '';
   @ViewChild('success') private _success: SwalComponent;
   @ViewChild('error') private _error: SwalComponent;
@@ -92,7 +91,6 @@ export class ProductComponent implements OnInit, DoCheck {
         } else {
           this.notAvailable.show();
         }
-
       },
       () => this._error.show()
     );
@@ -101,13 +99,13 @@ export class ProductComponent implements OnInit, DoCheck {
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (const prod of this._bucketProducts) {
-      totalNumber += prod.getTotalAmount;
+      totalNumber += prod.totalAmount;
     }
     this._bucketService.bucketStatus.emit(totalNumber.toString());
   }
 
   addProductToBucket(product) {
-    const founded: ProductDataAmount = this._bucketProducts.find(x => x.getId === product.id);
+    const founded: ProductDataAmount = this._bucketProducts.find(x => x.id === product.id);
 
     if (isUndefined(founded)) {
       const productDataAmount: ProductDataAmount = new ProductDataAmount(
@@ -117,14 +115,14 @@ export class ProductComponent implements OnInit, DoCheck {
         product.description,
         product.imageLink
       );
-      productDataAmount.setTotalAmount = 1;
+      productDataAmount.totalAmount = 1;
       this._bucketProducts.push(productDataAmount);
       return;
     } else {
       const index = this._bucketProducts.indexOf(founded);
-      let amount = founded.getTotalAmount;
+      let amount = founded.totalAmount;
       amount++;
-      founded.setTotalAmount = amount;
+      founded.totalAmount = amount;
       this._bucketProducts[index] = founded;
     }
   }
@@ -133,24 +131,14 @@ export class ProductComponent implements OnInit, DoCheck {
     const bucket = JSON.parse(localStorage.getItem('bucket123'));
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        // const bucketProduct: ProductDataAmount = new ProductDataAmount(
-        //   bucket[i].id,
-        //   bucket[i].price,
-        //   bucket[i].title,
-        //   bucket[i].description,
-        //   bucket[i].imageLink,
-        //   bucket[i].totalAmount,
-        //   null,
-        //   null);
-
         const bucketProduct: ProductDataAmount = new ProductDataAmount(
-          bucket[i].id,
-          bucket[i].price,
-          bucket[i].title,
-          bucket[i].description,
-          bucket[i].imageLink
+          bucket[i]._id,
+          bucket[i]._price,
+          bucket[i]._title,
+          bucket[i]._description,
+          bucket[i]._imageLink
         );
-        bucketProduct.setTotalAmount = bucket[i].totalAmount;
+        bucketProduct.totalAmount = bucket[i]._totalAmount;
         this._bucketProducts.push(bucketProduct);
       }
     }
@@ -181,8 +169,7 @@ export class ProductComponent implements OnInit, DoCheck {
         (response: ProductMarkDto) => {
           this._product.marksAverage = response.averageMarks;
           this._product.countMarks = response.countMarks;
-          console.log(this._product.countMarks);
-          this._product.setRated = true;
+          this._product.rated = true;
           this._success.text = 'Thank you for rated our product';
           this._success.show();
 
@@ -193,14 +180,13 @@ export class ProductComponent implements OnInit, DoCheck {
   }
 
   onAddComment(productId) {
-    // const comment: Comment = new Comment(localStorage.getItem('login'), this._commentMessage, productId);
     const comment: Comment = new Comment();
     comment.login = localStorage.getItem('login');
     comment.message = this.commentMessage;
     comment.productId = productId;
     this._serverService.addComment(comment).subscribe(
       (response: Comment[]) => {
-        this._product.setCommentDtos = response;
+        this._product.commentDtos = response;
         this._commentMessage = '';
         this._success.text = 'Thank you for comment our product';
         this._success.show();
@@ -316,14 +302,6 @@ export class ProductComponent implements OnInit, DoCheck {
     this._typedTitleLengthTemp = value;
   }
 
-  get sale(): string {
-    return this._sale;
-  }
-
-  set sale(value: string) {
-    this._sale = value;
-  }
-
   get searchForm(): NgForm {
     return this._searchForm;
   }
@@ -348,11 +326,11 @@ export class ProductComponent implements OnInit, DoCheck {
     this._hovered = value;
   }
 
-  get userLogin(): string {
+  get userLogin(): String {
     return this._userLogin;
   }
 
-  set userLogin(value: string) {
+  set userLogin(value: String) {
     this._userLogin = value;
   }
 
@@ -394,6 +372,14 @@ export class ProductComponent implements OnInit, DoCheck {
 
   set productId(value: number) {
     this._productId = value;
+  }
+
+  get sale(): String {
+    return this._sale;
+  }
+
+  set sale(value: String) {
+    this._sale = value;
   }
 }
 

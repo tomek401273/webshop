@@ -37,9 +37,9 @@ export class AddNewProductComponent implements OnInit, CanDeactivateGuard {
       this._addProductForm.value.title,
       this._addProductForm.value.desc,
       this._addProductForm.value.image);
-    this._productData.setTotalAmount = this._addProductForm.value.amount;
-    this._productData.setStatusCode = this._addProductForm.value.statusCode;
-    this._productData.setCategory = this._addProductForm.value.category;
+    this._productData.totalAmount = this._addProductForm.value.amount;
+    this._productData.statusCode = this._addProductForm.value.statusCode;
+    this._productData.category = this._addProductForm.value.category;
 
     this._productData.shortDescription.push(this._addProductForm.value.att1);
     this._productData.shortDescription.push(this._addProductForm.value.att2);

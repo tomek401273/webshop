@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {ProductEditComponent} from '../../admin-panel/product-edit/product-edit.component';
 import {ProductListComponent} from '../../product-list/product-list.component';
-import {Routes, RouterModule, CanDeactivate} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {AddNewProductComponent} from '../../admin-panel/add-new-product/add-new-product.component';
 import {EditDetailComponent} from '../../admin-panel/product-edit/edit-detail/edit-detail.component';
 import {SignupComponent} from '../../authentication/signup/signup.component';
@@ -14,7 +14,6 @@ import {OrdersComponent} from '../../orders/orders.component';
 import {OrderDetailComponent} from '../../orders/order-detail/order-detail.component';
 import {OrdersAdminComponent} from '../../orders/orders-admin/orders-admin.component';
 import {OrderAdminDetailComponent} from '../../orders/orders-admin/order-admin-detail/order-admin-detail.component';
-import {DeliveryStatusComponent} from '../../delivery-status/delivery-status.component';
 import {ProductComponent} from '../../product-list/product/product.component';
 import {ConfirmNewsletterComponent} from '../../authentication/confirm-newsletter/confirm-newsletter.component';
 import {ConfirmAccountComponent} from '../../authentication/confirm-account/confirm-account.component';
@@ -31,7 +30,6 @@ const appRoutes: Routes = [
   {path: 'orders', canActivate: [AuthGuard], component: OrdersComponent},
   {path: 'orders/:id', canActivate: [AuthGuard], component: OrderDetailComponent},
   {path: 'admin-orders', canActivate: [AuthGuard], component: OrdersAdminComponent},
-  {path: 'delivery/:id', canActivate: [AuthGuard], component: DeliveryStatusComponent},
   {path: 'newsletter/confirm', component: ConfirmNewsletterComponent},
   {path: 'admin-orders/:id', canActivate: [AuthGuard], component: OrderAdminDetailComponent},
   {path: 'confirm-account', component: ConfirmAccountComponent},

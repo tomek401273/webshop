@@ -11,7 +11,6 @@ export class ProductMarkDto {
     this.mark = mark;
   }
 
-
   get averageMarks(): number {
     return this._averageMarks;
   }

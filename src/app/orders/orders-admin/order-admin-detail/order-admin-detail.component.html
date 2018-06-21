@@ -13,13 +13,12 @@
             <p>Total Amount: {{order.totalAmount}}</p>
             <p>Bought Date: {{order.boughtDate}}</p>
             <p>Stratus status: {{order.status}}</p>
-            <p><a href="#">Delivery link</a></p>
           </div>
 
           <div class="col-md-6">
             <h3>Shippin Address</h3>
             <p>Country: {{order.shippingAddressDto.country}}</p>
-            <p>PostCode: {{order.shippingAddressDto.postalCode}} - {{order.shippingAddressDto.city}}</p>
+            <p>PostCode: {{order.shippingAddressDto.postCode}}  {{order.shippingAddressDto.city}}</p>
 
             <p *ngIf="order.shippingAddressDto.street == null">Locality: {{order.shippingAddressDto.district}}</p>
             <p *ngIf="order.shippingAddressDto.street != null">Locality: {{order.shippingAddressDto.city}}</p>
@@ -37,7 +36,6 @@
     </div>
   </div>
 
-
   <div class="row">
     <div class="text-center ">
       <h3 class=""><span class="label label-success order-status centerDiv ">{{order.statusCode |titlecase}}</span></h3>
@@ -48,8 +46,6 @@
         </button>
         <br>
       </div>
-
-      <!--<br>-->
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <div *ngIf="prepared && !send" class="input-group">
@@ -70,16 +66,15 @@
 
       </div>
     </div>
-
   </div>
-
 
   <div class="row">
     <h3 class="text-center">List ordered products</h3>
     <table class="table text-center table-striped">
       <thead>
       <tr>
-        <td *ngIf="paid && !prepared && !send">Confirm</td>
+        <td>Id</td>
+        <td *ngIf="paid && !prepared && !send && !delivered">Confirm</td>
         <td>name</td>
         <td>price</td>
         <td>amount</td>
@@ -88,6 +83,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let productBoughts of order.productBoughts; let i = index">
+        <td>{{i+1}}</td>
         <td *ngIf="paid && !prepared && !send && !delivered"><input type="checkbox"
                                                       (click)="onProductPrepared(i)"
         ></td>
@@ -96,12 +92,9 @@
         <td>{{productBoughts.amount}}</td>
         <td>{{productBoughts.amount*productBoughts.product.price}}</td>
       </tr>
-
       </tbody>
     </table>
-
   </div>
 
 </div>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
-

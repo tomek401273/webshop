@@ -16,7 +16,6 @@
           Value
         </td>
         <td>
-
         </td>
       </tr>
       </thead>
@@ -44,7 +43,6 @@
         <td>
           {{product.value}}
         </td>
-
         <td>
           <button class="btn btn-danger btn-sm removeProduct" (click)="onRemove(product)">Remove <span class="
 glyphicon glyphicon-remove"></span></button>
@@ -52,7 +50,6 @@ glyphicon glyphicon-remove"></span></button>
         </td>
       </tr>
       <tr *ngIf="!isCoupon">
-
         <td></td>
         <td></td>
         <td><p>Total:</p></td>
@@ -60,7 +57,6 @@ glyphicon glyphicon-remove"></span></button>
         <td></td>
       </tr>
       <tr *ngIf="isCoupon">
-
         <td><p>RABAT</p></td>
         <td><p>10%</p></td>
         <td><p>Total:</p></td>
@@ -99,11 +95,9 @@ glyphicon glyphicon-remove"></span></button>
       <div class="panel panel-default">
         <div class="panel-heading">COUPON CODE</div>
         <div class="panel-body">
-
           If you have a coupon code, enter it in the box below and click 'Go'.
           <br>
           <br>
-
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Code" ngModel #code="ngModel">
             <div class="input-group-btn">

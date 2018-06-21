@@ -2,41 +2,42 @@ import {ProductData} from './product-data';
 import {Comment} from './comment';
 
 export class ProductDataAmount extends ProductData {
-  private totalAmount: number;
-  private value: number;
+  private _totalAmount: number;
+  private _value: number;
   private _statusCode: String;
   private _statusMessage: String;
-  private sumMarks: number;
+  private _sumMarks: number;
   private _countMarks: number;
   private _marksAverage: number;
-  private rated = false;
+  private _rated = false;
   private _commentDtos: Comment [];
-  private category: string;
+  private _category: string;
   private _shortDescription: String[];
 
   constructor(id: number, price: number, title: String, description: String, imageLink: String) {
     super(id, price, title, description, imageLink);
     this.shortDescription = [];
+    this.commentDtos = [];
   }
 
   toString(): string {
     return super.toString();
   }
 
-  get getTotalAmount() {
-    return this.totalAmount;
+  get totalAmount(): number {
+    return this._totalAmount;
   }
 
-  set setTotalAmount(value) {
-    this.totalAmount = value;
+  set totalAmount(value: number) {
+    this._totalAmount = value;
   }
 
-  get getValue() {
-    return this.value;
+  get value(): number {
+    return this._value;
   }
 
-  set setValue(value) {
-    this.value = value;
+  set value(value: number) {
+    this._value = value;
   }
 
   get statusCode(): String {
@@ -44,10 +45,6 @@ export class ProductDataAmount extends ProductData {
   }
 
   set statusCode(value: String) {
-    this._statusCode = value;
-  }
-
-  set setStatusCode(value: String) {
     this._statusCode = value;
   }
 
@@ -59,16 +56,12 @@ export class ProductDataAmount extends ProductData {
     this._statusMessage = value;
   }
 
-  set setStatusMessage(value: String) {
-    this._statusMessage = value;
+  get sumMarks(): number {
+    return this._sumMarks;
   }
 
-  get getSumMarks(): number {
-    return this.sumMarks;
-  }
-
-  set setSumMarks(value: number) {
-    this.sumMarks = value;
+  set sumMarks(value: number) {
+    this._sumMarks = value;
   }
 
   get countMarks(): number {
@@ -87,12 +80,12 @@ export class ProductDataAmount extends ProductData {
     this._marksAverage = value;
   }
 
-  get getRated(): boolean {
-    return this.rated;
+  get rated(): boolean {
+    return this._rated;
   }
 
-  set setRated(value: boolean) {
-    this.rated = value;
+  set rated(value: boolean) {
+    this._rated = value;
   }
 
   get commentDtos(): Comment[] {
@@ -103,16 +96,12 @@ export class ProductDataAmount extends ProductData {
     this._commentDtos = value;
   }
 
-  set setCommentDtos(value: Comment[]) {
-    this._commentDtos = value;
+  get category(): string {
+    return this._category;
   }
 
-  get getCategory(): string {
-    return this.category;
-  }
-
-  set setCategory(value: string) {
-    this.category = value;
+  set category(value: string) {
+    this._category = value;
   }
 
   get shortDescription(): String[] {

@@ -7,7 +7,6 @@ import {Server} from '../model/server';
 
 @Injectable()
 export class ShowPublicDataSevice {
-  private productsTitle: String[] = [];
   productTitleEmitter = new EventEmitter<DirectoryTitles>();
   mavPriceEmitter = new EventEmitter<number>();
   private directoryTitles = new DirectoryTitles();
@@ -66,7 +65,6 @@ export class ShowPublicDataSevice {
       },
       (error) => {
         console.log(error);
-        console.log(error.error);
       }
     );
   }
@@ -140,5 +138,4 @@ export class ShowPublicDataSevice {
       params: params
     });
   }
-
 }

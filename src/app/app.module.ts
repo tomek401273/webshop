@@ -27,13 +27,11 @@ import {BucketServerService} from './services/bucket-server.service';
 import {ProductMapper} from './model/dto/product-mapper';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
-import {StatuteComponent} from './statute/statute.component';
 import {OrdersComponent} from './orders/orders.component';
 import {OrdersService} from './services/orders.service';
 import {OrderDetailComponent} from './orders/order-detail/order-detail.component';
 import {OrdersAdminComponent} from './orders/orders-admin/orders-admin.component';
 import {OrderAdminDetailComponent} from './orders/orders-admin/order-admin-detail/order-admin-detail.component';
-import {DeliveryStatusComponent} from './delivery-status/delivery-status.component';
 import {IonRangeSliderModule} from 'ng2-ion-range-slider';
 import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -65,12 +63,10 @@ import {Ng2FileInputModule} from 'ng2-file-input';
     BucketUserComponent,
     SummaryComponent,
     OrderSuccessfullyComponent,
-    StatuteComponent,
     OrdersComponent,
     OrderDetailComponent,
     OrdersAdminComponent,
     OrderAdminDetailComponent,
-    DeliveryStatusComponent,
     ProductComponent,
     ConfirmNewsletterComponent,
     ConfirmAccountComponent,

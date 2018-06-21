@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
     this.showPublicDataService.getAllProductsTitleFromDatabase();
     this.showPublicDataService.getMaxProductPrice();
     this.showPublicDataService.downloadApprovedCountry();
-
   }
 
   ngOnInit() {

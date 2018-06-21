@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
 import {ChangePassword} from '../../model/change-password';
 import {LogingService} from '../../services/loging.service';
@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
   @ViewChild('form') private _passwords: NgForm;
   @ViewChild('error') private _error: SwalComponent;
   @ViewChild('success') private _success: SwalComponent;
@@ -19,12 +19,8 @@ export class ChangePasswordComponent implements OnInit {
               private router: Router) {
   }
 
-  ngOnInit() {
-  }
-
   onSubmit() {
     const changePassword: ChangePassword = new ChangePassword(this.passwords.value.oldPassword, this.passwords.value.newPassword);
-    console.log(changePassword);
     this.logingService.changePassword(changePassword)
       .subscribe(
         () => {
@@ -36,7 +32,6 @@ export class ChangePasswordComponent implements OnInit {
         }
       );
   }
-
 
   get passwords(): NgForm {
     return this._passwords;

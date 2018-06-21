@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit, DoCheck {
     this.router.navigate(['/bucket']);
   }
 
-
   isAdmin(role: string) {
     if (role === 'admin, user') {
       this._adminPanel = true;
@@ -56,7 +55,6 @@ export class HeaderComponent implements OnInit, DoCheck {
       }
     );
 
-
     this.bucketService.bucketStatus.subscribe(
       (result) => {
         this._actualNumberProducts = +result;
@@ -68,8 +66,6 @@ export class HeaderComponent implements OnInit, DoCheck {
         this._actualNumberProducts = 0;
       }
     );
-    // this.calculateNumberProducts();
-
   }
 
   onSearchProductWithTitle() {
@@ -105,13 +101,12 @@ export class HeaderComponent implements OnInit, DoCheck {
     let total = 0;
     if (!isNull(bucket)) {
       for (let i = 0; i < bucket.length; i++) {
-        total += bucket[i].totalAmount;
+        total += bucket[i]._totalAmount;
       }
       this._actualNumberProducts = total;
     } else {
       this._actualNumberProducts = 0;
     }
-
   }
 
   ngDoCheck() {

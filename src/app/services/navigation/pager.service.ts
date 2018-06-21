@@ -20,7 +20,6 @@ export class PagerService {
         endPage = currentPage + 4;
       }
     }
-
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
     const pages = [];

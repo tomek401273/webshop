@@ -18,11 +18,7 @@
                 >
               </td>
               <td class="col-md-6 col-xs-7 text-left bottom-left">
-                <!--{{product.description}}-->
                 <div class="text-justify">
-                  <!--<div *ngFor="let des of product.shortDescription">-->
-                    <!--<p *ngIf="des.length > 5">{{des}}</p>-->
-                  <!--</div>-->
                   <ul *ngFor="let des of product.shortDescription">
                     <li>{{des}}</li>
                   </ul>
@@ -32,16 +28,7 @@
             <tr></tr>
             <tr></tr>
             <tr></tr>
-            <div class="">
-              <!--<p>Price: {{product.price}} $</p>-->
-            </div>
-
-            <!--<div class="detail text-center">-->
-            <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
-            <!--</div>-->
             </td>
-
-
             <td>
               <tr></tr>
               <tr></tr>
@@ -49,16 +36,8 @@
               <div class="text-right price">
                 <p>Price: {{product.price}} $</p>
               </div>
-
-              <!--<div class="detail text-center">-->
-              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
-              <!--</div>-->
             </td>
-
             </tr>
-
-
-
             </tbody>
           </table>
         </div>

@@ -7,22 +7,26 @@
       </div>
 
 
-      <div class="form-group" *ngIf="!isPaid">
-        <label for="bank">Select your bank </label>
-        <select
-          id="bank"
-          class="form-control"
-          ngModel
-          name="bank">
-          <option value="ING">ING</option>
-          <option value="AliorBank">AliorBank</option>
-        </select>
-        <div class="text-center">
-          <p>You will by redirected to your bank website</p>
-          <br>
-          <button type="button" class="btn btn-primary" (click)="onPay()">Payment</button>
-        </div>
-      </div>
+     <form #f="ngForm">
+       <div class="form-group" *ngIf="!isPaid">
+         <label for="bank">Select your bank </label>
+         <select
+           id="bank"
+           class="form-control"
+           ngModel
+           name="bank"
+           required
+         >
+           <option value="ING">ING</option>
+           <option value="AliorBank">AliorBank</option>
+         </select>
+         <div class="text-center">
+           <p>You will by redirected to your bank website</p>
+           <br>
+           <button type="button" class="btn btn-primary" [disabled]="!f.valid" (click)="onPay()">Payment</button>
+         </div>
+       </div>
+     </form>
 
       <div class="text-center">
         <div *ngIf="redirectToBank">

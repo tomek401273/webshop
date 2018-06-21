@@ -1,10 +1,8 @@
 <div class="container">
-
   <div class="row">
     <div class="col-xs-12"><b><h3 class="text-center">{{product.title}}</h3></b></div>
     <hr>
     <div class="col-md-2 col-sm-12">
-
       <img
         src="{{product.imageLink}}"
         alt="{{product.imageLink}}"
@@ -13,26 +11,22 @@
     </div>
     <div class="col-md-1 col-sm-1 "></div>
     <div class="col-md-6 col-sm-12  text-justify description">
-
       <br>
       <div class="col-xs-12 col-md-12">
         <div class="col-xs-1"></div>
         <div class="col-xs-10 col-md-12">
           <div *ngFor="let des of product.shortDescription">
             <p *ngIf="des.length > 5">{{des}}</p>
-
           </div>
         </div>
         <div class="col-xs-1"></div>
       </div>
-
       <br>
       <br>
       <br>
     </div>
     <div class="col-md-3 text-center col-sm-12">
-
-      <div class="text-center ">
+      <div class="text-center stars">
         <div class="col-sm-12">
           <div>
             <ngb-rating
@@ -49,10 +43,10 @@
         </div>
         <div>
           Price: {{product.price}} $<br>
-          <button class="btn btn-primary buy" [disabled]="product.statusCode!==sale"
+          <button class="btn btn-primary buy" [disabled]="product.statusCode != sale"
                   (click)="onAddToCard(product)">Add to Card
           </button>
-          <div *ngIf="product.statusCode!==sale">
+          <div *ngIf="product.statusCode != sale">
             <br>
             <p>Temporally unavailable</p>
             <button type="button" class="btn btn-primary reminder" (click)="lgModal.show()">Reminder</button>
@@ -71,20 +65,19 @@
       {{product.description}}
     </div>
     <div class="col-xs-1"></div>
-
   </div>
-
-  <div class="row">
+  <div class="row" *ngIf="product.commentDtos.length>0">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-justify description">
       <h3 class="text-center">Users Coments
       </h3>
     </div>
     <div class="col-md-3"></div>
+    <br>
+    <br>
   </div>
   <div class="row">
     <br>
-
     <div class="panel panel-default col-md-12" *ngFor="let comment of product.commentDtos let i = index"
          (mouseover)="mouseHover(comment)" (mouseleave)="mouseLeave(comment)">
       <div class="panel-heading">
@@ -95,7 +88,7 @@
         <div>
           <div *ngIf="!comment.editComment">
             {{comment.message}}
-            <div *ngIf="comment.changeComment && comment.login==userLogin">
+            <div *ngIf="comment.changeComment && comment.login == userLogin">
               <div class="btn-group dropdown-backdrop" dropdown>
                 <a type="button"
                    class="btn btn-default a-circle-sm dropdown-toggle"
@@ -112,7 +105,6 @@
                 >
                 </span>
                 </a>
-
                 <ul *dropdownMenu class="dropdown-menu" role="menu">
                   <li role="menuitem"><a class="dropdown-item "
                                          (click)="comment.editComment = true">Edit</a></li>
@@ -123,7 +115,6 @@
               </div>
             </div>
           </div>
-
           <div *ngIf="comment.editComment">
             <input
               class="form-control"
@@ -144,10 +135,8 @@
         <span class="text-muted"> Created: {{comment.createdDate}}</span>
       </div>
     </div>
-    <br>
-    <br>
-  </div>
 
+  </div>
   <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6 text-justify description">
@@ -156,9 +145,7 @@
     </div>
     <div class="col-md-3"></div>
   </div>
-
   <div class="row">
-    <!--<div class="col-md-3"></div>-->
     <div class="col-xs-12 col-md-12">
       <div class="col-xs-1"></div>
       <div class="col-xs-12 col-md-12">
@@ -170,12 +157,10 @@
             [disabled]="!isAuthenticated"
             maxlength="1000"
           >
-
           <div class="input-group-btn">
             <button class="btn btn-primary" (click)="onAddComment(product.id)" [disabled]="commentMessage.length<10">Add
               Comment
             </button>
-
           </div>
         </div>
         <div class="col-xs-1"></div>
@@ -185,20 +170,18 @@
   </div>
   <div class="row">
     <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <span class="text-center alert-info" *ngIf="!isAuthenticated">If you want comment this product
-        please login or sigin</span>
-
+    <div class="col-sm-4 text-center">
+      <span class="alert-info" *ngIf="!isAuthenticated">Writing comments only for logged user</span>
     </div>
   </div>
-
   <div class="row">
     <div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" aria-labelledby="myLargeModalLabel"
          aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title pull-left">We will send remind you when product {{product.title}} will be available</h4>
+            <h4 class="modal-title pull-left">We will send remind you when product {{product.title}} will be
+              available</h4>
             <button type="button" class="close pull-right" (click)="lgModal.hide()" aria-label="Close">
               <span aria-hidden="true">x</span></button>
           </div>
@@ -216,10 +199,8 @@
                 #emailSubscription="ngModel"
                 required
                 email
-
               >
               <br>
-
               <div class="center-block">
                 <button
                   class="btn btn-primary"
@@ -237,9 +218,7 @@
       </div>
     </div>
   </div>
-
 </div>
-
 <swal #success title="Success" text="Successfully added product to bucket" type="success"></swal>
 <swal #error title="Error" text="Something go wrong. Please contact with our service" type="error"></swal>
 <swal #notavailable title="Not Available" text="This product is not available" type="error"></swal>

@@ -1,8 +1,3 @@
-/*.center-block {*/
-  /*float: none !important*/
-/*}*/
-
-
 input.amonut-a {
   position: relative;
   left: 100px;
@@ -13,12 +8,6 @@ input.amonut-a {
     position: relative;
     left: 10px;
     top: 5px
-  }
-
-  button.submit-next {
-    /*width: 100px;*/
-    /*position: relative;*/
-    /*bottom: 60px;*/
   }
 }
 
@@ -32,10 +21,8 @@ input.amonut-a {
     height: auto;
   }
 
-
-  .table>tbody>tr>td, .table>thead>tr>td {
+  .table > tbody > tr > td, .table > thead > tr > td {
     vertical-align: middle;
-
   }
 }
 

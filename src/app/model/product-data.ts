@@ -1,40 +1,40 @@
 export class ProductData {
-  private id: number;
-  private price: number;
+  private _id: number;
+  private _price: number;
   private _title: String;
   private _description: String;
   private _imageLink: String;
 
   constructor(id: number, price: number, title: String, description: String, imageLink: String) {
-    this.id = id;
-    this.price = price;
+    this._id = id;
+    this._price = price;
     this._title = title;
     this._description = description;
     this._imageLink = imageLink;
   }
 
   toString(): string {
-    return 'id: ' + this.id + ' '
-      + 'price: ' + this.price + ' '
+    return 'id: ' + this._id + ' '
+      + 'price: ' + this._price + ' '
       + 'title: ' + this._title + ' '
       + 'description: ' + this._description + ' '
       + 'imageLink: ' + this._imageLink + ' ';
   }
 
-  get getId(): number {
-    return this.id;
+  get id(): number {
+    return this._id;
   }
 
-  set setId(value: number) {
-    this.id = value;
+  set id(value: number) {
+    this._id = value;
   }
 
-  get getPrice(): number {
-    return this.price;
+  get price(): number {
+    return this._price;
   }
 
-  set setPrice(value: number) {
-    this.price = value;
+  set price(value: number) {
+    this._price = value;
   }
 
   get title(): String {
@@ -42,10 +42,6 @@ export class ProductData {
   }
 
   set title(value: String) {
-    this._title = value;
-  }
-
-  set setTitle(value: String) {
     this._title = value;
   }
 
@@ -57,19 +53,11 @@ export class ProductData {
     this._description = value;
   }
 
-  set setDescription(value: String) {
-    this._description = value;
-  }
-
   get imageLink(): String {
     return this._imageLink;
   }
 
   set imageLink(value: String) {
-    this._imageLink = value;
-  }
-
-  set setImageLink(value: String) {
     this._imageLink = value;
   }
 }

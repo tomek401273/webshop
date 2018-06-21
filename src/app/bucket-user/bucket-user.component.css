@@ -8,9 +8,6 @@ input.amonut-a {
     position: relative;
     left: 0px;
     top: 5px;
-    /*display: flex;*/
-    /*!*align-items: center;*!*/
-    /*!*justify-content: center;*!*/
   }
 
   .amount-product-manipulation {
@@ -33,8 +30,6 @@ input.amonut-a {
   }
 }
 
-
-
 @media only screen and (max-width: 992px) {
   table > tbody > tr > td {
     vertical-align: inherit;
@@ -49,9 +44,5 @@ input.amonut-a {
   }
   button.removeProduct {
     width: 74px;
-  }
-
-  button.submit-next {
-    /*width: 100px;*/
   }
 }

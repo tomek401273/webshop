@@ -115,7 +115,6 @@ export class OrdersAdminComponent implements OnInit {
     this._usersLogin = this.ordersService.getUsersLogin();
   }
 
-
   get orders(): Order[] {
     return this._orders;
   }

@@ -33,19 +33,16 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
 
   ngOnInit() {
     const id: number = Number(this.activatedRoute.snapshot.params['id']) | 0;
-    const code = 'code';
-
     this.publicServer.getProduct(id)
       .subscribe(
         (product: ProductAmountDto) => {
-          console.log(product);
-          this.product.setId = product.id;
-          this.product.setTitle = product.title;
-          this.product.setDescription = product.description;
-          this.product.setPrice = product.price;
-          this.product.setImageLink = product.imageLink;
-          this.product.setStatusCode = product.statusCode;
-          this.product.setTotalAmount = product.totalAmount;
+          this.product.id = product.id;
+          this.product.title = product.title;
+          this.product.description = product.description;
+          this.product.price = product.price;
+          this.product.imageLink = product.imageLink;
+          this.product.statusCode = product.statusCode;
+          this.product.totalAmount = product.totalAmount;
 
           const descList: String[] = [];
           for (let i = 0; i < product.shortDescription.length; i++) {
@@ -53,7 +50,6 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
             descList.push(desc);
           }
           this.product.shortDescription = descList;
-          console.log(this.product);
         },
         () => this._error.show());
 
@@ -65,14 +61,14 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
 
   onSubmit() {
     this._productUpdated = new ProductDataAmount(
-      this._product.getId,
+      this._product.id,
       this._editProductForm.value.price,
       this._editProductForm.value.title,
       this._editProductForm.value.desc,
       this._editProductForm.value.image
     );
-    this._productUpdated.setTotalAmount = this._editProductForm.value.amount;
-    this._productUpdated.setStatusCode = this._editProductForm.value.statusCode;
+    this._productUpdated.totalAmount = this._editProductForm.value.amount;
+    this._productUpdated.statusCode = this._editProductForm.value.statusCode;
 
     const shortDes: String[] = [];
     shortDes.push(this._editProductForm.value.desc1);
@@ -98,24 +94,23 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if ((this._editProductForm.value.price !== this._product.getPrice
+    if ((this._editProductForm.value.price !== this._product.price
         || this._editProductForm.value.title !== this._product.title
         || this._editProductForm.value.desc !== this._product.description
         || this._editProductForm.value.image !== this._product.imageLink)
       && !this._saveChanges) {
-      return confirm('Do you want to discard the changes ???');
+      return confirm('Do you want to discard the changes ?');
     } else {
       return true;
     }
   }
-
 
   onDelete() {
     this._confirmDelete.show();
   }
 
   onConfirm() {
-    this.serverServie.removeProduct(this.product.getId)
+    this.serverServie.removeProduct(this.product.id)
       .subscribe(
         (response) => {
           this.serverServie.onProductRemoved.emit(this.product);
@@ -125,7 +120,6 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
         () => this._error.show()
       );
   }
-
 
   get editProductForm(): NgForm {
     return this._editProductForm;

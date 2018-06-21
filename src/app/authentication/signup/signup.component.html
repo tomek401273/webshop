@@ -59,7 +59,7 @@
           <div class="form-group text-center">
             <label for="password">*- Password</label>
             <input class="form-control"
-                   type="text"
+                   type="password"
                    id="password"
                    ngModel
                    name="password"
@@ -73,7 +73,7 @@
           <div class="form-group text-center">
             <label for="confirm-password">*- Confirm password</label>
             <input class="form-control"
-                   type="text"
+                   type="password"
                    id="confirm-password"
                    ngModel
                    name="confirmed"
@@ -117,6 +117,7 @@
                       required
                       min="1"
                       max="999"
+                      #housNumber="ngModel"
                >
              </td>
            </tr>
@@ -133,6 +134,7 @@
                       name="apartmentNumber"
                       min="0"
                       max="999"
+                      #apartNumber="ngModel"
                >
              </td>
            </tr>
@@ -170,7 +172,8 @@
       || (!loginAvailable)
       || (!controlCheckBoxStatus)
       || (!validAddress)
-      || (!house.valid)"
+      || (housNumber.value < 1)
+      || (apartNumber.value < 0)"
               (click)="onSubmit()"
       >
         Crate new account

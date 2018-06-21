@@ -1,9 +1,7 @@
 <div class="container-fluid">
-
   <div class="row">
     <div class="col-md-2 col-xs-12">
       <div class="col-md-10">
-
         <h4 class="text-center">Filter product</h4>
         <hr>
         <br>
@@ -35,9 +33,12 @@
                [max]="maxValueProductInShop"
         >
         <br>
-        <button class="btn btn-primary center-block filter-price" type="button" (click)="onFilterDatabaseWithPriceBetween()">
-          Search
-        </button>
+       <div class="center-element">
+         <button class="btn btn-primary filter-price" type="button"
+                 (click)="onFilterDatabaseWithPriceBetween()">
+           Search
+         </button>
+       </div>
       </div>
     </div>
 
@@ -52,7 +53,6 @@
             <tbody>
             <tr>
               <td class="col-sm-3 col-xs-4">
-
                 <img
                   src="{{product.imageLink}}"
                   alt="{{product.imageLink}}"
@@ -60,27 +60,19 @@
                 >
               </td>
               <td class="col-md-6 col-xs-7 text-left bottom-left">
-                <!--{{product.description}}-->
-               <div class="text-justify">
-                 <ul *ngFor="let des of product.shortDescription">
-                   <li>{{des}}</li>
-                 </ul>
-               </div>
+                <div class="text-justify">
+                  <ul *ngFor="let des of product.shortDescription">
+                    <li>{{des}}</li>
+                  </ul>
+                </div>
               </td>
               <td class="text-right ">
             <tr></tr>
             <tr></tr>
             <tr></tr>
             <div class="">
-              <!--<p>Price: {{product.price}} $</p>-->
             </div>
-
-            <!--<div class="detail text-center">-->
-              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
-            <!--</div>-->
             </td>
-
-
             <td class="center-block ">
               <tr></tr>
               <tr></tr>
@@ -88,16 +80,8 @@
               <div class="text-right price">
                 <p>Price: {{product.price}} $</p>
               </div>
-
-              <!--<div class="detail text-center">-->
-              <!--&lt;!&ndash;<button class="btn btn-primary show-detail">Detail</button>&ndash;&gt;-->
-              <!--</div>-->
             </td>
-
             </tr>
-
-
-
             </tbody>
           </table>
         </div>
@@ -177,7 +161,9 @@
           >
         </div>
         <br>
-        <button class="btn btn-primary center-block" [disabled]="!form.valid" type="submit" (click)="modalRef.hide()">Submit</button>
+        <button class="btn btn-primary center-block" [disabled]="!form.valid" type="submit" (click)="modalRef.hide()">
+          Submit
+        </button>
       </form>
     </div>
   </ng-template>

@@ -52,7 +52,6 @@ export class ProductListComponent implements OnInit, DoCheck {
               private modalService: BsModalService,
               private router: Router) {
     this.getMaxPriceProduct();
-
   }
 
   finish(slider, event) {
@@ -125,7 +124,7 @@ export class ProductListComponent implements OnInit, DoCheck {
   acutalNumberProductInBucket() {
     let totalNumber = 0;
     for (const prod of this._bucketProducts) {
-      totalNumber += prod.getTotalAmount;
+      totalNumber += prod.totalAmount;
     }
     this.bucketService.bucketStatus.emit(totalNumber.toString());
   }
@@ -140,7 +139,7 @@ export class ProductListComponent implements OnInit, DoCheck {
           bucket[i]._title,
           bucket[i]._description,
           bucket[i]._imageLink);
-        bucketProduct.setTotalAmount = bucket[i]._totalAmount;
+        bucketProduct.totalAmount = bucket[i]._totalAmount;
         this._bucketProducts.push(bucketProduct);
       }
     }
@@ -212,7 +211,9 @@ export class ProductListComponent implements OnInit, DoCheck {
   calculateSliderValues(response) {
     this._maxValueProductInShop = response;
     this._maxValueCover = this._maxValueProductInShop - (this._maxValueProductInShop / 5);
+    this._maxValueCover = Math.ceil(this._maxValueCover);
     this._minValueCover = this._maxValueProductInShop / 5;
+    this._minValueCover = Math.ceil(this._minValueCover);
     if (this._minValueCover > 100) {
       this._minValueCover = 100;
     }
@@ -238,7 +239,6 @@ export class ProductListComponent implements OnInit, DoCheck {
         alert('Something go wrong. Please contact with our service');
       }
     );
-
   }
 
   onShowProduct(productId) {

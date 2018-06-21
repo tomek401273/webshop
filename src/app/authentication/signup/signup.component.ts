@@ -37,15 +37,11 @@ export class SignupComponent {
   }
 
   correctAddress(isCorrect: boolean) {
-    console.log('isCorrect Address? ' + isCorrect);
     this.validAddress = isCorrect;
   }
 
   onAddressInput(userAddress: string) {
-    console.log('usser addres correct inject in signUP component');
-    console.log(userAddress);
     this._validatedAddress = userAddress;
-
   }
 
   onSearchChange(typedValue: string) {
@@ -63,10 +59,6 @@ export class SignupComponent {
     register.address = this._validatedAddress;
     register.house = this.house.value.houseNumber;
     register.apartment = this.house.value.apartmentNumber;
-
-    console.log('Register');
-    console.log(register);
-
 
     this.logingService.registration(register)
       .subscribe(
@@ -100,11 +92,7 @@ export class SignupComponent {
 
     this.logingService.checkLoginAvailable(login).subscribe(
       (resonse: HttpResponse<any>) => {
-        if (resonse.body === 'true') {
-          this._loginAvailable = true;
-        } else {
-          this._loginAvailable = false;
-        }
+        this._loginAvailable = resonse.body === 'true';
       },
       () => {
         this._error.show();

@@ -19,6 +19,27 @@ export class OrderSuccessfullyComponent implements OnInit {
               private activatedRoute: ActivatedRoute) {
   }
 
+  ngOnInit() {
+    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
+  }
+
+  onPay() {
+    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._id, null, 'paid');
+    this._redirectToBank = true;
+
+    setTimeout(() => {
+      this._redirectToBank = false;
+      this.ordersService.paymentVerification(payment).subscribe(
+        (response: boolean) => {
+          if (response) {
+            this._isPaid = true;
+          }
+        },
+        (error) => this._error.show()
+      );
+    }, 3000);
+  }
+
   get isPaid(): boolean {
     return this._isPaid;
   }
@@ -50,26 +71,4 @@ export class OrderSuccessfullyComponent implements OnInit {
   set error(value: SwalComponent) {
     this._error = value;
   }
-
-  ngOnInit() {
-    this._id = Number(this.activatedRoute.snapshot.params['id']) | 0;
-  }
-
-  onPay() {
-    const payment: OrderStatus = new OrderStatus(localStorage.getItem('login'), this._id, null, 'paid');
-    this._redirectToBank = true;
-
-    setTimeout(() => {
-      this._redirectToBank = false;
-      this.ordersService.paymentVerification(payment).subscribe(
-        (response: boolean) => {
-          if (response) {
-            this._isPaid = true;
-          }
-        },
-        (error) => this._error.show()
-      );
-    }, 3000);
-  }
-
 }

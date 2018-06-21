@@ -6,8 +6,8 @@ import {ProductAmountDto} from './product-amount-dto';
 export class ProductMapper {
   mapToProductDto(product: ProductData) {
     const productDto: ProductDto = new ProductDto(
-      product.getId,
-      product.getPrice,
+      product.id,
+      product.price,
       product.title,
       product.description,
       product.imageLink);
@@ -16,16 +16,16 @@ export class ProductMapper {
 
   mapToProductAmountDto(product: ProductDataAmount) {
     const productAmountDto: ProductAmountDto = new ProductAmountDto(
-      product.getId,
-      product.getPrice,
+      product.id,
+      product.price,
       product.title,
       product.description,
       product.imageLink,
-      product.getTotalAmount,
+      product.totalAmount,
       product.statusCode,
       product.shortDescription
     );
-    productAmountDto.category = product.getCategory;
+    productAmountDto.category = product.category;
     return productAmountDto;
   }
 }
