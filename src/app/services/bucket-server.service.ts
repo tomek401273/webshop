@@ -58,7 +58,10 @@ export class BucketServerService {
   }
 
   getAllCountriesOnWorld() {
-    return this.httpClient.get(Server.address + 'location/country', {
-    });
+    return this.httpClient.get(Server.address + 'location/country');
+  }
+
+  getCountProduct() {
+    return this.httpClient.get(Server.address + 'bucket/count');
   }
 }

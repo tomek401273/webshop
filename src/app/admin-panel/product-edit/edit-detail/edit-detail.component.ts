@@ -112,9 +112,7 @@ export class EditDetailComponent implements OnInit, CanDeactivateGuard {
   onConfirm() {
     this.serverServie.removeProduct(this.product.id)
       .subscribe(
-        (response) => {
-          this.serverServie.onProductRemoved.emit(this.product);
-
+        () => {
           this.successDelete.show();
         },
         () => this._error.show()

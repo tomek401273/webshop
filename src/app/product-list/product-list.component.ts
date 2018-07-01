@@ -88,9 +88,6 @@ export class ProductListComponent implements OnInit, DoCheck {
     this.getAllProductsTitle();
     this.getProductTitlesFromService();
     this.getTemp();
-    this.serverService.onProductRemoved.subscribe(
-      (product: ProductDataAmount) => this._products.splice(this._products.indexOf(product), 1)
-    );
     this.getDataFromDatabase();
     this.getCategoryNames();
   }

@@ -71,17 +71,6 @@ export class ProductEditComponent implements OnInit, AfterContentChecked {
     this.router.navigate(['/productEdit', id], {queryParams: {numberpage: this._currentPage}});
   }
 
-  onRemove(poroductDeteted, id: number) {
-    this.serverService.removeProduct(poroductDeteted.id)
-      .subscribe(
-        (response) => {
-          this.serverService.onProductRemoved.emit(poroductDeteted);
-          this._pagedProducts.splice(id, 1);
-        },
-        () => this._error.show()
-      );
-  }
-
   computeNunberPages() {
     this._pager = this.pagerService.getPager(this._productDataEdit.length, 1);
   }

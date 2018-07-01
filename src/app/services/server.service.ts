@@ -17,7 +17,6 @@ export class ServerService {
               private mapper: ProductMapper) {
   }
 
-  onProductRemoved = new EventEmitter<ProductDataAmount>();
   onProductUpdated = new EventEmitter<ProductDataAmount>();
 
   addNewProduct(product: ProductDataAmount) {

@@ -25,6 +25,7 @@ export class BucketUserComponent implements OnInit, DoCheck {
   private _wrongMessage: String;
   @ViewChild('success') private _success: SwalComponent;
   @ViewChild('error') private _error: SwalComponent;
+  @ViewChild('info') private _info: SwalComponent;
 
   constructor(private bucketService: BucketService,
               private router: Router,
@@ -37,7 +38,9 @@ export class BucketUserComponent implements OnInit, DoCheck {
     localStorage.setItem('coupon', null);
     this._isAuthenticated = this.logingServiece.isAuthenticated();
     if (this._isAuthenticated) {
+      this._products = [];
       this.getDataFromDatabase();
+      this.saveTempDataToLocalStorage();
     } else {
       const bucket = JSON.parse(localStorage.getItem('bucket123'));
       if (!isNull(bucket)) {
@@ -55,26 +58,17 @@ export class BucketUserComponent implements OnInit, DoCheck {
         }
         this._isFullFiled = true;
       }
-      this.calculateTotalAmountProduct();
-      this.calcuateTotalValueProducts();
-
     }
 
     this.bucketService.buyAllProduct.subscribe(
-      (respone) => {
+      () => {
         this._products = [];
         localStorage.setItem('bucket123', null);
       }
     );
-  }
 
-  productWithDrawnFromSale() {
-    this.serverService.onProductRemoved.subscribe(
-      (response) => {
-
-        this.calculateTotalAmountProduct();
-      }
-    );
+    // this.calculateTotalAmountProduct();
+    this.calcuateTotalValueProducts();
   }
 
   ngDoCheck() {
@@ -87,7 +81,6 @@ export class BucketUserComponent implements OnInit, DoCheck {
       this.calculateTotalAmountProduct();
     }
     this.saveTempDataToLocalStorage();
-    this.productWithDrawnFromSale();
   }
 
   saveTempDataToLocalStorage() {
@@ -198,7 +191,22 @@ export class BucketUserComponent implements OnInit, DoCheck {
   }
 
   onNext() {
-    this.router.navigate(['/summary']);
+
+
+    this.bucketServerService.getCountProduct().subscribe(
+      (count: number) => {
+        if (count === this._totalAmountProducts) {
+          this.router.navigate(['/summary']);
+        } else {
+          this.info.show();
+          this.products = [];
+          this.getDataFromDatabase();
+          this.saveTempDataToLocalStorage();
+          this.calculateTotalAmountProduct();
+          this.calcuateTotalValueProducts();
+        }
+      }
+    );
   }
 
   getDataFromDatabase() {
@@ -336,5 +344,13 @@ export class BucketUserComponent implements OnInit, DoCheck {
 
   set error(value: SwalComponent) {
     this._error = value;
+  }
+
+  get info(): SwalComponent {
+    return this._info;
+  }
+
+  set info(value: SwalComponent) {
+    this._info = value;
   }
 }
