@@ -271,6 +271,7 @@ export class ProductListComponent implements OnInit, DoCheck {
     );
   }
 
+
   get products(): ProductDataAmount[] {
     return this._products;
   }

@@ -6,7 +6,6 @@ import {isNull} from 'util';
 import {OrdersService} from '../services/orders.service';
 import {ShowPublicDataSevice} from '../services/show-public-data.sevice';
 import {DirectoryTitles} from '../model/directory-titles';
-import {ServerService} from '../services/server.service';
 
 @Component({
   selector: 'app-header',
@@ -71,6 +70,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   onSearchProductWithTitle() {
+    this.router.navigate(['/']);
     this.showPublicData.searchedProduct.emit(this.chosenTitle);
   }
 
@@ -94,6 +94,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   }
 
   onCategoryClicked(category) {
+    this.onBackToBegin();
     this.isCategory = !this.isCategory;
   }
 

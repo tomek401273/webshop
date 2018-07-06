@@ -1,175 +1,185 @@
 <div class="container">
   <div class="row">
-    <div>
-      <h2 class="text-center">Shipping Address</h2>
-      <br>
-    </div>
-    <div class="col-xs-12 col-md-12">
-          <div class="col-xs-4 col-sm-5"></div>
-      <div class="col-xs-6 col-sm-6">
-        <div class="row form-group text-justify" *ngIf="!useAnotherAddress">
-          <p>Country: {{userAddress.country}}</p>
-          <p>PostCode: {{userAddress.postCode}} - {{userAddress.city}}</p>
-          <div>
-            <p *ngIf="userAddress.street == null">Locality: {{userAddress.district}}</p>
-            <p *ngIf="userAddress.street != null">Locality: {{userAddress.city}}</p>
+    <div class="co-sm-3"></div>
+    <div class="co-sm-6">
+      <div>
+        <h2 class="text-center">Shipping Address</h2>
+        <br>
+      </div>
+      <div class="col-xs-12 col-md-12">
+        <div class="col-xs-4 col-sm-3"></div>
+        <div class="col-xs-6 col-sm-6">
+          <div class="row form-group text-center" *ngIf="!useAnotherAddress">
+            <p>Country: {{userAddress.country}}</p>
+            <p>PostCode: {{userAddress.postCode}} - {{userAddress.city}}</p>
+            <div>
+              <p *ngIf="userAddress.street == null">Locality: {{userAddress.district}}</p>
+              <p *ngIf="userAddress.street != null">Locality: {{userAddress.city}}</p>
+            </div>
+            <p *ngIf="userAddress.street != null">Street: {{userAddress.street}}</p>
+            <p>House: {{userAddress.house}}</p>
+            <p *ngIf="userAddress.apartment!=0">Apartment: {{userAddress.apartment}}</p>
+            <p>Name: {{userAddress.name}}</p>
+            <p>Surname: {{userAddress.surname}}</p>
           </div>
-          <p *ngIf="userAddress.street != null">Street: {{userAddress.street}}</p>
-          <p>House: {{userAddress.house}}</p>
-          <p *ngIf="userAddress.apartment!=0">Apartment: {{userAddress.apartment}}</p>
-          <p>Name: {{userAddress.name}}</p>
-          <p>Surname: {{userAddress.surname}}</p>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div *ngIf="useAnotherAddress" class="form-group text-center">
-      <app-address
-        (userAddress)="onAddressInput($event)"
-        (permissionToSubmit)="correctAddress($event)"
-      ></app-address>
-      <form #user="ngForm">
-        <div class="form-group text-center">
-          <label for="name">*- Name</label>
-          <input class="form-control"
-                 type="text"
-                 id="name"
-                 [(ngModel)]="nameUser"
-                 name="name"
-                 required
-                 #name="ngModel"
-          >
-          <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <div *ngIf="useAnotherAddress" class="form-group text-center">
+        <app-address
+          (userAddress)="onAddressInput($event)"
+          (permissionToSubmit)="correctAddress($event)"
+        ></app-address>
+
+        <form #user="ngForm">
+          <div class="form-group text-center">
+            <label for="name">*- Name</label>
+            <input class="form-control"
+                   type="text"
+                   id="name"
+                   [(ngModel)]="nameUser"
+                   name="name"
+                   required
+                   #name="ngModel"
+            >
+            <span class="help-block alert-danger" *ngIf="!name.valid && name.touched">Check your input</span>
+          </div>
+
+          <div class="form-group text-center">
+            <label for="surname">*- Surname</label>
+            <input class="form-control"
+                   type="text"
+                   id="surname"
+                   [(ngModel)]="surenameUser"
+                   name="surname"
+                   required
+                   #surname="ngModel">
+            <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
+          </div>
+
+          <table>
+            <thead>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            </thead>
+            <tbody class="table table-responsive">
+            <tr>
+              <td>
+                *- House Number:
+              </td>
+              <td></td>
+
+              <td>
+                <input class="form-control input-xs"
+                       type="number"
+                       [(ngModel)]="houseNumer"
+                       name="houseNumber"
+                       required
+                       min="1"
+                       max="999"
+                >
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Apartment Number:
+              </td>
+              <td></td>
+              <td>
+                <input class="form-control input-xs"
+                       type="number"
+                       [(ngModel)]="appartmentNumber"
+                       name="apartmentNumber"
+                       min="0"
+                       max="999"
+                >
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </form>
+
+        <hr>
+        <br>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <div class="col-xs-12 col-sm-12">
+        <div class="change-address">
+          <button class="btn btn-default" (click)="this.useAnotherAddress = !this.useAnotherAddress;"
+                  *ngIf="!useAnotherAddress">Use different address
+          </button>
+
+          <button class="btn btn-default"
+                  (click)="this.useAnotherAddress = !this.useAnotherAddress;"
+                  *ngIf="useAnotherAddress">Use default address
+          </button>
         </div>
-
-        <div class="form-group text-center">
-          <label for="surname">*- Surname</label>
-          <input class="form-control"
-                 type="text"
-                 id="surname"
-                 [(ngModel)]="surenameUser"
-                 name="surname"
-                 required
-                 #surname="ngModel">
-          <span class="help-block alert-danger" *ngIf="!surname.valid && surname.touched">Check your input</span>
-        </div>
-
-        <table>
-          <thead>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          </thead>
-          <tbody class="table table-responsive">
-          <tr>
-            <td>
-              *- House Number:
-            </td>
-            <td></td>
-
-            <td>
-              <input class="form-control input-xs"
-                     type="number"
-                     [(ngModel)]="houseNumer"
-                     name="houseNumber"
-                     required
-                     min="1"
-                     max="999"
-              >
-            </td>
-          </tr>
-
-          <tr>
-            <td>
-              Apartment Number:
-            </td>
-            <td></td>
-            <td>
-              <input class="form-control input-xs"
-                     type="number"
-                     [(ngModel)]="appartmentNumber"
-                     name="apartmentNumber"
-                     min="0"
-                     max="999"
-              >
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </form>
-
-      <hr>
+      </div>
       <br>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12">
-      <div class="change-address">
-        <button class="btn btn-default" (click)="this.useAnotherAddress = !this.useAnotherAddress;"
-                *ngIf="!useAnotherAddress">Use different address
-        </button>
-
-        <button class="btn btn-default"
-                (click)="this.useAnotherAddress = !this.useAnotherAddress;"
-                *ngIf="useAnotherAddress">Use default address
-        </button>
-      </div>
-    </div>
-    <br>
-    <div class="col-xs-12 col-sm-12">
-      <div class="col-xs-2"></div>
-      <div class="col-xs-8 col-sm-12">
-        <form (ngSubmit)="onSubmit()" #f="ngForm">
-          <div class="row text-center">
+      <div class="col-xs-12 col-sm-12">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8 col-sm-12">
+          <form (ngSubmit)="onSubmit()" #f="ngForm">
             <div class="row text-center">
-              <h4>Select your supplier</h4>
-              <div class="radio text-center" *ngFor="let supplier of suppliers">
+              <div class="row text-center">
+                <br>
+                <h4>Select your supplier</h4>
+                <div class="radio text-center" *ngFor="let supplier of suppliers">
 
-                <label>
-                  <input
-                    type="radio"
-                    ngModel
-                    name="supplierS"
-                    [value]="supplier.name"
-                    #supplier2="ngModel"
-                    required
-                  >
-                  *- Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
-                </label>
-              </div>
-              <p class="text-center">[*] - required fields</p>
+                  <label>
+                    <input
+                      type="radio"
+                      ngModel
+                      name="supplierS"
+                      [value]="supplier.name"
+                      #supplier2="ngModel"
+                      required
+                    >
+                    *- Supplier: {{supplier.name}} totalPrice: {{supplier.price}} $
+                  </label>
+                </div>
+                <p class="text-center">[*] - required fields</p>
 
 
-              <button *ngIf="!useAnotherAddress"
-                      class="btn btn-primary"
-                      type="submit"
-                      [disabled]="!validAddress
+                <button *ngIf="!useAnotherAddress"
+                        class="btn btn-primary"
+                        type="submit"
+                        [disabled]="!validAddress
                  && useAnotherAddress
                  || !f.valid">Buy
-              </button>
+                </button>
 
 
-              <button *ngIf="useAnotherAddress"
-                class="btn btn-primary"
-                type="submit"
-                [disabled]="!validAddress
+                <button *ngIf="useAnotherAddress"
+                        class="btn btn-primary"
+                        type="submit"
+                        [disabled]="!validAddress
                  && useAnotherAddress
                  || surenameUser.length<5
                  || nameUser.length<5
                  || houseNumer<1
                  || !f.valid">Buy
-              </button>
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-
-  <br><br><br>
 </div>
 
 

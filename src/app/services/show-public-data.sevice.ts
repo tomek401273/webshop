@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {DirectoryTitles} from '../model/directory-titles';
 import {ReminderDto} from '../model/dto/reminder-dto';
 import {Server} from '../model/server';
+import {Router} from '@angular/router';
 
 
 @Injectable()
@@ -13,11 +14,16 @@ export class ShowPublicDataSevice {
   private maxPrice: number;
   private approvedCountry: string[] = [];
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,
+              private router: Router) {
   }
 
   category = new EventEmitter<string>();
   searchedProduct = new EventEmitter<string>();
+
+  redirectToBegin(category: String) {
+    this.router.navigate(['/']);
+  }
 
   getProducts() {
     return this.httpClient.get(Server.address + 'product/all');

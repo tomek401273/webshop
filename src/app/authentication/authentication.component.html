@@ -5,7 +5,7 @@
 <div *ngIf="isAuthenticated==false">
   <div class="btn-group " dropdown placement="bottom right">
     <button id="button-alignment" dropdownToggle type="button"
-            class="btn btn-primary dropdown-toggle authentication " aria-controls="dropdown-alignment">
+            class="btn btn-primary dropdown-toggle authentication " aria-controls="dropdown-alignment" (click)="clearData()">
       Get in <span class="caret"></span>
     </button>
     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
@@ -51,12 +51,10 @@
           [ngModel]="password">
         <span class="help-block" *ngIf="paswordCrt.invalid && paswordCrt.touched"></span>
       </div>
-      <h5 class="text-center" *ngIf="message.length>0"><span class="alert-danger ">Warrning  {{message}} check login and password</span>
+      <h5 class="text-center" *ngIf="message.length>0"><span class="alert-danger ">{{message}}</span>
       </h5>
 
-      <br>
-
-      <button class="btn btn-primary center-block" type="submit">LOGGIN</button>
+      <button class="btn btn-primary center-block" type="submit">LOGIN</button>
 
     </form>
   </div>

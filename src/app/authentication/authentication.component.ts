@@ -1,4 +1,4 @@
-import {Component, DoCheck, TemplateRef} from '@angular/core';
+import {Component, DoCheck, OnInit, TemplateRef} from '@angular/core';
 import {LogingService} from '../services/loging.service';
 import {Router} from '@angular/router';
 import {ProductDataAmount} from '../model/product-data-amount';
@@ -21,9 +21,9 @@ export class AuthenticationComponent implements DoCheck {
   private _roleUser = '';
   private productIdArray: number[] = [];
   private products: ProductDataAmount[] = [];
-  private modalRef: BsModalRef;
-  private name = 'tomek371240@gmail.com';
-  private password = 'thomas';
+  private _modalRef: BsModalRef;
+  private _name = '';
+  private _password = '';
   private _message = '';
   private _role = '';
 
@@ -43,7 +43,6 @@ export class AuthenticationComponent implements DoCheck {
 
   onSubmit(submittedForm) {
     const log: Log = new Log(submittedForm.value.passwordLog, submittedForm.value.loginLog);
-
     this._loggingService.getToken(log)
       .subscribe(
         (response: HttpResponse<String>) => {
@@ -66,7 +65,8 @@ export class AuthenticationComponent implements DoCheck {
           );
           this.productIdArray = [];
           this.getDataFromDatabase();
-          this.modalRef.hide();
+          this._modalRef.hide();
+          this.router.navigate(['/']);
         },
         () => {
           this.somethingGoWrong();
@@ -102,9 +102,9 @@ export class AuthenticationComponent implements DoCheck {
   somethingGoWrong() {
     localStorage.setItem('token', null);
     localStorage.setItem('role', null);
-    this._message = 'something something go wrong ....';
-    this.name = '';
-    this.password = '';
+    this._message = 'Logging attempt failed. Please check your login and password';
+    this._name = '';
+    this._password = '';
   }
 
   getDataFromDatabase() {
@@ -135,7 +135,13 @@ export class AuthenticationComponent implements DoCheck {
   }
 
   openModal(template: TemplateRef<any>) {
-    this.modalRef = this._modalService.show(template);
+    this._modalRef = this._modalService.show(template);
+  }
+
+  clearData() {
+    this.name = '';
+    this.password = '';
+    this._message = '';
   }
 
   get isAuthenticated(): boolean {
@@ -224,6 +230,30 @@ export class AuthenticationComponent implements DoCheck {
 
   set message(value: string) {
     this._message = value;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  set name(value: string) {
+    this._name = value;
+  }
+
+  get password(): string {
+    return this._password;
+  }
+
+  set password(value: string) {
+    this._password = value;
+  }
+
+  get modalRef(): BsModalRef {
+    return this._modalRef;
+  }
+
+  set modalRef(value: BsModalRef) {
+    this._modalRef = value;
   }
 }
 
